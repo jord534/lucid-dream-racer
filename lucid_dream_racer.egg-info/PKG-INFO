@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: lucid-dream-racer
+Version: 0.1.0
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.26
+Requires-Dist: torch>=2.2
+Requires-Dist: gymnasium[box2d]>=1.0
+Requires-Dist: pillow>=10
+Requires-Dist: cma>=3.3
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: pandas>=2.0
+Requires-Dist: tqdm>=4.66
+Provides-Extra: app
+Requires-Dist: gradio>=4.44; extra == "app"
+Requires-Dist: pygame-ce>=2.4; extra == "app"
+Provides-Extra: baseline
+Requires-Dist: stable-baselines3>=2.4; extra == "baseline"
+Requires-Dist: rliable>=1.2; extra == "baseline"
+Provides-Extra: dev
+Requires-Dist: pytest>=8; extra == "dev"
+Requires-Dist: ruff>=0.5; extra == "dev"
