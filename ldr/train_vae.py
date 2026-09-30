@@ -16,8 +16,6 @@ from .data import FrameSampler
 from .utils import CSVLogger, get_device, load_ckpt, save_ckpt, seed_everything, to_tensor, to_uint8
 from .vae import VAE, vae_loss
 
-from tqdm import trange
-
 
 @torch.no_grad()
 def save_grid(model, x, path: Path, n: int = 8):
@@ -51,7 +49,7 @@ def main():
     log, rng, best = CSVLogger(args.out / "log.csv"), np.random.default_rng(args.seed + start), 1e9
     (args.out / "grids").mkdir(parents=True, exist_ok=True)
 
-    for step in trange(start, args.steps, initial=start, total=args.steps, desc="vae", dynamic_ncols=True):
+    for step in range(start, args.steps):
         x = to_tensor(data.sample(args.batch, "train", rng), dev)
         recon, mu, logvar = model(x)
         loss, rec, kl = vae_loss(recon, x, mu, logvar)

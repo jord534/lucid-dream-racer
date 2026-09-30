@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from tqdm import tqdm
 
-from .config import C, DATA
+from .config import DATA, C
 
 
 def pack(rollouts: Path, out: Path, val_frac: float = 0.05) -> None:

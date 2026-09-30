@@ -11,8 +11,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from .config import C, DATA, RUNS
-from .mdnrnn import MDNRNN, mdn_nll
+from .config import DATA, RUNS, C
+from .mdnrnn import MDNRNN, mdn_nll, mdn_sample
 from .utils import CSVLogger, get_device, load_ckpt, save_ckpt, seed_everything
 
 
@@ -44,9 +44,26 @@ class SequenceSampler:
                 t(np.clip(self.rew[a], -1, 10)), t(self.done[a].astype(np.float32)))
 
 
-def loss_fn(model, batch, done_pos_weight=50.0):
+def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0):
+    """ss_prob > 0 is scheduled sampling: at each step, with that probability, the input
+    latent is the model's own sample from the previous step instead of the recorded one.
+    Teacher forcing alone never scores the model on its own outputs, which is exactly the
+    regime the dream runs in."""
     z, a, z_next, r, d = batch
-    logit, mu, logsig, r_hat, d_hat, _ = model(z, a)
+    if ss_prob <= 0:
+        logit, mu, logsig, r_hat, d_hat, _ = model(z, a)
+    else:
+        B, L, _ = z.shape
+        state, zin, outs = None, z[:, 0], []
+        for t in range(L):
+            step = model.step(zin, a[:, t], state)
+            outs.append(step[:5])
+            state = step[5]
+            if t + 1 < L:
+                own = mdn_sample(step[0], step[1], step[2], 1.0)
+                use = (torch.rand(B, 1, device=z.device) < ss_prob).float()
+                zin = use * own + (1 - use) * z[:, t + 1]
+        logit, mu, logsig, r_hat, d_hat = [torch.stack(o, 1) for o in zip(*outs)]
     nll = mdn_nll(logit, mu, logsig, z_next)
     r_loss = F.mse_loss(r_hat, r)
     d_loss = F.binary_cross_entropy_with_logits(
@@ -59,6 +76,10 @@ def main():
     p.add_argument("--steps", type=int, default=20_000)
     p.add_argument("--batch", type=int, default=64)
     p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--ss-prob", type=float, default=0.0,
+                   help="final scheduled-sampling probability, ramped in over the run")
+    p.add_argument("--shared-mixture", action="store_true",
+                   help="draw one mixture component per frame instead of per dimension")
     p.add_argument("--eval-every", type=int, default=500)
     p.add_argument("--out", type=Path, default=RUNS / "mdnrnn")
     p.add_argument("--device", default=None)
@@ -67,7 +88,7 @@ def main():
     seed_everything(args.seed)
     dev = get_device(args.device)
     data = SequenceSampler()
-    model = MDNRNN().to(dev)
+    model = MDNRNN(shared=args.shared_mixture).to(dev)
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)
     start, ck = 0, args.out / "last.pt"
@@ -78,7 +99,8 @@ def main():
     log, rng, best = CSVLogger(args.out / "log.csv"), np.random.default_rng(args.seed + start), 1e9
 
     for step in range(start, args.steps):
-        loss, nll, rl, dl = loss_fn(model, data.sample(args.batch, "train", rng, dev))
+        ss = args.ss_prob * min(1.0, 2 * step / args.steps)   # ramp in over the first half
+        loss, nll, rl, dl = loss_fn(model, data.sample(args.batch, "train", rng, dev), ss_prob=ss)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   # LSTMs spike
@@ -87,6 +109,7 @@ def main():
             model.eval()
             with torch.no_grad():
                 vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev))
+                # validation always teacher-forced, so the number stays comparable across runs
             model.train()
             log.log(step=step + 1, nll=nll.item(), r_mse=rl.item(), d_bce=dl.item(),
                     val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item())

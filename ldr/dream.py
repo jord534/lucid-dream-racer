@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import torch
 
-from .config import C, DATA
+from .config import DATA, C
 from .mdnrnn import MDNRNN, mdn_sample
 
 
@@ -14,14 +14,24 @@ class DreamSim:
     (matching how real episodes start) or, with warm=K, from a random mid-episode
     frame after teacher-forcing K real steps to build up h."""
 
-    def __init__(self, rnn: MDNRNN, device, tau: float = C.tau, latents=DATA / "latents.npz"):
+    def __init__(self, rnn: MDNRNN, device, tau: float = C.tau, latents=DATA / "latents.npz",
+                 start_from: str = "good"):
+        """start_from="good" draws warm-start states only from the better half of the
+        recorded episodes (the pure-pursuit ones), so the controller is scored from
+        situations a competent driver actually reaches, rather than from a spin on the
+        grass left behind by the Brownian collector."""
         d = np.load(latents)
         self.rnn, self.dev, self.tau = rnn, device, tau
         self.mu = torch.from_numpy(d["mu"]).to(device)
         self.logvar = torch.from_numpy(d["logvar"]).to(device)
         self.actions = torch.from_numpy(d["actions"]).to(device)
         self.obs_start, self.act_start, self.ep_len = d["obs_start"], d["act_start"], d["ep_len"]
-        self.train_eps = np.flatnonzero(~d["is_val"])
+        train = np.flatnonzero(~d["is_val"])
+        if start_from == "good":
+            ret = np.array([d["rewards"][s: s + T].sum()
+                            for s, T in zip(d["act_start"], d["ep_len"])])
+            train = train[ret[train] >= np.median(ret[train])]
+        self.train_eps = train
 
     def _z(self, idx):
         return self.mu[idx] + torch.randn_like(self.mu[idx]) * (0.5 * self.logvar[idx]).exp()

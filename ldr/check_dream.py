@@ -9,21 +9,26 @@ from __future__ import annotations
 import argparse
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from PIL import Image
 
-from .config import C, DATA, REPORTS, RUNS
+from .config import DATA, REPORTS, RUNS, C
 from .encode import load_vae
 from .mdnrnn import MDNRNN, mdn_mean, mdn_sample
 from .utils import get_device, load_ckpt, to_uint8, upscale
 
 
 def load_mdnrnn(path=RUNS / "mdnrnn" / "best.pt", device="cpu") -> MDNRNN:
-    m = MDNRNN()
-    m.load_state_dict(load_ckpt(path, device)["model"])
+    """Infers shared vs per-dimension mixtures from the checkpoint's head size, so
+    models trained before that option existed still load."""
+    sd = load_ckpt(path, device)["model"]
+    out = sd["head.weight"].shape[0]
+    m = MDNRNN(shared=out == C.n_gauss + C.z_dim * C.n_gauss * 2 + 2)
+    m.load_state_dict(sd)
     return m.to(device).eval()
 
 
@@ -34,7 +39,8 @@ def main():
     p.add_argument("--context", type=int, default=5)
     p.add_argument("--horizon", type=int, default=100)
     p.add_argument("--offset", type=int, default=100, help="skip the zoom-in intro")
-    p.add_argument("--tau", type=float, default=1.0)
+    p.add_argument("--tau", type=float, default=0.05,
+                   help="low = fair error measurement; 1.0 = what the dream really looks like")
     p.add_argument("--device", default=None)
     a = p.parse_args()
     dev = get_device(a.device)

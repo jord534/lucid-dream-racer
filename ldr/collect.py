@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from tqdm import tqdm
 
-from .config import C, DATA, SEED_DATA
+from .config import DATA, SEED_DATA, C
 from .envs import POLICIES, curvature_ahead, make_env
 from .utils import preprocess
 

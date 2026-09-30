@@ -15,7 +15,7 @@ import torch
 from tqdm import tqdm
 
 from .check_dream import load_mdnrnn
-from .config import C, RUNS, SEED_VAL
+from .config import RUNS, SEED_VAL, C
 from .controller import N_PARAMS, act_batched
 from .dream import DreamSim
 from .train_controller import evaluate_population, make_pool
@@ -23,11 +23,15 @@ from .utils import CSVLogger, get_device, save_ckpt, save_pickle
 
 
 @torch.no_grad()
-def dream_fitness(sim, X, rollouts, horizon, rng, dev):
+def dream_fitness(sim, X, rollouts, horizon, rng, dev, warm: int = 0):
+    """Score every candidate on `rollouts` imagined runs of `horizon` steps.
+    warm > 0 starts each run from a random real mid-episode state (teacher-forced for
+    `warm` steps) instead of a lap start, which keeps the dream inside the data the
+    model was trained on and limits how far prediction error can compound."""
     P = len(X)
     theta = torch.as_tensor(np.asarray(X), dtype=torch.float32, device=dev)
     theta = theta.repeat_interleave(rollouts, 0)
-    z, h = sim.reset(P * rollouts, rng)
+    z, h = sim.reset(P * rollouts, rng, warm=warm)
     ret = torch.zeros(P * rollouts, device=dev)
     for _ in range(horizon):
         z, h, r, alive = sim.step(act_batched(theta, z, h))
@@ -42,9 +46,14 @@ def main():
     p.add_argument("--generations", type=int, default=500)
     p.add_argument("--popsize", type=int, default=64)
     p.add_argument("--rollouts", type=int, default=16)
-    p.add_argument("--horizon", type=int, default=C.max_steps)
+    p.add_argument("--horizon", type=int, default=200,
+                   help="steps per imagined run; short runs limit compounding error")
+    p.add_argument("--warm", type=int, default=40,
+                   help="real steps fed in before dreaming; 0 starts every run at a lap start")
     p.add_argument("--tau", type=float, default=C.tau)
     p.add_argument("--sigma0", type=float, default=0.1)
+    p.add_argument("--start-from", default="good", choices=["good", "all"],
+                   help="which recorded episodes warm starts are drawn from")
     p.add_argument("--real-every", type=int, default=25)
     p.add_argument("--real-tracks", type=int, default=8)
     p.add_argument("--workers", type=int, default=4)
@@ -54,7 +63,7 @@ def main():
     a = p.parse_args()
     dev = get_device(a.device)
     a.out.mkdir(parents=True, exist_ok=True)
-    sim = DreamSim(load_mdnrnn(device=dev), dev, tau=a.tau)
+    sim = DreamSim(load_mdnrnn(device=dev), dev, tau=a.tau, start_from=a.start_from)
     es_path = a.out / "es.pkl"
     if es_path.exists():                                  # resume
         es, start, best = pickle.loads(es_path.read_bytes())
@@ -69,11 +78,16 @@ def main():
     with make_pool(a.workers) as pool:
         for gen in range(start + 1, a.generations + 1):
             X = es.ask()
-            fit = dream_fitness(sim, X, a.rollouts, a.horizon, rng, dev)
+            fit = dream_fitness(sim, X, a.rollouts, a.horizon, rng, dev, a.warm)
             es.tell(X, (-fit).tolist())
-            row = dict(gen=gen, dream_fit_mean=fit.mean(), dream_fit_max=fit.max(), real_return="")
+            row = dict(gen=gen, dream_fit_mean=fit.mean(), dream_fit_max=fit.max(),
+                       mean_dream="", real_return="")
             if gen % a.real_every == 0:                    # the transfer gap, measured
                 theta = np.asarray(es.result.xfavorite, np.float32)
+                # same theta scored in both worlds: dream fitness of the distribution mean,
+                # not the population average, so the two logged lines are comparable
+                row["mean_dream"] = float(dream_fitness(sim, [theta], a.rollouts, a.horizon,
+                                                        rng, dev, a.warm)[0])
                 real, _ = evaluate_population(pool, [theta], real_seeds)
                 row["real_return"] = real[0]
                 if real[0] > best:

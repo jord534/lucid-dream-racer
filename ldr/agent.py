@@ -8,7 +8,7 @@ import numpy as np
 import torch
 
 from .check_dream import load_mdnrnn
-from .config import C, RUNS
+from .config import RUNS, C
 from .controller import act_np
 from .encode import load_vae
 from .envs import make_env, set_road_friction

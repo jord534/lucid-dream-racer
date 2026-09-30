@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageOps
 from .agent import WorldModelAgent
 from .check_dream import load_mdnrnn
 from .config import REPORTS, RUNS, SEED_TEST
-from .controller import act_batched, act_np
+from .controller import act_batched
 from .dream import DreamSim
 from .encode import load_vae
 from .envs import make_env

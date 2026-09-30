@@ -14,11 +14,10 @@ from pathlib import Path
 
 import cma
 import numpy as np
-import torch
 from tqdm import tqdm
 
 from .agent import WorldModelAgent
-from .config import C, RUNS, SEED_TRAIN, SEED_VAL
+from .config import RUNS, SEED_TRAIN, SEED_VAL, C
 from .controller import N_PARAMS
 from .utils import CSVLogger, save_ckpt, save_pickle
 
@@ -32,18 +31,50 @@ def _init_worker():
 
 
 def _eval(job):
-    theta, seeds, max_steps = job
-    out = [_AGENT.rollout(theta, s, max_steps) for s in seeds]
-    return float(np.mean([r for r, _ in out])), int(sum(n for _, n in out))
+    """One rollout per task. Small units keep fast cores fed: on a machine with
+    performance and efficiency cores, a slow worker delays the generation by at most
+    one rollout instead of a whole candidate's worth."""
+    i, theta, seed, max_steps = job
+    r, n = _AGENT.rollout(theta, seed, max_steps)
+    return i, r, n
 
 
 def make_pool(workers: int) -> Pool:
     return Pool(workers, initializer=_init_worker)
 
 
+def evaluate_racing(pool, thetas, seeds, keep_frac=0.5, max_steps=C.max_steps):
+    """Score every candidate on seeds[0], keep the best `keep_frac`, and give only those
+    the remaining tracks. CMA-ES uses the ranking and weights only the better half, so
+    precision spent on the losers is wasted. Eliminated candidates keep their single-track
+    score, which is noisier but only has to place them in the bottom half.
+    Returns (fitness, env steps, rollouts saved)."""
+    first, steps = evaluate_population(pool, thetas, seeds[:1], max_steps)
+    if len(seeds) == 1:
+        return first, steps, 0
+    keep = np.argsort(-first)[: max(2, int(round(len(thetas) * keep_frac)))]
+    rest, n = evaluate_population(pool, [thetas[i] for i in keep], seeds[1:], max_steps)
+    fit = first.copy()
+    fit[keep] = (first[keep] + rest * (len(seeds) - 1)) / len(seeds)
+    # A one-track score can beat a survivor's four-track mean by luck, which would hand
+    # an eliminated candidate weight in the CMA update. Rank them below every survivor,
+    # keeping their order among themselves: that is what round one decided.
+    cut = np.setdiff1d(np.arange(len(thetas)), keep)
+    cut = cut[np.argsort(-first[cut])]
+    fit[cut] = fit[keep].min() - 1e-3 * (1 + np.arange(len(cut)))
+    saved = len(cut) * (len(seeds) - 1)
+    return fit, steps + n, saved
+
+
 def evaluate_population(pool, thetas, seeds, max_steps=C.max_steps):
-    res = pool.map(_eval, [(np.asarray(t, np.float32), seeds, max_steps) for t in thetas])
-    return np.array([r for r, _ in res]), sum(n for _, n in res)
+    jobs = [(i, np.asarray(t, np.float32), s, max_steps)
+            for i, t in enumerate(thetas) for s in seeds]
+    totals = np.zeros(len(thetas))
+    steps = 0
+    for i, r, n in pool.imap_unordered(_eval, jobs, chunksize=1):
+        totals[i] += r
+        steps += n
+    return totals / len(seeds), steps
 
 
 def main():
@@ -53,6 +84,9 @@ def main():
     p.add_argument("--rollouts", type=int, default=4)
     p.add_argument("--sigma0", type=float, default=0.1)
     p.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
+    p.add_argument("--race", action="store_true",
+                   help="score all candidates on one track, then only the better half on the rest")
+    p.add_argument("--keep-frac", type=float, default=0.5)
     p.add_argument("--val-every", type=int, default=10)
     p.add_argument("--val-tracks", type=int, default=16)
     p.add_argument("--max-steps", type=int, default=C.max_steps)
@@ -76,11 +110,14 @@ def main():
             # Common random numbers: every candidate drives the same tracks this generation.
             seeds = [int(s) for s in SEED_TRAIN + rng.integers(0, 800_000, a.rollouts)]
             X = es.ask()
-            fit, n = evaluate_population(pool, X, seeds, a.max_steps)
+            if a.race:
+                fit, n, saved = evaluate_racing(pool, X, seeds, a.keep_frac, a.max_steps)
+            else:
+                (fit, n), saved = evaluate_population(pool, X, seeds, a.max_steps), 0
             es.tell(X, (-fit).tolist())                   # CMA-ES minimises
             gen, env_steps = gen + 1, env_steps + n
             row = dict(gen=gen, env_steps=env_steps, fit_mean=fit.mean(), fit_max=fit.max(),
-                       sigma=es.sigma, val_return="")
+                       sigma=es.sigma, rollouts_saved=saved, val_return="")
             if gen % a.val_every == 0:
                 mean_theta = es.result.xfavorite
                 val, n = evaluate_population(pool, [mean_theta], val_seeds, a.max_steps)

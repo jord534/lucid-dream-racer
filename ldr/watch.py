@@ -12,7 +12,6 @@ import time
 from pathlib import Path
 
 import matplotlib
-import numpy as np
 import pandas as pd
 
 from .config import REPORTS, RUNS, SEED_VAL
@@ -54,9 +53,14 @@ def draw(fig, axes, d: pd.DataFrame, total: int, name: str) -> str:
         val = d.dropna(subset=["val_return"]) if "val_return" in d else d.iloc[:0]
         ax.plot(val.gen, val.val_return, "o-", label="validation (unseen tracks)")
     else:                                                     # dream run
-        ax.plot(d.gen, d.dream_fit_mean, alpha=.6, label="average score inside the dream")
+        ax.plot(d.gen, d.dream_fit_mean, alpha=.45,
+                label="population average inside the dream")
+        if "mean_dream" in d:
+            md = d.dropna(subset=["mean_dream"])
+            ax.plot(md.gen, md.mean_dream, "s--", alpha=.8,
+                    label="current best driver, inside the dream")
         real = d.dropna(subset=["real_return"]) if "real_return" in d else d.iloc[:0]
-        ax.plot(real.gen, real.real_return, "o-", label="same driver on the real track")
+        ax.plot(real.gen, real.real_return, "o-", label="current best driver, real track")
     ax.axhline(900, ls="--", lw=1, c="grey")
     ax.set_ylabel("score per run (return)")
     ax.legend(loc="upper left", fontsize=8)
