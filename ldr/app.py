@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 from .agent import WorldModelAgent
-from .config import RUNS, SEED_TEST, C
+from .config import C, RUNS, SEED_TEST
 from .controller import act_np
 from .envs import make_env
 from .mdnrnn import mdn_sample
