@@ -1,0 +1,231 @@
+200 rollouts, 6 workers
+[  1/200] dream_v3      seed 1000004  return   394.5  tiles  49%  left road at step  199, bend pct 0.54, recovered   eta 47.0 min
+[  2/200] dream_v3      seed 1000005  return   337.5  tiles  44%  left road at step  229, bend pct 0.37, recovered   eta 24.0 min
+[  3/200] dream_v3      seed 1000003  return   135.3  tiles  24%  left road at step  198, bend pct 0.45, NOT recovered   eta 16.0 min
+[  4/200] dream_v3      seed 1000001  return   335.5  tiles  44%  left road at step  208, bend pct 0.48, recovered   eta 12.0 min
+[  5/200] dream_v3      seed 1000000  return   185.7  tiles  29%  left road at step  207, bend pct 0.47, recovered   eta  9.6 min
+[  6/200] dream_v3      seed 1000002  return   617.0  tiles  72%  left road at step  202, bend pct 0.54, recovered   eta  8.0 min
+[  7/200] dream_v3      seed 1000006  return   103.2  tiles  25%  left road at step  209, bend pct 0.52, NOT recovered   eta  9.3 min
+[  8/200] dream_v3      seed 1000008  return   148.3  tiles  25%  left road at step  201, bend pct 0.85, NOT recovered   eta 10.9 min
+[  9/200] dream_v3      seed 1000010  return   222.7  tiles  32%  left road at step  238, bend pct 1.00, NOT recovered   eta  9.7 min
+[ 10/200] dream_v3      seed 1000007  return   687.1  tiles  79%  left road at step  215, bend pct 0.41, recovered   eta  8.7 min
+[ 11/200] dream_v3      seed 1000009  return   335.8  tiles  44%  left road at step  206, bend pct 0.49, recovered   eta  7.9 min
+[ 12/200] dream_v3      seed 1000011  return   698.6  tiles  80%  left road at step  200, bend pct 0.76, recovered   eta  7.3 min
+[ 13/200] dream_v3      seed 1000012  return   576.2  tiles  68%  left road at step  142, bend pct 0.86, recovered   eta  8.2 min
+[ 14/200] dream_v3      seed 1000014  return   189.4  tiles  29%  left road at step  210, bend pct 0.42, NOT recovered   eta  9.0 min
+[ 15/200] dream_v3      seed 1000013  return   369.2  tiles  47%  left road at step  121, bend pct 0.10, recovered   eta  8.4 min
+[ 16/200] dream_v3      seed 1000016  return   371.4  tiles  47%  left road at step  128, bend pct 0.13, recovered   eta  7.9 min
+[ 17/200] dream_v3      seed 1000015  return   162.5  tiles  26%  left road at step  213, bend pct 0.50, recovered   eta  7.5 min
+[ 18/200] dream_v3      seed 1000017  return   163.7  tiles  26%  left road at step  198, bend pct 0.71, recovered   eta  7.0 min
+[ 19/200] dream_v3      seed 1000018  return   440.2  tiles  54%  left road at step  218, bend pct 0.43, recovered   eta  7.4 min
+[ 20/200] dream_v3      seed 1000020  return   117.1  tiles  27%  left road at step  204, bend pct 0.39, NOT recovered   eta  7.0 min
+[ 21/200] dream_v3      seed 1000019  return   155.1  tiles  26%  left road at step  202, bend pct 0.85, NOT recovered   eta  7.5 min
+[ 22/200] dream_v3      seed 1000022  return    -6.2  tiles   9%  left road at step  121, bend pct 0.11, NOT recovered   eta  7.2 min
+[ 23/200] dream_v3      seed 1000023  return   270.8  tiles  37%  left road at step  191, bend pct 0.43, recovered   eta  6.9 min
+[ 24/200] dream_v3      seed 1000021  return   256.9  tiles  36%  left road at step  125, bend pct 0.73, recovered   eta  6.6 min
+[ 25/200] dream_v3      seed 1000024  return    -2.2  tiles  10%  left road at step  106, bend pct 0.12, NOT recovered   eta  6.8 min
+[ 26/200] dream_v3      seed 1000025  return   176.5  tiles  28%  left road at step  204, bend pct 0.59, NOT recovered   eta  6.6 min
+[ 27/200] dream_v3      seed 1000026  return   211.3  tiles  31%  left road at step  215, bend pct 0.48, NOT recovered   eta  6.9 min
+[ 28/200] dream_v3      seed 1000027  return   158.9  tiles  26%  left road at step  201, bend pct 0.65, NOT recovered   eta  6.7 min
+[ 29/200] dream_v3      seed 1000028  return   207.1  tiles  31%  left road at step  199, bend pct 0.49, recovered   eta  6.5 min
+[ 30/200] dream_v3      seed 1000029  return    97.2  tiles  20%  left road at step  121, bend pct 0.12, recovered   eta  6.2 min
+[ 31/200] dream_v3      seed 1000030  return   319.6  tiles  42%  left road at step  131, bend pct 0.14, recovered   eta  6.4 min
+[ 32/200] dream_v3      seed 1000031  return   319.5  tiles  42%  left road at step  197, bend pct 0.66, recovered   eta  6.3 min
+[ 33/200] dream_v3      seed 1000034  return   180.8  tiles  33%  left road at step  247, bend pct 0.51, recovered   eta  6.1 min
+[ 34/200] dream_v3      seed 1000033  return   146.6  tiles  25%  left road at step  199, bend pct 0.92, NOT recovered   eta  6.3 min
+[ 35/200] dream_v3      seed 1000032  return   288.5  tiles  39%  left road at step  206, bend pct 0.54, recovered   eta  6.1 min
+[ 36/200] dream_v3      seed 1000035  return    91.9  tiles  19%  left road at step  180, bend pct 0.15, NOT recovered   eta  5.9 min
+[ 37/200] dream_v3      seed 1000036  return   180.0  tiles  28%  left road at step  234, bend pct 0.72, NOT recovered   eta  6.0 min
+[ 38/200] dream_v3      seed 1000037  return    61.2  tiles  16%  left road at step  162, bend pct 0.12, NOT recovered   eta  6.0 min
+[ 39/200] dream_v3      seed 1000038  return    95.9  tiles  20%  left road at step  121, bend pct 0.14, recovered   eta  5.8 min
+[ 40/200] dream_v3      seed 1000041  return   265.5  tiles  45%  left road at step  121, bend pct 0.13, recovered   eta  5.8 min
+[ 41/200] dream_v3      seed 1000039  return   331.0  tiles  43%  left road at step  200, bend pct 0.52, recovered   eta  5.7 min
+[ 42/200] dream_v3      seed 1000040  return   192.3  tiles  29%  left road at step  209, bend pct 0.86, NOT recovered   eta  5.6 min
+[ 43/200] dream_v3      seed 1000042  return     5.6  tiles  11%  left road at step  114, bend pct 0.70, NOT recovered   eta  5.7 min
+[ 44/200] dream_v3      seed 1000044  return   767.1  tiles  87%  left road at step  224, bend pct 0.75, recovered   eta  5.7 min
+[ 45/200] dream_v3      seed 1000043  return   209.2  tiles  31%  left road at step  166, bend pct 0.68, recovered   eta  5.5 min
+[ 46/200] dream_v3      seed 1000045  return   132.1  tiles  23%  left road at step  128, bend pct 0.11, recovered   eta  5.6 min
+[ 47/200] dream_v3      seed 1000047  return   113.5  tiles  21%  left road at step  182, bend pct 0.57, NOT recovered   eta  5.5 min
+[ 48/200] dream_v3      seed 1000046  return   505.5  tiles  61%  left road at step  208, bend pct 0.80, recovered   eta  5.3 min
+[ 49/200] dream_v3      seed 1000048  return   123.0  tiles  22%  left road at step  187, bend pct 0.89, NOT recovered   eta  5.5 min
+[ 50/200] dream_v3      seed 1000050  return   149.2  tiles  25%  left road at step  202, bend pct 0.39, NOT recovered   eta  5.5 min
+[ 51/200] dream_v3      seed 1000049  return   327.4  tiles  43%  left road at step  230, bend pct 0.51, recovered   eta  5.3 min
+[ 52/200] dream_v3      seed 1000051  return    70.3  tiles  17%  left road at step  149, bend pct 0.79, NOT recovered   eta  5.3 min
+[ 53/200] dream_v3      seed 1000052  return     1.3  tiles  10%  left road at step  125, bend pct 0.13, NOT recovered   eta  5.3 min
+[ 54/200] dream_v3      seed 1000053  return   614.3  tiles  71%  left road at step  208, bend pct 0.12, recovered   eta  5.2 min
+[ 55/200] dream_v3      seed 1000054  return   454.2  tiles  55%  left road at step  149, bend pct 0.15, recovered   eta  5.2 min
+[ 56/200] dream_v3      seed 1000055  return   118.2  tiles  22%  left road at step  124, bend pct 0.08, recovered   eta  5.2 min
+[ 57/200] dream_v3      seed 1000056  return    10.1  tiles  11%  left road at step  135, bend pct 0.17, NOT recovered   eta  5.1 min
+[ 58/200] dream_v3      seed 1000057  return   327.2  tiles  43%  left road at step  202, bend pct 0.58, recovered   eta  5.1 min
+[ 59/200] dream_v3      seed 1000058  return   186.7  tiles  29%  left road at step  237, bend pct 0.38, NOT recovered   eta  5.0 min
+[ 60/200] dream_v3      seed 1000059  return   178.0  tiles  28%  left road at step  120, bend pct 0.15, recovered   eta  4.9 min
+[ 61/200] dream_v3      seed 1000060  return   122.6  tiles  22%  left road at step  184, bend pct 0.47, NOT recovered   eta  5.0 min
+[ 62/200] dream_v3      seed 1000061  return   207.2  tiles  31%  left road at step  237, bend pct 0.14, NOT recovered   eta  5.0 min
+[ 63/200] dream_v3      seed 1000062  return   388.5  tiles  49%  left road at step  234, bend pct 0.19, recovered   eta  4.9 min
+[ 64/200] dream_v3      seed 1000063  return   474.9  tiles  57%  left road at step  226, bend pct 0.29, recovered   eta  4.9 min
+[ 65/200] dream_v3      seed 1000064  return   334.6  tiles  43%  left road at step  189, bend pct 0.93, recovered   eta  4.8 min
+[ 66/200] dream_v3      seed 1000065  return   433.8  tiles  53%  left road at step  227, bend pct 0.12, recovered   eta  4.7 min
+[ 67/200] dream_v3      seed 1000066  return    75.7  tiles  18%  left road at step  169, bend pct 0.93, NOT recovered   eta  4.7 min
+[ 68/200] dream_v3      seed 1000067  return    25.0  tiles  12%  left road at step  127, bend pct 0.14, NOT recovered   eta  4.7 min
+[ 69/200] dream_v3      seed 1000068  return    71.5  tiles  17%  left road at step  163, bend pct 0.75, NOT recovered   eta  4.6 min
+[ 70/200] dream_v3      seed 1000069  return   181.9  tiles  28%  left road at step  224, bend pct 0.98, NOT recovered   eta  4.7 min
+[ 71/200] dream_v3      seed 1000070  return   694.7  tiles  79%  left road at step  151, bend pct 0.93, recovered   eta  4.6 min
+[ 72/200] dream_v3      seed 1000071  return   499.3  tiles  60%  left road at step  202, bend pct 0.80, recovered   eta  4.5 min
+[ 73/200] dream_v3      seed 1000072  return   195.1  tiles  30%  left road at step   99, bend pct 0.14, recovered   eta  4.5 min
+[ 74/200] dream_v3      seed 1000073  return   185.2  tiles  29%  left road at step   91, bend pct 0.14, recovered   eta  4.5 min
+[ 75/200] dream_v3      seed 1000074  return   228.7  tiles  33%  left road at step  100, bend pct 0.12, recovered   eta  4.4 min
+[ 76/200] dream_v3      seed 1000075  return   130.5  tiles  23%  left road at step  192, bend pct 0.64, NOT recovered   eta  4.4 min
+[ 77/200] dream_v3      seed 1000076  return    92.0  tiles  19%  left road at step  168, bend pct 0.11, NOT recovered   eta  4.3 min
+[ 78/200] dream_v3      seed 1000077  return   160.2  tiles  26%  left road at step  225, bend pct 0.09, NOT recovered   eta  4.3 min
+[ 79/200] dream_v3      seed 1000078  return   255.4  tiles  36%  left road at step   96, bend pct 0.50, recovered   eta  4.3 min
+[ 80/200] dream_v3      seed 1000080  return   136.8  tiles  24%  left road at step  200, bend pct 0.09, NOT recovered   eta  4.3 min
+[ 81/200] dream_v3      seed 1000079  return   524.6  tiles  62%  left road at step  207, bend pct 0.66, recovered   eta  4.2 min
+[ 82/200] dream_v3      seed 1000081  return   761.7  tiles  86%  left road at step  126, bend pct 0.18, recovered   eta  4.2 min
+[ 83/200] dream_v3      seed 1000082  return   124.8  tiles  22%  left road at step  189, bend pct 0.15, NOT recovered   eta  4.1 min
+[ 84/200] dream_v3      seed 1000083  return   170.7  tiles  27%  left road at step  204, bend pct 0.57, recovered   eta  4.1 min
+[ 85/200] dream_v3      seed 1000084  return   126.5  tiles  23%  left road at step  142, bend pct 0.10, recovered   eta  4.1 min
+[ 86/200] dream_v3      seed 1000085  return   120.6  tiles  22%  left road at step  122, bend pct 0.14, recovered   eta  4.0 min
+[ 87/200] dream_v3      seed 1000086  return   208.5  tiles  31%  left road at step  130, bend pct 0.11, recovered   eta  4.0 min
+[ 88/200] dream_v3      seed 1000087  return   183.6  tiles  28%  left road at step  206, bend pct 0.67, NOT recovered   eta  4.0 min
+[ 89/200] dream_v3      seed 1000088  return    83.6  tiles  18%  left road at step  122, bend pct 0.11, recovered   eta  3.9 min
+[ 90/200] dream_v3      seed 1000089  return   128.7  tiles  23%  left road at step  119, bend pct 0.09, recovered   eta  3.9 min
+[ 91/200] dream_v3      seed 1000090  return   278.7  tiles  38%  left road at step  385, bend pct 0.38, NOT recovered   eta  3.8 min
+[ 92/200] dream_v3      seed 1000091  return   351.6  tiles  45%  left road at step  123, bend pct 0.14, recovered   eta  3.8 min
+[ 93/200] dream_v3      seed 1000092  return   276.7  tiles  38%  left road at step  263, bend pct 0.80, recovered   eta  3.7 min
+[ 94/200] dream_v3      seed 1000093  return    41.5  tiles  14%  left road at step  151, bend pct 0.13, NOT recovered   eta  3.7 min
+[ 95/200] dream_v3      seed 1000094  return    63.5  tiles  16%  left road at step  170, bend pct 0.93, NOT recovered   eta  3.7 min
+[ 96/200] dream_v3      seed 1000095  return    76.8  tiles  18%  left road at step  178, bend pct 0.11, NOT recovered   eta  3.6 min
+[ 97/200] dream_v3      seed 1000096  return   523.3  tiles  62%  left road at step  166, bend pct 0.10, recovered   eta  3.6 min
+[ 98/200] dream_v3      seed 1000097  return   745.6  tiles  85%  left road at step  227, bend pct 0.92, recovered   eta  3.6 min
+[ 99/200] dream_v3      seed 1000098  return   353.6  tiles  45%  left road at step  154, bend pct 0.12, recovered   eta  3.5 min
+[100/200] controller_v2 seed 1000000  return   922.9  tiles 100%  stayed on road   eta  3.5 min
+[101/200] dream_v3      seed 1000099  return   252.7  tiles  35%  left road at step  134, bend pct 0.13, recovered   eta  3.4 min
+[102/200] controller_v2 seed 1000001  return   871.0  tiles  97%  left road at step  522, bend pct 0.55, recovered   eta  3.4 min
+[103/200] controller_v2 seed 1000002  return   918.5  tiles 100%  stayed on road   eta  3.4 min
+[104/200] controller_v2 seed 1000004  return   933.3  tiles 100%  stayed on road   eta  3.3 min
+[105/200] controller_v2 seed 1000003  return   922.0  tiles 100%  stayed on road   eta  3.3 min
+[106/200] controller_v2 seed 1000005  return   929.9  tiles 100%  stayed on road   eta  3.2 min
+[107/200] controller_v2 seed 1000006  return   919.4  tiles 100%  stayed on road   eta  3.2 min
+[108/200] controller_v2 seed 1000007  return   934.4  tiles 100%  stayed on road   eta  3.1 min
+[109/200] controller_v2 seed 1000009  return   922.5  tiles 100%  stayed on road   eta  3.1 min
+[110/200] controller_v2 seed 1000008  return   886.0  tiles  99%  left road at step  320, bend pct 0.52, recovered   eta  3.1 min
+[111/200] controller_v2 seed 1000010  return   929.0  tiles 100%  stayed on road   eta  3.0 min
+[112/200] controller_v2 seed 1000011  return   926.1  tiles 100%  stayed on road   eta  3.0 min
+[113/200] controller_v2 seed 1000013  return   923.9  tiles 100%  stayed on road   eta  3.0 min
+[114/200] controller_v2 seed 1000012  return   881.0  tiles  98%  stayed on road   eta  2.9 min
+[115/200] controller_v2 seed 1000014  return   929.4  tiles 100%  stayed on road   eta  2.9 min
+[116/200] controller_v2 seed 1000016  return   930.3  tiles 100%  stayed on road   eta  2.8 min
+[117/200] controller_v2 seed 1000017  return   919.0  tiles 100%  stayed on road   eta  2.8 min
+[118/200] controller_v2 seed 1000015  return   913.1  tiles 100%  stayed on road   eta  2.7 min
+[119/200] controller_v2 seed 1000018  return   935.4  tiles 100%  stayed on road   eta  2.7 min
+[120/200] controller_v2 seed 1000019  return   926.0  tiles 100%  stayed on road   eta  2.7 min
+[121/200] controller_v2 seed 1000020  return   926.1  tiles 100%  stayed on road   eta  2.7 min
+[122/200] controller_v2 seed 1000023  return   941.6  tiles 100%  stayed on road   eta  2.6 min
+[123/200] controller_v2 seed 1000021  return   925.4  tiles 100%  stayed on road   eta  2.5 min
+[124/200] controller_v2 seed 1000024  return   928.2  tiles 100%  stayed on road   eta  2.5 min
+[125/200] controller_v2 seed 1000022  return   875.0  tiles  98%  left road at step  383, bend pct 0.62, recovered   eta  2.5 min
+[126/200] controller_v2 seed 1000025  return   934.1  tiles 100%  stayed on road   eta  2.5 min
+[127/200] controller_v2 seed 1000026  return   936.9  tiles 100%  stayed on road   eta  2.4 min
+[128/200] controller_v2 seed 1000027  return   925.3  tiles 100%  stayed on road   eta  2.4 min
+[129/200] controller_v2 seed 1000029  return   932.3  tiles 100%  stayed on road   eta  2.4 min
+[130/200] controller_v2 seed 1000028  return   871.4  tiles  97%  left road at step  423, bend pct 0.49, recovered   eta  2.3 min
+[131/200] controller_v2 seed 1000031  return   925.7  tiles 100%  stayed on road   eta  2.3 min
+[132/200] controller_v2 seed 1000032  return   929.8  tiles 100%  stayed on road   eta  2.2 min
+[133/200] controller_v2 seed 1000030  return   893.7  tiles  99%  stayed on road   eta  2.2 min
+[134/200] controller_v2 seed 1000034  return   926.8  tiles 100%  stayed on road   eta  2.2 min
+[135/200] controller_v2 seed 1000033  return   684.2  tiles  78%  left road at step  612, bend pct 0.38, NOT recovered   eta  2.1 min
+[136/200] controller_v2 seed 1000035  return   923.6  tiles 100%  stayed on road   eta  2.1 min
+[137/200] controller_v2 seed 1000037  return   929.3  tiles 100%  stayed on road   eta  2.1 min
+[138/200] controller_v2 seed 1000036  return   926.4  tiles 100%  stayed on road   eta  2.0 min
+[139/200] controller_v2 seed 1000040  return   936.9  tiles 100%  stayed on road   eta  2.0 min
+[140/200] controller_v2 seed 1000041  return   934.8  tiles 100%  stayed on road   eta  2.0 min
+[141/200] controller_v2 seed 1000038  return   872.5  tiles  97%  stayed on road   eta  1.9 min
+[142/200] controller_v2 seed 1000039  return   926.6  tiles 100%  stayed on road   eta  1.9 min
+[143/200] controller_v2 seed 1000042  return   920.2  tiles 100%  stayed on road   eta  1.9 min
+[144/200] controller_v2 seed 1000043  return   893.4  tiles  99%  stayed on road   eta  1.8 min
+[145/200] controller_v2 seed 1000044  return   930.9  tiles 100%  stayed on road   eta  1.8 min
+[146/200] controller_v2 seed 1000045  return   926.3  tiles 100%  stayed on road   eta  1.7 min
+[147/200] controller_v2 seed 1000046  return   928.9  tiles 100%  stayed on road   eta  1.7 min
+[148/200] controller_v2 seed 1000047  return   929.5  tiles 100%  stayed on road   eta  1.7 min
+[149/200] controller_v2 seed 1000048  return   923.8  tiles 100%  stayed on road   eta  1.6 min
+[150/200] controller_v2 seed 1000049  return   938.4  tiles 100%  stayed on road   eta  1.6 min
+[151/200] controller_v2 seed 1000053  return   927.4  tiles 100%  stayed on road   eta  1.6 min
+[152/200] controller_v2 seed 1000051  return   924.2  tiles 100%  stayed on road   eta  1.5 min
+[153/200] controller_v2 seed 1000052  return   919.8  tiles 100%  stayed on road   eta  1.5 min
+[154/200] controller_v2 seed 1000050  return   877.0  tiles  98%  left road at step  345, bend pct 0.57, recovered   eta  1.5 min
+[155/200] controller_v2 seed 1000054  return   937.2  tiles 100%  stayed on road   eta  1.4 min
+[156/200] controller_v2 seed 1000055  return   930.8  tiles 100%  stayed on road   eta  1.4 min
+[157/200] controller_v2 seed 1000056  return   919.1  tiles 100%  stayed on road   eta  1.4 min
+[158/200] controller_v2 seed 1000058  return   923.4  tiles 100%  stayed on road   eta  1.3 min
+[159/200] controller_v2 seed 1000059  return   930.3  tiles 100%  stayed on road   eta  1.3 min
+[160/200] controller_v2 seed 1000057  return   910.0  tiles 100%  stayed on road   eta  1.3 min
+[161/200] controller_v2 seed 1000060  return   921.5  tiles 100%  stayed on road   eta  1.2 min
+[162/200] controller_v2 seed 1000061  return   923.8  tiles 100%  stayed on road   eta  1.2 min
+[163/200] controller_v2 seed 1000063  return   930.8  tiles 100%  stayed on road   eta  1.2 min
+[164/200] controller_v2 seed 1000064  return   931.8  tiles 100%  stayed on road   eta  1.1 min
+[165/200] controller_v2 seed 1000062  return   921.7  tiles 100%  stayed on road   eta  1.1 min
+[166/200] controller_v2 seed 1000065  return   918.8  tiles 100%  stayed on road   eta  1.1 min
+[167/200] controller_v2 seed 1000067  return   935.5  tiles 100%  stayed on road   eta  1.0 min
+[168/200] controller_v2 seed 1000066  return   927.7  tiles 100%  stayed on road   eta  1.0 min
+[169/200] controller_v2 seed 1000070  return   931.9  tiles 100%  stayed on road   eta  1.0 min
+[170/200] controller_v2 seed 1000068  return   921.2  tiles 100%  stayed on road   eta  0.9 min
+[171/200] controller_v2 seed 1000069  return   886.6  tiles  99%  stayed on road   eta  0.9 min
+[172/200] controller_v2 seed 1000072  return   919.1  tiles 100%  stayed on road   eta  0.9 min
+[173/200] controller_v2 seed 1000073  return   914.3  tiles 100%  stayed on road   eta  0.8 min
+[174/200] controller_v2 seed 1000071  return   877.5  tiles  98%  left road at step  309, bend pct 0.53, recovered   eta  0.8 min
+[175/200] controller_v2 seed 1000075  return   921.0  tiles 100%  stayed on road   eta  0.8 min
+[176/200] controller_v2 seed 1000076  return   929.4  tiles 100%  stayed on road   eta  0.8 min
+[177/200] controller_v2 seed 1000074  return   854.5  tiles  95%  left road at step  394, bend pct 0.83, recovered   eta  0.7 min
+[178/200] controller_v2 seed 1000077  return   919.5  tiles 100%  stayed on road   eta  0.7 min
+[179/200] controller_v2 seed 1000079  return   926.6  tiles 100%  stayed on road   eta  0.7 min
+[180/200] controller_v2 seed 1000078  return   882.6  tiles  98%  stayed on road   eta  0.6 min
+[181/200] controller_v2 seed 1000080  return   923.3  tiles 100%  stayed on road   eta  0.6 min
+[182/200] controller_v2 seed 1000081  return   928.2  tiles 100%  stayed on road   eta  0.6 min
+[183/200] controller_v2 seed 1000082  return   922.4  tiles 100%  stayed on road   eta  0.5 min
+[184/200] controller_v2 seed 1000084  return   929.4  tiles 100%  stayed on road   eta  0.5 min
+[185/200] controller_v2 seed 1000083  return   466.9  tiles  57%  left road at step  466, bend pct 0.65, recovered   eta  0.5 min
+[186/200] controller_v2 seed 1000087  return   933.0  tiles 100%  stayed on road   eta  0.4 min
+[187/200] controller_v2 seed 1000085  return   881.6  tiles  98%  left road at step  386, bend pct 0.49, recovered   eta  0.4 min
+[188/200] controller_v2 seed 1000088  return   923.1  tiles 100%  stayed on road   eta  0.4 min
+[189/200] controller_v2 seed 1000089  return   932.0  tiles 100%  stayed on road   eta  0.3 min
+[190/200] controller_v2 seed 1000086  return   896.6  tiles 100%  stayed on road   eta  0.3 min
+[191/200] controller_v2 seed 1000090  return   918.8  tiles 100%  stayed on road   eta  0.3 min
+[192/200] controller_v2 seed 1000092  return   926.1  tiles 100%  stayed on road   eta  0.3 min
+[193/200] controller_v2 seed 1000093  return   926.3  tiles 100%  stayed on road   eta  0.2 min
+[194/200] controller_v2 seed 1000091  return   492.4  tiles  59%  left road at step  940, bend pct 0.97, NOT recovered   eta  0.2 min
+[195/200] controller_v2 seed 1000095  return   923.5  tiles 100%  stayed on road   eta  0.2 min
+[196/200] controller_v2 seed 1000094  return   920.1  tiles 100%  stayed on road   eta  0.1 min
+[197/200] controller_v2 seed 1000096  return   926.7  tiles 100%  stayed on road   eta  0.1 min
+[198/200] controller_v2 seed 1000097  return   935.4  tiles 100%  stayed on road   eta  0.1 min
+[199/200] controller_v2 seed 1000098  return   934.4  tiles 100%  stayed on road   eta  0.0 min
+[200/200] controller_v2 seed 1000099  return   930.5  tiles 100%  stayed on road   eta  0.0 min
+
+=== summary ===
+{
+ "name": "dream_v3",
+ "n": 100,
+ "mean_return": 251.72896598715658,
+ "matches_stored_eval": "100/100",
+ "median_tiles_visited": 0.29084249084249086,
+ "tracks_with_excursion": 100,
+ "excursions_not_recovered": 41,
+ "onset_bend_pct_mean": 0.43423020756460806,
+ "onsets_in_top_quartile_of_bends": 19,
+ "top_quartile_binom_p": 0.2033176490614011,
+ "median_onset_step": 194.5
+}
+{
+ "name": "controller_v2",
+ "n": 100,
+ "mean_return": 908.3689021829607,
+ "matches_stored_eval": "100/100",
+ "median_tiles_visited": 1.0,
+ "tracks_with_excursion": 11,
+ "excursions_not_recovered": 2,
+ "onset_bend_pct_mean": 0.6011663690174661,
+ "onsets_in_top_quartile_of_bends": 2,
+ "top_quartile_binom_p": 1.0,
+ "median_onset_step": 394.0
+}
+wrote reports/bend_check.json
+exit: 0
