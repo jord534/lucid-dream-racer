@@ -23,7 +23,7 @@ def fig1_transfer():
     have = [(p, lab) for p, lab in DREAM_RUNS if Path(p).exists()]
     if not have:
         return
-    fig, axes = plt.subplots(1, len(have), figsize=(5.2 * len(have), 3.6), sharey=False)
+    fig, axes = plt.subplots(1, len(have), figsize=(5.2 * len(have), 3.6), sharey=True)
     for ax, (p, lab) in zip(np.atleast_1d(axes), have):
         d = pd.read_csv(p)
         ax.plot(d.gen, d.dream_fit_mean, lw=1, alpha=.5, label="population, in the dream")
@@ -93,25 +93,34 @@ def fig3_headline():
     fig.tight_layout(); fig.savefig(R / "fig3_headline.png", dpi=160); plt.close(fig)
 
 
+# Severity order within each perturbation family, rather than the alphabetical order
+# glob() returns.
+SEVERITY_ORDER = ["gas50", "noise10", "noise25", "noise50", "grip0.8", "grip0.6"]
+RELABEL = {"gas50": "throttle 50%", "grip0.8": "grip x0.8", "grip0.6": "grip x0.6"}
+
+
 def fig4_robustness():
     ev = _evals()
     base = next((v for k, v in ev.items() if k.endswith("_v2")), None)
-    pert = {k: v for k, v in ev.items()
+    pert = {k[len("wm_real_v2_"):]: v for k, v in ev.items()
             if any(t in k for t in ("noise", "grip", "gas"))}
     if base is None or not pert:
         return
+    ordered = [s for s in SEVERITY_ORDER if s in pert]
     b = _iqm(base)
-    names = ["none"] + list(pert)
-    vals = [b] + [_iqm(v) for v in pert.values()]
+    names = ["none"] + ordered
+    series = [base] + [pert[s] for s in ordered]
+    vals = [_iqm(x) for x in series]
+    cis = [_ci(x) for x in series]
     fig, ax = plt.subplots(figsize=(7.2, 3.6))
     ax.bar(range(len(vals)), vals,
            color=["tab:grey"] + ["tab:red" if v < 0.5 * b else "tab:blue" for v in vals[1:]])
-    for i, v in enumerate(vals):
-        ax.text(i, v + 12, f"{v:.0f}", ha="center", fontsize=8)
+    for i, (v, (lo, hi)) in enumerate(zip(vals, cis)):
+        ax.plot([i, i], [lo, hi], color="black", lw=1.5)
+        ax.text(i, hi + 10, f"{v:.0f}", ha="center", fontsize=8)
     ax.set_xticks(range(len(names)))
-    ax.set_xticklabels([n.replace("wm_real_v2_", "") for n in names], rotation=30,
-                       ha="right", fontsize=8)
-    ax.set_ylabel("IQM")
+    ax.set_xticklabels([RELABEL.get(n, n) for n in names], rotation=30, ha="right", fontsize=8)
+    ax.set_ylabel("IQM, with 95% bootstrap CI")
     fig.tight_layout(); fig.savefig(R / "fig4_robustness.png", dpi=160); plt.close(fig)
 
 
