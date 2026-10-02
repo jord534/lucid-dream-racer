@@ -1,0 +1,16 @@
+{
+ "round": 2,
+ "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop/r02/mdnrnn/best.pt",
+ "real_return_mean": 639.7268069458008,
+ "real_return_by_proposer": [
+  762.5101846313477,
+  599.9807940673828,
+  556.6894421386719
+ ],
+ "gap_mean": 57.36462043484052,
+ "gap_median": 59.14934730529785,
+ "dream_return_window_mean": 81.71829024957286,
+ "real_return_window_mean": 24.35366981473234,
+ "real_on_road_share_mean": 0.4697265041717725,
+ "candidates": 450
+}

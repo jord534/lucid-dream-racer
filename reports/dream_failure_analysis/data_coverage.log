@@ -1,0 +1,339 @@
+episodes per policy in the dataset: {'pursuit': 500, 'brownian': 500, 'controller': 400}
+replaying 180 episodes (60 per policy), 6 workers
+[  1/180] episode   10 (pursuit   ) off-road  90%   eta 38.4 min
+[  2/180] episode    1 (pursuit   ) off-road  17%   eta 19.2 min
+[  3/180] episode    7 (pursuit   ) off-road  95%   eta 12.8 min
+[  4/180] episode   13 (pursuit   ) off-road  88%   eta  9.5 min
+[  5/180] episode    4 (pursuit   ) off-road  87%   eta  7.6 min
+[  6/180] episode    2 (pursuit   ) off-road  17%   eta  6.5 min
+[  7/180] episode   15 (pursuit   ) off-road  57%   eta  9.7 min
+[  8/180] episode   33 (pursuit   ) off-road  63%   eta  8.6 min
+[  9/180] episode   18 (pursuit   ) off-road  28%   eta  7.7 min
+[ 10/180] episode   38 (pursuit   ) off-road  14%   eta  6.9 min
+[ 11/180] episode   42 (pursuit   ) off-road  70%   eta  6.3 min
+[ 12/180] episode   60 (pursuit   ) off-road   6%   eta  5.7 min
+[ 13/180] episode   82 (pursuit   ) off-road  57%   eta  7.4 min
+[ 14/180] episode  119 (pursuit   ) off-road  83%   eta  6.9 min
+[ 15/180] episode   78 (pursuit   ) off-road  60%   eta  6.4 min
+[ 16/180] episode  127 (pursuit   ) off-road  15%   eta  6.0 min
+[ 17/180] episode  125 (pursuit   ) off-road  95%   eta  5.7 min
+[ 18/180] episode  136 (pursuit   ) off-road  11%   eta  5.4 min
+[ 19/180] episode  143 (pursuit   ) off-road  49%   eta  6.6 min
+[ 20/180] episode  193 (pursuit   ) off-road  14%   eta  6.3 min
+[ 21/180] episode  183 (pursuit   ) off-road  77%   eta  6.0 min
+[ 22/180] episode  188 (pursuit   ) off-road   7%   eta  5.7 min
+[ 23/180] episode  202 (pursuit   ) off-road  17%   eta  5.4 min
+[ 24/180] episode  226 (pursuit   ) off-road  10%   eta  5.3 min
+[ 25/180] episode  248 (pursuit   ) off-road  60%   eta  6.2 min
+[ 26/180] episode  230 (pursuit   ) off-road  28%   eta  5.9 min
+[ 27/180] episode  228 (pursuit   ) off-road  77%   eta  5.7 min
+[ 28/180] episode  227 (pursuit   ) off-road  69%   eta  5.5 min
+[ 29/180] episode  255 (pursuit   ) off-road  72%   eta  5.3 min
+[ 30/180] episode  257 (pursuit   ) off-road  55%   eta  5.1 min
+[ 31/180] episode  275 (pursuit   ) off-road  93%   eta  5.7 min
+[ 32/180] episode  288 (pursuit   ) off-road  70%   eta  5.6 min
+[ 33/180] episode  258 (pursuit   ) off-road  57%   eta  5.4 min
+[ 34/180] episode  281 (pursuit   ) off-road  87%   eta  5.2 min
+[ 35/180] episode  292 (pursuit   ) off-road  95%   eta  5.0 min
+[ 36/180] episode  301 (pursuit   ) off-road  13%   eta  4.9 min
+[ 37/180] episode  310 (pursuit   ) off-road  64%   eta  5.3 min
+[ 38/180] episode  325 (pursuit   ) off-road   6%   eta  5.2 min
+[ 39/180] episode  315 (pursuit   ) off-road  87%   eta  5.0 min
+[ 40/180] episode  332 (pursuit   ) off-road  16%   eta  4.9 min
+[ 41/180] episode  341 (pursuit   ) off-road  46%   eta  4.7 min
+[ 42/180] episode  342 (pursuit   ) off-road  63%   eta  4.6 min
+[ 43/180] episode  358 (pursuit   ) off-road  22%   eta  4.9 min
+[ 44/180] episode  365 (pursuit   ) off-road  84%   eta  4.8 min
+[ 45/180] episode  376 (pursuit   ) off-road  13%   eta  4.7 min
+[ 46/180] episode  375 (pursuit   ) off-road  80%   eta  4.6 min
+[ 47/180] episode  399 (pursuit   ) off-road  93%   eta  4.4 min
+[ 48/180] episode  398 (pursuit   ) off-road  80%   eta  4.3 min
+[ 49/180] episode  409 (pursuit   ) off-road  19%   eta  4.6 min
+[ 50/180] episode  412 (pursuit   ) off-road  41%   eta  4.5 min
+[ 51/180] episode  430 (pursuit   ) off-road  72%   eta  4.4 min
+[ 52/180] episode  441 (pursuit   ) off-road   9%   eta  4.3 min
+[ 53/180] episode  474 (pursuit   ) off-road  62%   eta  4.2 min
+[ 54/180] episode  475 (pursuit   ) off-road  20%   eta  4.1 min
+[ 55/180] episode  486 (pursuit   ) off-road  48%   eta  4.3 min
+[ 56/180] episode  494 (pursuit   ) off-road  90%   eta  4.2 min
+[ 57/180] episode  490 (pursuit   ) off-road   5%   eta  4.2 min
+[ 58/180] episode  496 (pursuit   ) off-road  66%   eta  4.1 min
+[ 59/180] episode  492 (pursuit   ) off-road  70%   eta  4.0 min
+[ 60/180] episode  499 (pursuit   ) off-road  88%   eta  3.9 min
+[ 61/180] episode  523 (brownian  ) off-road  63%   eta  3.8 min
+[ 62/180] episode  538 (brownian  ) off-road  50%   eta  3.8 min
+[ 63/180] episode  557 (brownian  ) off-road  60%   eta  3.7 min
+[ 64/180] episode  540 (brownian  ) off-road  77%   eta  3.8 min
+[ 65/180] episode  507 (brownian  ) off-road  54%   eta  3.7 min
+[ 66/180] episode  522 (brownian  ) off-road  95%   eta  3.6 min
+[ 67/180] episode  591 (brownian  ) off-road  59%   eta  3.6 min
+[ 68/180] episode  548 (brownian  ) off-road  83%   eta  3.5 min
+[ 69/180] episode  566 (brownian  ) off-road  88%   eta  3.5 min
+[ 70/180] episode  588 (brownian  ) off-road   0%   eta  3.5 min
+[ 71/180] episode  634 (brownian  ) off-road  71%   eta  3.4 min
+[ 72/180] episode  590 (brownian  ) off-road  95%   eta  3.4 min
+[ 73/180] episode  592 (brownian  ) off-road  94%   eta  3.3 min
+[ 74/180] episode  612 (brownian  ) off-road  58%   eta  3.3 min
+[ 75/180] episode  690 (brownian  ) off-road  68%   eta  3.3 min
+[ 76/180] episode  679 (brownian  ) off-road  73%   eta  3.2 min
+[ 77/180] episode  638 (brownian  ) off-road  50%   eta  3.2 min
+[ 78/180] episode  666 (brownian  ) off-road  94%   eta  3.1 min
+[ 79/180] episode  667 (brownian  ) off-road  85%   eta  3.1 min
+[ 80/180] episode  697 (brownian  ) off-road  93%   eta  3.1 min
+[ 81/180] episode  701 (brownian  ) off-road  90%   eta  3.1 min
+[ 82/180] episode  703 (brownian  ) off-road  52%   eta  3.0 min
+[ 83/180] episode  704 (brownian  ) off-road  95%   eta  3.0 min
+[ 84/180] episode  705 (brownian  ) off-road  95%   eta  2.9 min
+[ 85/180] episode  721 (brownian  ) off-road  95%   eta  2.9 min
+[ 86/180] episode  735 (brownian  ) off-road  95%   eta  2.9 min
+[ 87/180] episode  741 (brownian  ) off-road  93%   eta  2.9 min
+[ 88/180] episode  751 (brownian  ) off-road  92%   eta  2.8 min
+[ 89/180] episode  757 (brownian  ) off-road  80%   eta  2.8 min
+[ 90/180] episode  760 (brownian  ) off-road  89%   eta  2.7 min
+[ 91/180] episode  791 (brownian  ) off-road  82%   eta  2.7 min
+[ 92/180] episode  779 (brownian  ) off-road  95%   eta  2.7 min
+[ 93/180] episode  788 (brownian  ) off-road  79%   eta  2.7 min
+[ 94/180] episode  792 (brownian  ) off-road  95%   eta  2.7 min
+[ 95/180] episode  794 (brownian  ) off-road  96%   eta  2.6 min
+[ 96/180] episode  804 (brownian  ) off-road  95%   eta  2.6 min
+[ 97/180] episode  845 (brownian  ) off-road  25%   eta  2.5 min
+[ 98/180] episode  852 (brownian  ) off-road  67%   eta  2.5 min
+[ 99/180] episode  854 (brownian  ) off-road  90%   eta  2.5 min
+[100/180] episode  862 (brownian  ) off-road  95%   eta  2.5 min
+[101/180] episode  865 (brownian  ) off-road  96%   eta  2.4 min
+[102/180] episode  870 (brownian  ) off-road  25%   eta  2.4 min
+[103/180] episode  884 (brownian  ) off-road  96%   eta  2.3 min
+[104/180] episode  902 (brownian  ) off-road  95%   eta  2.3 min
+[105/180] episode  904 (brownian  ) off-road  96%   eta  2.3 min
+[106/180] episode  922 (brownian  ) off-road  91%   eta  2.3 min
+[107/180] episode  907 (brownian  ) off-road  96%   eta  2.2 min
+[108/180] episode  930 (brownian  ) off-road  76%   eta  2.2 min
+[109/180] episode  931 (brownian  ) off-road  91%   eta  2.1 min
+[110/180] episode  942 (brownian  ) off-road  95%   eta  2.1 min
+[111/180] episode  947 (brownian  ) off-road  95%   eta  2.1 min
+[112/180] episode  948 (brownian  ) off-road  81%   eta  2.1 min
+[113/180] episode  953 (brownian  ) off-road  96%   eta  2.0 min
+[114/180] episode  954 (brownian  ) off-road  96%   eta  2.0 min
+[115/180] episode  957 (brownian  ) off-road  96%   eta  2.0 min
+[116/180] episode  958 (brownian  ) off-road  96%   eta  1.9 min
+[117/180] episode  963 (brownian  ) off-road  96%   eta  1.9 min
+[118/180] episode  970 (brownian  ) off-road  75%   eta  1.9 min
+[119/180] episode  974 (brownian  ) off-road  94%   eta  1.8 min
+[120/180] episode  980 (brownian  ) off-road  96%   eta  1.8 min
+[121/180] episode 1009 (controller) off-road   2%   eta  1.8 min
+[122/180] episode 1016 (controller) off-road   3%   eta  1.7 min
+[123/180] episode 1017 (controller) off-road   3%   eta  1.7 min
+[124/180] episode 1022 (controller) off-road   1%   eta  1.7 min
+[125/180] episode 1031 (controller) off-road   3%   eta  1.7 min
+[126/180] episode 1044 (controller) off-road   0%   eta  1.6 min
+[127/180] episode 1045 (controller) off-road   3%   eta  1.6 min
+[128/180] episode 1049 (controller) off-road   1%   eta  1.6 min
+[129/180] episode 1056 (controller) off-road   2%   eta  1.6 min
+[130/180] episode 1074 (controller) off-road   0%   eta  1.5 min
+[131/180] episode 1078 (controller) off-road   4%   eta  1.5 min
+[132/180] episode 1080 (controller) off-road   4%   eta  1.4 min
+[133/180] episode 1085 (controller) off-road   4%   eta  1.4 min
+[134/180] episode 1089 (controller) off-road   1%   eta  1.4 min
+[135/180] episode 1091 (controller) off-road   5%   eta  1.4 min
+[136/180] episode 1096 (controller) off-road   2%   eta  1.3 min
+[137/180] episode 1104 (controller) off-road   2%   eta  1.3 min
+[138/180] episode 1107 (controller) off-road   3%   eta  1.3 min
+[139/180] episode 1118 (controller) off-road   2%   eta  1.2 min
+[140/180] episode 1141 (controller) off-road   1%   eta  1.2 min
+[141/180] episode 1148 (controller) off-road   2%   eta  1.2 min
+[142/180] episode 1154 (controller) off-road   0%   eta  1.1 min
+[143/180] episode 1159 (controller) off-road   2%   eta  1.1 min
+[144/180] episode 1166 (controller) off-road   1%   eta  1.1 min
+[145/180] episode 1168 (controller) off-road   0%   eta  1.0 min
+[146/180] episode 1184 (controller) off-road   1%   eta  1.0 min
+[147/180] episode 1196 (controller) off-road   5%   eta  1.0 min
+[148/180] episode 1202 (controller) off-road   8%   eta  1.0 min
+[149/180] episode 1207 (controller) off-road   0%   eta  0.9 min
+[150/180] episode 1212 (controller) off-road   0%   eta  0.9 min
+[151/180] episode 1213 (controller) off-road   1%   eta  0.9 min
+[152/180] episode 1223 (controller) off-road   2%   eta  0.8 min
+[153/180] episode 1229 (controller) off-road   0%   eta  0.8 min
+[154/180] episode 1235 (controller) off-road   1%   eta  0.8 min
+[155/180] episode 1236 (controller) off-road   3%   eta  0.8 min
+[156/180] episode 1242 (controller) off-road   2%   eta  0.7 min
+[157/180] episode 1267 (controller) off-road   2%   eta  0.7 min
+[158/180] episode 1269 (controller) off-road   2%   eta  0.7 min
+[159/180] episode 1280 (controller) off-road   2%   eta  0.6 min
+[160/180] episode 1281 (controller) off-road   0%   eta  0.6 min
+[161/180] episode 1291 (controller) off-road   2%   eta  0.6 min
+[162/180] episode 1297 (controller) off-road   3%   eta  0.5 min
+[163/180] episode 1303 (controller) off-road   1%   eta  0.5 min
+[164/180] episode 1307 (controller) off-road   0%   eta  0.5 min
+[165/180] episode 1311 (controller) off-road   1%   eta  0.5 min
+[166/180] episode 1313 (controller) off-road   1%   eta  0.4 min
+[167/180] episode 1315 (controller) off-road   1%   eta  0.4 min
+[168/180] episode 1316 (controller) off-road   1%   eta  0.4 min
+[169/180] episode 1320 (controller) off-road   1%   eta  0.3 min
+[170/180] episode 1327 (controller) off-road   1%   eta  0.3 min
+[171/180] episode 1329 (controller) off-road   2%   eta  0.3 min
+[172/180] episode 1336 (controller) off-road   0%   eta  0.2 min
+[173/180] episode 1356 (controller) off-road   2%   eta  0.2 min
+[174/180] episode 1358 (controller) off-road   0%   eta  0.2 min
+[175/180] episode 1363 (controller) off-road   1%   eta  0.1 min
+[176/180] episode 1364 (controller) off-road   2%   eta  0.1 min
+[177/180] episode 1367 (controller) off-road   0%   eta  0.1 min
+[178/180] episode 1368 (controller) off-road   0%   eta  0.1 min
+[179/180] episode 1371 (controller) off-road   0%   eta  0.0 min
+[180/180] episode 1372 (controller) off-road   0%   eta  0.0 min
+
+=== summary ===
+{
+ "replays_matching_recorded_rewards": "180/180",
+ "episodes_per_policy_in_dataset": {
+  "pursuit": 500,
+  "brownian": 500,
+  "controller": 400
+ },
+ "frames_per_policy_in_dataset": {
+  "pursuit": 500000,
+  "brownian": 459000,
+  "controller": 400000
+ },
+ "per_policy": {
+  "pursuit": {
+   "episodes": 60,
+   "frames": 60000,
+   "off_road_share": {
+    "value": 0.5251,
+    "ci95": [
+     0.44809916666666666,
+     0.6026675
+    ]
+   },
+   "spun_share": {
+    "value": 0.26075,
+    "ci95": [
+     0.21083083333333336,
+     0.30857291666666653
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.9833333333333333,
+   "excursions_per_1000_frames": {
+    "value": 2.4833333333333334,
+    "ci95": [
+     2.0,
+     3.0337499999999977
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 1.1833333333333333,
+    "ci95": [
+     0.8666666666666667,
+     1.5333333333333334
+    ]
+   }
+  },
+  "brownian": {
+   "episodes": 60,
+   "frames": 54489,
+   "off_road_share": {
+    "value": 0.8294518159628549,
+    "ci95": [
+     0.7721416374984026,
+     0.8800384393161829
+    ]
+   },
+   "spun_share": {
+    "value": 0.4348400594615427,
+    "ci95": [
+     0.40034675595981095,
+     0.46296885867121773
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.9833333333333333,
+   "excursions_per_1000_frames": {
+    "value": 2.8262585108921066,
+    "ci95": [
+     2.068145222549173,
+     3.642433869623077
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 0.7524454477050414,
+    "ci95": [
+     0.4262500986832236,
+     1.1062906468862648
+    ]
+   }
+  },
+  "controller": {
+   "episodes": 60,
+   "frames": 60000,
+   "off_road_share": {
+    "value": 0.0158,
+    "ci95": [
+     0.012299583333333334,
+     0.019450416666666664
+    ]
+   },
+   "spun_share": {
+    "value": 0.0002666666666666667,
+    "ci95": [
+     5e-05,
+     0.0005666666666666667
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.2,
+   "excursions_per_1000_frames": {
+    "value": 0.21666666666666667,
+    "ci95": [
+     0.11666666666666667,
+     0.3333333333333333
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 0.2,
+    "ci95": [
+     0.1,
+     0.31666666666666665
+    ]
+   }
+  }
+ },
+ "whole_dataset_estimate": {
+  "off_road_share": 0.477989980520199,
+  "spun_share": 0.24287950990398438,
+  "recoveries_per_1000_frames": 0.7483731620038857,
+  "recoveries_in_dataset": 1017.0391271632807
+ },
+ "dream_trained_controller_test_rollouts": {
+  "episodes": 100,
+  "frames": 98340,
+  "off_road_share": {
+   "value": 0.6164632906243644,
+   "ci95": [
+    0.5765983896677866,
+    0.6555676915100235
+   ]
+  },
+  "spun_share": {
+   "value": 0.3997152735407769,
+   "ci95": [
+    0.3721515365002209,
+    0.4277938492538497
+   ]
+  },
+  "share_of_episodes_with_an_excursion": 1.0,
+  "excursions_per_1000_frames": {
+   "value": 2.603213341468375,
+   "ci95": [
+    2.2992903299703147,
+    2.908415630785394
+   ]
+  },
+  "recoveries_per_1000_frames": {
+   "value": 1.647345942647956,
+   "ci95": [
+    1.3235081983180752,
+    1.963837589667237
+   ]
+  }
+ }
+}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/data_coverage.json
+exit: 0

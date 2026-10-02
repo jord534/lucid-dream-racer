@@ -1,0 +1,181 @@
+20:55:55 r00/proposers: start   (about 94 min left in total, estimate)
+20:55:55   training proposer 0
+20:56:55     dream CMA-ES:  30%|███       | 30/100 [00:56<02:16,  1.96s/gen, best_real=41, dream_avg=185]
+20:57:55     dream CMA-ES:  64%|██████▍   | 64/100 [01:57<00:54,  1.51s/gen, best_real=81, dream_avg=218]
+20:58:55     dream CMA-ES:  94%|█████████▍| 94/100 [02:56<00:09,  1.55s/gen, best_real=296, dream_avg=223]
+20:59:13   training proposer 1
+21:00:13     dream CMA-ES:  29%|██▉       | 29/100 [00:56<02:47,  2.36s/gen, best_real=271, dream_avg=183]
+21:01:13     dream CMA-ES:  61%|██████    | 61/100 [01:55<01:02,  1.59s/gen, best_real=271, dream_avg=224]
+21:02:13     dream CMA-ES:  95%|█████████▌| 95/100 [02:56<00:07,  1.53s/gen, best_real=271, dream_avg=231]
+21:02:33   training proposer 2
+21:03:33     dream CMA-ES:  30%|███       | 30/100 [00:56<02:21,  2.02s/gen, best_real=167, dream_avg=180]
+21:04:33     dream CMA-ES:  65%|██████▌   | 65/100 [01:56<00:56,  1.61s/gen, best_real=167, dream_avg=214]
+21:05:33     dream CMA-ES:  99%|█████████▉| 99/100 [02:55<00:01,  1.53s/gen, best_real=167, dream_avg=226]
+21:05:41 r00/proposers: done in 9.8 min (about 0.00 euros so far)
+21:05:41 r00/measure: start   (about 83 min left in total, estimate)
+  real rollouts: 15/150  (0.7 min elapsed, about 6.6 min left)
+  real rollouts: 30/150  (1.2 min elapsed, about 4.8 min left)
+  real rollouts: 45/150  (1.8 min elapsed, about 4.2 min left)
+  real rollouts: 60/150  (4.3 min elapsed, about 6.4 min left)
+  real rollouts: 75/150  (31.3 min elapsed, about 31.3 min left)
+  real rollouts: 90/150  (32.0 min elapsed, about 21.3 min left)
+  real rollouts: 105/150  (32.5 min elapsed, about 13.9 min left)
+  real rollouts: 120/150  (32.9 min elapsed, about 8.2 min left)
+  real rollouts: 135/150  (33.3 min elapsed, about 3.7 min left)
+  real rollouts: 150/150  (33.8 min elapsed, about 0.0 min left)
+  real replays: 45/450  (0.3 min elapsed, about 2.7 min left)
+  real replays: 90/450  (0.6 min elapsed, about 2.4 min left)
+  real replays: 135/450  (0.9 min elapsed, about 2.1 min left)
+  real replays: 180/450  (1.4 min elapsed, about 2.0 min left)
+  real replays: 225/450  (1.8 min elapsed, about 1.8 min left)
+  real replays: 270/450  (2.2 min elapsed, about 1.5 min left)
+  real replays: 315/450  (2.6 min elapsed, about 1.1 min left)
+  real replays: 360/450  (3.0 min elapsed, about 0.7 min left)
+  real replays: 405/450  (3.4 min elapsed, about 0.4 min left)
+  real replays: 450/450  (3.8 min elapsed, about 0.0 min left)
+21:43:23   round 0: real return 270.2, exploit gap 90.4, real on-road share 0.34
+21:43:23 r00/measure: done in 37.7 min (about 0.00 euros so far)
+21:43:23 r00/critic: start   (about 128 min left in total, estimate)
+  real rollouts: 12/120  (0.5 min elapsed, about 4.3 min left)
+  real rollouts: 24/120  (0.9 min elapsed, about 3.7 min left)
+  real rollouts: 36/120  (1.4 min elapsed, about 3.2 min left)
+  real rollouts: 48/120  (1.8 min elapsed, about 2.7 min left)
+  real rollouts: 60/120  (2.2 min elapsed, about 2.2 min left)
+  real rollouts: 72/120  (2.6 min elapsed, about 1.8 min left)
+  real rollouts: 84/120  (3.0 min elapsed, about 1.3 min left)
+  real rollouts: 96/120  (3.4 min elapsed, about 0.9 min left)
+  real rollouts: 108/120  (3.8 min elapsed, about 0.4 min left)
+  real rollouts: 120/120  (4.1 min elapsed, about 0.0 min left)
+  real replays: 36/360  (0.2 min elapsed, about 1.9 min left)
+  real replays: 72/360  (0.5 min elapsed, about 1.9 min left)
+  real replays: 108/360  (0.7 min elapsed, about 1.7 min left)
+  real replays: 144/360  (1.0 min elapsed, about 1.5 min left)
+  real replays: 180/360  (1.3 min elapsed, about 1.3 min left)
+  real replays: 216/360  (1.7 min elapsed, about 1.1 min left)
+  real replays: 252/360  (2.0 min elapsed, about 0.8 min left)
+  real replays: 288/360  (2.3 min elapsed, about 0.6 min left)
+  real replays: 324/360  (2.6 min elapsed, about 0.3 min left)
+  real replays: 360/360  (2.9 min elapsed, about 0.0 min left)
+21:50:25   kept 180 of 360 candidates (mean gap 87.2)
+21:50:25 r00/critic: done in 7.0 min (about 0.00 euros so far)
+21:50:25 r00/finetune: start   (about 119 min left in total, estimate)
+21:51:25     step 500/5000  nll 0.970  val nll 0.980  val r_mse 0.887  about 7.9 min left
+21:52:25     step 1000/5000  nll 0.955  val nll 0.970  val r_mse 0.872  about 7.0 min left
+21:53:25     step 1500/5000  nll 0.969  val nll 0.979  val r_mse 0.916  about 6.1 min left
+21:54:25     step 2000/5000  nll 0.989  val nll 0.984  val r_mse 0.867  about 5.2 min left
+21:55:25     step 2500/5000  nll 0.988  val nll 0.982  val r_mse 0.920  about 4.4 min left
+21:56:25     step 3000/5000  nll 0.983  val nll 0.981  val r_mse 0.806  about 3.6 min left
+21:57:25     step 3500/5000  nll 0.989  val nll 0.988  val r_mse 0.793  about 2.7 min left
+21:58:25     step 4000/5000  nll 0.978  val nll 0.981  val r_mse 0.846  about 1.8 min left
+21:59:25     step 4500/5000  nll 0.992  val nll 0.985  val r_mse 0.927  about 0.9 min left
+21:59:28   fine-tuned on 180 branch episodes
+21:59:28 r00/finetune: done in 9.0 min (about 0.00 euros so far)
+21:59:28 r01/proposers: start   (about 111 min left in total, estimate)
+21:59:28   training proposer 0
+22:00:28     dream CMA-ES:  29%|██▉       | 29/100 [00:56<02:51,  2.41s/gen, best_real=415, dream_avg=187]
+22:01:28     dream CMA-ES:  60%|██████    | 60/100 [01:55<01:03,  1.59s/gen, best_real=423, dream_avg=232]
+22:02:28     dream CMA-ES:  92%|█████████▏| 92/100 [02:56<00:11,  1.49s/gen, best_real=423, dream_avg=240]
+22:02:54   training proposer 1
+22:03:54     dream CMA-ES:  27%|██▋       | 27/100 [00:56<04:42,  3.87s/gen, best_real=524, dream_avg=162]
+22:04:54     dream CMA-ES:  58%|█████▊    | 58/100 [01:55<01:11,  1.70s/gen, best_real=524, dream_avg=240]
+22:05:54     dream CMA-ES:  90%|█████████ | 90/100 [02:55<00:14,  1.47s/gen, best_real=524, dream_avg=252]
+22:06:23   training proposer 2
+22:07:23     dream CMA-ES:  30%|███       | 30/100 [00:55<02:20,  2.00s/gen, best_real=285, dream_avg=173]
+22:08:23     dream CMA-ES:  61%|██████    | 61/100 [01:55<01:01,  1.57s/gen, best_real=498, dream_avg=227]
+22:09:23     dream CMA-ES:  92%|█████████▏| 92/100 [02:56<00:11,  1.49s/gen, best_real=556, dream_avg=235]
+22:09:51 r01/proposers: done in 10.4 min (about 0.00 euros so far)
+22:09:51 r01/measure: start   (about 102 min left in total, estimate)
+  real rollouts: 15/150  (0.7 min elapsed, about 6.3 min left)
+  real rollouts: 30/150  (1.1 min elapsed, about 4.6 min left)
+  real rollouts: 45/150  (1.7 min elapsed, about 3.9 min left)
+  real rollouts: 60/150  (2.2 min elapsed, about 3.3 min left)
+  real rollouts: 75/150  (2.7 min elapsed, about 2.7 min left)
+  real rollouts: 90/150  (3.3 min elapsed, about 2.2 min left)
+  real rollouts: 105/150  (3.8 min elapsed, about 1.6 min left)
+  real rollouts: 120/150  (4.3 min elapsed, about 1.1 min left)
+  real rollouts: 135/150  (4.9 min elapsed, about 0.5 min left)
+  real rollouts: 150/150  (5.3 min elapsed, about 0.0 min left)
+  real replays: 45/450  (0.9 min elapsed, about 7.8 min left)
+  real replays: 90/450  (1.6 min elapsed, about 6.2 min left)
+  real replays: 135/450  (2.3 min elapsed, about 5.4 min left)
+  real replays: 180/450  (3.0 min elapsed, about 4.4 min left)
+  real replays: 225/450  (3.7 min elapsed, about 3.7 min left)
+  real replays: 270/450  (4.3 min elapsed, about 2.9 min left)
+  real replays: 315/450  (5.1 min elapsed, about 2.2 min left)
+  real replays: 360/450  (5.9 min elapsed, about 1.5 min left)
+  real replays: 405/450  (6.7 min elapsed, about 0.7 min left)
+  real replays: 450/450  (7.5 min elapsed, about 0.0 min left)
+22:22:46   round 1: real return 593.0, exploit gap 70.8, real on-road share 0.40
+22:22:46 r01/measure: done in 12.9 min (about 0.00 euros so far)
+22:22:46 r01/critic: start   (about 51 min left in total, estimate)
+  real rollouts: 12/120  (0.5 min elapsed, about 4.3 min left)
+  real rollouts: 24/120  (0.9 min elapsed, about 3.6 min left)
+  real rollouts: 36/120  (1.3 min elapsed, about 2.9 min left)
+  real rollouts: 48/120  (1.7 min elapsed, about 2.5 min left)
+  real rollouts: 60/120  (2.1 min elapsed, about 2.1 min left)
+  real rollouts: 72/120  (2.6 min elapsed, about 1.7 min left)
+  real rollouts: 84/120  (3.0 min elapsed, about 1.3 min left)
+  real rollouts: 96/120  (3.4 min elapsed, about 0.9 min left)
+  real rollouts: 108/120  (3.9 min elapsed, about 0.4 min left)
+  real rollouts: 120/120  (4.2 min elapsed, about 0.0 min left)
+  real replays: 36/360  (0.7 min elapsed, about 6.1 min left)
+  real replays: 72/360  (1.2 min elapsed, about 4.9 min left)
+  real replays: 108/360  (1.8 min elapsed, about 4.2 min left)
+  real replays: 144/360  (2.4 min elapsed, about 3.6 min left)
+  real replays: 180/360  (2.9 min elapsed, about 2.9 min left)
+  real replays: 216/360  (3.4 min elapsed, about 2.2 min left)
+  real replays: 252/360  (4.0 min elapsed, about 1.7 min left)
+  real replays: 288/360  (4.5 min elapsed, about 1.1 min left)
+  real replays: 324/360  (5.1 min elapsed, about 0.6 min left)
+  real replays: 360/360  (5.8 min elapsed, about 0.0 min left)
+22:32:51   kept 180 of 360 candidates (mean gap 66.0)
+22:32:51 r01/critic: done in 10.1 min (about 0.00 euros so far)
+22:32:51 r01/finetune: start   (about 44 min left in total, estimate)
+22:33:51     step 500/5000  nll 0.980  val nll 0.979  val r_mse 0.813  about 7.7 min left
+22:34:51     step 1000/5000  nll 0.974  val nll 0.980  val r_mse 0.753  about 6.9 min left
+22:35:51     step 1500/5000  nll 0.991  val nll 0.976  val r_mse 0.828  about 6.0 min left
+22:36:51     step 2000/5000  nll 0.989  val nll 0.975  val r_mse 0.837  about 5.2 min left
+22:37:51     step 2500/5000  nll 0.999  val nll 0.984  val r_mse 0.850  about 4.3 min left
+22:38:51     step 3000/5000  nll 0.989  val nll 0.982  val r_mse 0.792  about 3.4 min left
+22:39:51     step 4000/5000  nll 1.024  val nll 0.978  val r_mse 0.880  about 1.7 min left
+22:40:51     step 4500/5000  nll 0.993  val nll 0.981  val r_mse 0.832  about 0.9 min left
+22:41:33   fine-tuned on 360 branch episodes
+22:41:33 r01/finetune: done in 8.7 min (about 0.00 euros so far)
+22:41:33 r02/proposers: start   (about 35 min left in total, estimate)
+22:41:33   training proposer 0
+22:42:33     dream CMA-ES:  27%|██▋       | 27/100 [00:56<04:36,  3.79s/gen, best_real=483, dream_avg=139]
+22:43:33     dream CMA-ES:  56%|█████▌    | 56/100 [01:56<01:31,  2.07s/gen, best_real=649, dream_avg=184]
+22:44:33     dream CMA-ES:  85%|████████▌ | 85/100 [02:56<00:25,  1.68s/gen, best_real=699, dream_avg=194]
+22:45:12   training proposer 1
+22:46:12     dream CMA-ES:  29%|██▉       | 29/100 [00:56<02:50,  2.40s/gen, best_real=464, dream_avg=155]
+22:47:12     dream CMA-ES:  61%|██████    | 61/100 [01:56<01:01,  1.58s/gen, best_real=464, dream_avg=189]
+22:48:12     dream CMA-ES:  92%|█████████▏| 92/100 [02:56<00:12,  1.50s/gen, best_real=464, dream_avg=203]
+22:48:38   training proposer 2
+22:49:38     dream CMA-ES:  29%|██▉       | 29/100 [00:56<02:50,  2.40s/gen, best_real=407, dream_avg=158]
+22:50:38     dream CMA-ES:  61%|██████    | 61/100 [01:55<01:01,  1.57s/gen, best_real=407, dream_avg=194]
+22:51:38     dream CMA-ES:  95%|█████████▌| 95/100 [02:56<00:07,  1.50s/gen, best_real=407, dream_avg=212]
+22:51:55 r02/proposers: done in 10.4 min (about 0.00 euros so far)
+22:51:55 r02/measure: start   (about 25 min left in total, estimate)
+  real rollouts: 15/150  (0.6 min elapsed, about 5.6 min left)
+  real rollouts: 30/150  (1.1 min elapsed, about 4.5 min left)
+  real rollouts: 45/150  (1.7 min elapsed, about 3.9 min left)
+  real rollouts: 60/150  (2.3 min elapsed, about 3.5 min left)
+  real rollouts: 75/150  (2.8 min elapsed, about 2.8 min left)
+  real rollouts: 90/150  (3.4 min elapsed, about 2.3 min left)
+  real rollouts: 105/150  (3.9 min elapsed, about 1.7 min left)
+  real rollouts: 120/150  (4.5 min elapsed, about 1.1 min left)
+  real rollouts: 135/150  (5.0 min elapsed, about 0.6 min left)
+  real rollouts: 150/150  (5.4 min elapsed, about 0.0 min left)
+  real replays: 45/450  (0.9 min elapsed, about 7.8 min left)
+  real replays: 90/450  (1.8 min elapsed, about 7.0 min left)
+  real replays: 135/450  (2.6 min elapsed, about 6.0 min left)
+  real replays: 180/450  (3.3 min elapsed, about 5.0 min left)
+  real replays: 225/450  (4.0 min elapsed, about 4.0 min left)
+  real replays: 270/450  (4.7 min elapsed, about 3.1 min left)
+  real replays: 315/450  (5.4 min elapsed, about 2.3 min left)
+  real replays: 360/450  (6.1 min elapsed, about 1.5 min left)
+  real replays: 405/450  (6.7 min elapsed, about 0.7 min left)
+  real replays: 450/450  (7.5 min elapsed, about 0.0 min left)
+23:04:59   round 2: real return 639.7, exploit gap 57.4, real on-road share 0.47
+23:04:59 r02/measure: done in 13.1 min (about 0.00 euros so far)
+23:04:59 finished: completed; about 0.00 euros of 5.00 used

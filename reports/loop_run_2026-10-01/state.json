@@ -1,0 +1,73 @@
+{
+ "hours": 2.151058568822013,
+ "ledger": [
+  {
+   "round": 0,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop/r00/mdnrnn/best.pt",
+   "real_return_mean": 270.20386726379394,
+   "real_return_by_proposer": [
+    250.7275845336914,
+    261.301565322876,
+    298.58245193481446
+   ],
+   "gap_mean": 90.36642312652535,
+   "gap_median": 100.37636947631836,
+   "dream_return_window_mean": 121.01948674811257,
+   "real_return_window_mean": 30.653063621587222,
+   "real_on_road_share_mean": 0.34192222222222224,
+   "candidates": 450
+  },
+  {
+   "round": 1,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop/r01/mdnrnn/best.pt",
+   "real_return_mean": 592.9936197408041,
+   "real_return_by_proposer": [
+    590.6789640808106,
+    492.876201171875,
+    695.4256939697266
+   ],
+   "gap_mean": 70.84951266843412,
+   "gap_median": 73.1567440032959,
+   "dream_return_window_mean": 97.90346764587694,
+   "real_return_window_mean": 27.05395497744282,
+   "real_on_road_share_mean": 0.40259636141150495,
+   "candidates": 450
+  },
+  {
+   "round": 2,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop/r02/mdnrnn/best.pt",
+   "real_return_mean": 639.7268069458008,
+   "real_return_by_proposer": [
+    762.5101846313477,
+    599.9807940673828,
+    556.6894421386719
+   ],
+   "gap_mean": 57.36462043484052,
+   "gap_median": 59.14934730529785,
+   "dream_return_window_mean": 81.71829024957286,
+   "real_return_window_mean": 24.35366981473234,
+   "real_on_road_share_mean": 0.4697265041717725,
+   "candidates": 450
+  }
+ ],
+ "stage_min": {
+  "proposers": [
+   9.764921915531158,
+   10.391923785209656,
+   10.371838529904684
+  ],
+  "measure": [
+   37.70439773400624,
+   12.907711311181385,
+   13.06543163061142
+  ],
+  "critic": [
+   7.023871783415476,
+   10.081386482715606
+  ],
+  "finetune": [
+   9.049670898914338,
+   8.702360900243123
+  ]
+ }
+}

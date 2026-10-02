@@ -158,10 +158,88 @@ failure. This is the model being exploited by the search, not just blurred.
 **Caveats for sections 5 and 6.** One controller, one world model, one temperature, 100 tracks.
 Section 6 applies the dream's actions open-loop in the simulator, which is not what the controller
 would do on real frames (it would react), so it shows that the dream's prediction for those actions
-is wrong, not what the controller would achieve. The results are consistent with the world model
-rarely having seen spins and recoveries (the training data is mostly on-road driving), but that
-cause was not tested. Starting the dream from a point already off the road, to see whether the
-controller can recover there, was not done.
+is wrong, not what the controller would achieve. Section 7 tested the idea that the world model
+rarely saw the car leave the road, and found it false. Starting the dream from a point already off
+the road, to see whether the controller can recover there, was not done.
+
+## 7. How much of the world model's training data shows the car off the road?  (`data_coverage.json`, `data_coverage.log`)
+
+**Setup.** One candidate cause of sections 5 and 6 was that the training data rarely shows what
+happens once the car leaves the road. This counts it. A random sample of 60 recorded training
+episodes from each of the three recording policies (pursuit driver, random driver, on-policy
+controller; 180 in all) was replayed in the real simulator. Replaying the recorded actions from the
+track seed reproduced every episode exactly (180 of 180 recorded rewards matched), so the labels are
+true. Counted: frames with no wheel on the road; frames where the car points more than 90 degrees
+away from the track direction ("spun"); excursions (20 or more consecutive off-road steps); and
+recoveries (an excursion followed by 20 or more consecutive on-road steps). Intervals are bootstrap
+95% over episodes. The whole-dataset figures weight each policy by its number of frames. The same
+counts were made for the dream-trained controller's own test rollouts for comparison. Run
+`python diagnostics/data_coverage.py` (about 12 minutes, 6 workers).
+
+**Result.**
+
+| | Off the road | Spun | Episodes with an excursion | Recoveries per 1000 frames |
+|---|---|---|---|---|
+| Pursuit driver (500 episodes) | 52.5% (45 to 60) | 26.1% | 98% | 1.18 |
+| Random driver (500 episodes) | 82.9% (77 to 88) | 43.5% | 98% | 0.75 |
+| On-policy controller (400 episodes) | 1.6% (1.2 to 1.9) | 0.03% | 20% | 0.20 |
+| **Whole dataset (estimate)** | **47.8%** | **24.3%** | | **0.75 (about 1,000 recoveries)** |
+| Dream-trained controller, test rollouts | 61.6% (58 to 66) | 40.0% | 100% | 1.65 |
+
+**Meaning.** The world model has seen a great deal of off-road driving: about half of all training
+frames, a quarter of them spun, and about a thousand recoveries. The idea that the data is mostly
+on-road, so the model never learned what leaving the road looks like, is false. The dream-trained
+controller's own test rollouts (61.6% off the road) look like the pursuit and random driver data, not
+unlike it. What is nearly absent is off-road driving *with controller-like actions*: the on-policy
+controller data, the only recordings made by a controller, is 98.4% on the road. If the model has learned
+that smooth, controller-style steering goes together with the road being under the car, that would
+explain sections 5 and 6, and it matches the idea that the model has learned the action and the track
+state as coupled. That is an inference; it was not tested.
+
+**Caveats.** A sample of 60 episodes per policy, not the whole dataset. "Controller-like actions" were
+not measured: it is assumed that the dream-trained controller steers in a style similar to the
+real-trained controller whose data was recorded.
+
+## 8. Do the actions alone reveal whether the car is on the road?  (`action_leak.json`, logs)
+
+**Setup.** Tests the coupling idea from section 7: that a world model could read "road under the
+car" off the actions instead of tracking the road itself. The same 180 training episodes as section
+7 were replayed in the simulator (all 180 matched) and the true on-road label kept for every step.
+For each step, a small network was given only the last 10 actions (steer, gas, brake, including the
+action taken at that step) and asked whether the car was on the road. No images, no positions.
+Scored on whole episodes it never saw (5-fold split by episode); chance is 0.5. Three versions: trained
+and scored within each recording policy; trained on all three pooled; and a control trained on shuffled
+labels. The pooled predictors were then applied to the dream-trained controller's actions on the
+100 test tracks. Fixed before running: the within-policy scores, and the pooled predictors' reading on
+the dream-trained controller's actions at steps where its car is really off the road. Run
+`python diagnostics/action_leak_check.py --collect` (about 10 minutes) then `--analyse` (about 3).
+
+**Result.**
+
+| Predicting "on the road" from the last 10 actions alone | AUC (95% interval) |
+|---|---|
+| Pursuit driver, within policy | 0.93 (0.90 to 0.95) |
+| On-policy controller, within policy | 0.92 (0.91 to 0.94) |
+| Random driver, within policy | 0.73 (0.64 to 0.81) |
+| All three pooled | 0.94 (0.92 to 0.95) |
+| Control, shuffled labels | 0.49 |
+
+On the dream-trained controller's own actions (its car is on the road 38% of the time), the pooled
+predictors read the probability of "on road" as 0.66 at the steps where the car is really off the road
+and 0.37 where it is on the road; they call 81% of the off-road steps "on road". Their AUC there is
+0.27 (0.25 to 0.28), below chance: the reading is inverted.
+
+**Meaning.** The actions alone say a lot about whether the car is on the road: 0.92 to 0.93 for drivers
+that react to the track, and still 0.73 for the random driver. So the shortcut exists in the data, and
+a world model could use it. On the dream-trained controller the shortcut misleads: when its car is off
+the road it keeps applying the kind of driving actions the data associates with being on the road, so
+actions-only reading says "road". That would produce the pattern in sections 5 and 6 (road drawn under
+the car), but this test does not show the world model actually relies on it.
+
+**Caveats.** The shuffled-label control rules out a pipeline fault. The random driver's 0.73 shows some
+of the signal comes from how actions persist in time, not only from reacting to the road. Whether the
+world model uses the shortcut would need a separate test, for example changing the actions it is given
+and seeing whether the imagined road follows them.
 
 ## Files
 
@@ -173,5 +251,8 @@ controller can recover there, was not done.
 | `dream_fidelity.json`, `dream_fidelity_collect.log`, `dream_fidelity_analyse.log` | Section 4 summary, per-track rows, and logs |
 | `dream_closed_loop.json`, `closed_loop_frames.png`, `dream_closed_loop.log` | Section 5 summary, per-track rows, picture, log |
 | `dream_actions_in_sim.json`, `dream_actions_in_sim.log` | Section 6 summary, per-track rows, log |
+| `data_coverage.json`, `data_coverage.log` | Section 7 summary and log |
+| `action_leak.json`, `action_leak_collect.log`, `action_leak_analyse.log` | Section 8 summary and logs |
+| `../../data/dream_failure/coverage_replays.npz` | True per-step on-road labels for the 180 replayed episodes (section 8) |
 | `../../data/dream_failure/rollouts_dream_v3.npz` | Per-step real rollouts behind sections 4 to 6 |
-| `../../diagnostics/bendiness_check.py`, `bend_check.py`, `dream_fidelity.py`, `dream_closed_loop.py`, `dream_actions_in_sim.py` | The scripts |
+| `../../diagnostics/bendiness_check.py`, `bend_check.py`, `dream_fidelity.py`, `dream_closed_loop.py`, `dream_actions_in_sim.py`, `data_coverage.py`, `action_leak_check.py` | The scripts |

@@ -1,0 +1,153 @@
+{
+ "replays_matching_recorded_rewards": "180/180",
+ "episodes_per_policy_in_dataset": {
+  "pursuit": 500,
+  "brownian": 500,
+  "controller": 400
+ },
+ "frames_per_policy_in_dataset": {
+  "pursuit": 500000,
+  "brownian": 459000,
+  "controller": 400000
+ },
+ "per_policy": {
+  "pursuit": {
+   "episodes": 60,
+   "frames": 60000,
+   "off_road_share": {
+    "value": 0.5251,
+    "ci95": [
+     0.44809916666666666,
+     0.6026675
+    ]
+   },
+   "spun_share": {
+    "value": 0.26075,
+    "ci95": [
+     0.21083083333333336,
+     0.30857291666666653
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.9833333333333333,
+   "excursions_per_1000_frames": {
+    "value": 2.4833333333333334,
+    "ci95": [
+     2.0,
+     3.0337499999999977
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 1.1833333333333333,
+    "ci95": [
+     0.8666666666666667,
+     1.5333333333333334
+    ]
+   }
+  },
+  "brownian": {
+   "episodes": 60,
+   "frames": 54489,
+   "off_road_share": {
+    "value": 0.8294518159628549,
+    "ci95": [
+     0.7721416374984026,
+     0.8800384393161829
+    ]
+   },
+   "spun_share": {
+    "value": 0.4348400594615427,
+    "ci95": [
+     0.40034675595981095,
+     0.46296885867121773
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.9833333333333333,
+   "excursions_per_1000_frames": {
+    "value": 2.8262585108921066,
+    "ci95": [
+     2.068145222549173,
+     3.642433869623077
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 0.7524454477050414,
+    "ci95": [
+     0.4262500986832236,
+     1.1062906468862648
+    ]
+   }
+  },
+  "controller": {
+   "episodes": 60,
+   "frames": 60000,
+   "off_road_share": {
+    "value": 0.0158,
+    "ci95": [
+     0.012299583333333334,
+     0.019450416666666664
+    ]
+   },
+   "spun_share": {
+    "value": 0.0002666666666666667,
+    "ci95": [
+     5e-05,
+     0.0005666666666666667
+    ]
+   },
+   "share_of_episodes_with_an_excursion": 0.2,
+   "excursions_per_1000_frames": {
+    "value": 0.21666666666666667,
+    "ci95": [
+     0.11666666666666667,
+     0.3333333333333333
+    ]
+   },
+   "recoveries_per_1000_frames": {
+    "value": 0.2,
+    "ci95": [
+     0.1,
+     0.31666666666666665
+    ]
+   }
+  }
+ },
+ "whole_dataset_estimate": {
+  "off_road_share": 0.477989980520199,
+  "spun_share": 0.24287950990398438,
+  "recoveries_per_1000_frames": 0.7483731620038857,
+  "recoveries_in_dataset": 1017.0391271632807
+ },
+ "dream_trained_controller_test_rollouts": {
+  "episodes": 100,
+  "frames": 98340,
+  "off_road_share": {
+   "value": 0.6164632906243644,
+   "ci95": [
+    0.5765983896677866,
+    0.6555676915100235
+   ]
+  },
+  "spun_share": {
+   "value": 0.3997152735407769,
+   "ci95": [
+    0.3721515365002209,
+    0.4277938492538497
+   ]
+  },
+  "share_of_episodes_with_an_excursion": 1.0,
+  "excursions_per_1000_frames": {
+   "value": 2.603213341468375,
+   "ci95": [
+    2.2992903299703147,
+    2.908415630785394
+   ]
+  },
+  "recoveries_per_1000_frames": {
+   "value": 1.647345942647956,
+   "ci95": [
+    1.3235081983180752,
+    1.963837589667237
+   ]
+  }
+ }
+}

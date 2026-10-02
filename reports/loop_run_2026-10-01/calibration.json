@@ -1,0 +1,55 @@
+{
+ "hardware": {
+  "system": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.1",
+  "torch": "2.14.0",
+  "logical_cores": 8,
+  "torch_threads": 4,
+  "cpu": "Apple M1",
+  "physical_cores": 8,
+  "performance_cores": 4,
+  "efficiency_cores": 4,
+  "ram_gb": 16.0,
+  "power": "Now drawing from 'Battery Power'",
+  "gpu": "Chipset Model: Apple M1 | Total Number of Cores: 8",
+  "torch_cuda": false,
+  "torch_mps": true
+ },
+ "sim_steps_per_s_by_workers": {
+  "1": 159.33726937889585,
+  "2": 253.54540183438317,
+  "4": 378.8914310847368,
+  "6": 441.2973365703669,
+  "8": 468.4186095487443
+ },
+ "worker_peak_rss_gb": 0.42,
+ "dream_s_per_generation": {
+  "cpu": 1.3298383951187134,
+  "mps": 1.4207775592803955
+ },
+ "finetune_steps_per_s": {
+  "cpu": 9.851901004262036,
+  "mps": 5.457432477137598
+ },
+ "rates": {
+  "sim_steps_per_s": 468.4186095487443,
+  "dream_s_per_gen": 1.3298383951187134,
+  "finetune_steps_per_s": 9.851901004262036
+ },
+ "recommended": {
+  "workers": 8,
+  "device": "cpu"
+ },
+ "projected_minutes_default_settings": {
+  "proposers": 10.064940127746137,
+  "measure": 10.140502326702945,
+  "critic": 8.112401861362356,
+  "finetune": 8.458604415257772
+ },
+ "projected_total_hours_default": 1.562638998609792,
+ "notes": [
+  "The machine was on battery power: plug it in, speed is usually lower on battery."
+ ],
+ "calibration_seconds": 56.33167815208435,
+ "measured_at": "2026-10-01T20:49:56+02:00"
+}

@@ -1,0 +1,8 @@
+share of steps on the road: {np.str_('brownian'): 0.163, np.str_('controller'): 0.984, np.str_('pursuit'): 0.471}
+within brownian  : AUC 0.728 [0.636, 0.807]
+within controller: AUC 0.924 [0.91, 0.938]
+within pursuit   : AUC 0.926 [0.902, 0.946]
+pooled overall AUC {'auc': 0.9371372234760459, 'ci95': [0.9191433024109386, 0.9499911832415165]} | shuffled-label control 0.49
+dream-trained controller's actions: {"share_on_road": 0.3786945812807882, "mean_p_on_road_at_off_road_steps": 0.6632949709892273, "mean_p_on_road_at_on_road_steps": 0.3749150037765503, "share_of_off_road_steps_predicted_on_road": 0.813181367690783, "auc": {"auc": 0.2678495482840524, "ci95": [0.25444324973475474, 0.27892055316201597]}}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/action_leak.json
+exit: 0
