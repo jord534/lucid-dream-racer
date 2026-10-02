@@ -5,12 +5,14 @@
 from __future__ import annotations
 
 import argparse
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 
+from .check_dream import load_mdnrnn
 from .config import DATA, RUNS, C
 from .mdnrnn import MDNRNN, mdn_nll, mdn_sample
 from .utils import CSVLogger, get_device, load_ckpt, save_ckpt, seed_everything
@@ -29,7 +31,8 @@ class SequenceSampler:
             t = np.arange(T - L + 1)
             pair = np.stack([d["obs_start"][e] + t, d["act_start"][e] + t], 1)
             starts["val" if d["is_val"][e] else "train"].append(pair)
-        self.starts = {k: np.concatenate(v) for k, v in starts.items()}
+        empty = np.zeros((0, 2), int)
+        self.starts = {k: np.concatenate(v) if v else empty for k, v in starts.items()}
 
     def sample(self, batch, split, rng, device):
         s = self.starts[split][rng.integers(len(self.starts[split]), size=batch)]
@@ -80,6 +83,12 @@ def main():
                    help="final scheduled-sampling probability, ramped in over the run")
     p.add_argument("--shared-mixture", action="store_true",
                    help="draw one mixture component per frame instead of per dimension")
+    p.add_argument("--init-from", type=Path, default=None,
+                   help="warm start from this checkpoint (shared/per-dimension is read from it)")
+    p.add_argument("--extra", type=Path, default=None,
+                   help="npz of extra episodes in the latents.npz format (e.g. real branches)")
+    p.add_argument("--extra-frac", type=float, default=0.5,
+                   help="share of every training batch drawn from --extra")
     p.add_argument("--eval-every", type=int, default=500)
     p.add_argument("--out", type=Path, default=RUNS / "mdnrnn")
     p.add_argument("--device", default=None)
@@ -88,7 +97,16 @@ def main():
     seed_everything(args.seed)
     dev = get_device(args.device)
     data = SequenceSampler()
-    model = MDNRNN(shared=args.shared_mixture).to(dev)
+    extra = SequenceSampler(args.extra) if args.extra else None
+    model = (load_mdnrnn(args.init_from, dev) if args.init_from
+             else MDNRNN(shared=args.shared_mixture).to(dev)).train()
+
+    def draw(split, n):
+        if extra is None or not len(extra.starts[split]):
+            return data.sample(n, split, rng, dev)
+        k = round(n * args.extra_frac)
+        a, b = data.sample(n - k, split, rng, dev), extra.sample(k, split, rng, dev)
+        return tuple(torch.cat([x, y]) for x, y in zip(a, b))
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)
     start, ck = 0, args.out / "last.pt"
@@ -98,9 +116,10 @@ def main():
         sched.load_state_dict(s["sched"]); start = s["step"]
     log, rng, best = CSVLogger(args.out / "log.csv"), np.random.default_rng(args.seed + start), 1e9
 
+    t_start = time.time()
     for step in range(start, args.steps):
         ss = args.ss_prob * min(1.0, 2 * step / args.steps)   # ramp in over the first half
-        loss, nll, rl, dl = loss_fn(model, data.sample(args.batch, "train", rng, dev), ss_prob=ss)
+        loss, nll, rl, dl = loss_fn(model, draw("train", args.batch), ss_prob=ss)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   # LSTMs spike
@@ -110,16 +129,21 @@ def main():
             with torch.no_grad():
                 vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev))
                 # validation always teacher-forced, so the number stays comparable across runs
+                ve = (loss_fn(model, extra.sample(256, "val", rng, dev))[1].item()
+                      if extra is not None and len(extra.starts["val"]) else float("nan"))
             model.train()
             log.log(step=step + 1, nll=nll.item(), r_mse=rl.item(), d_bce=dl.item(),
-                    val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item())
-            print(f"step {step + 1}  nll {nll.item():.3f}  "
-                  f"val nll {vn.item():.3f}  val r_mse {vr.item():.3f}")
+                    val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item(), val_nll_extra=ve)
+            eta = (time.time() - t_start) / (step + 1 - start) * (args.steps - step - 1)
+            print(f"step {step + 1}/{args.steps}  nll {nll.item():.3f}  "
+                  f"val nll {vn.item():.3f}  val r_mse {vr.item():.3f}  "
+                  f"about {eta / 60:.1f} min left", flush=True)
             payload = dict(model=model.state_dict(), opt=opt.state_dict(),
                            sched=sched.state_dict(), step=step + 1)
             save_ckpt(ck, **payload)
-            if vl.item() < best:
-                best = vl.item()
+            sel = vl.item() if np.isnan(ve) else 0.5 * (vn.item() + ve)   # with extra, judge both
+            if sel < best:
+                best = sel
                 save_ckpt(args.out / "best.pt", **payload)
 
 

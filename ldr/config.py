@@ -1,10 +1,11 @@
 """Single source of truth for paths and default hyperparameters."""
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"          # rollouts, packed frames, latents
-RUNS = ROOT / "runs"          # checkpoints, logs, figures
+RUNS = Path(os.environ["LDR_RUNS"]) if "LDR_RUNS" in os.environ else ROOT / "runs"          # checkpoints, logs, figures
 REPORTS = ROOT / "reports"    # final plots and tables
 
 # Disjoint seed ranges so no track is ever reused across stages.
