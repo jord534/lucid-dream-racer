@@ -1,0 +1,8 @@
+[  1] seed 1000009  real off-road steps  71  P(on road) there: real 0.43  dream replaying real actions 0.65  dream steered by controller 0.96  (0.4 min)
+[  2] seed 1000015  real off-road steps  71  P(on road) there: real 0.20  dream replaying real actions 0.62  dream steered by controller 0.97  (0.8 min)
+[  3] seed 1000016  real off-road steps  71  P(on road) there: real 0.36  dream replaying real actions 1.00  dream steered by controller 0.93  (1.2 min)
+[  4] seed 1000019  real off-road steps  71  P(on road) there: real 0.33  dream replaying real actions 0.97  dream steered by controller 0.99  (1.7 min)
+[  5] seed 1000029  real off-road steps  71  P(on road) there: real 0.91  dream replaying real actions 1.00  dream steered by controller 0.99  (2.1 min)
+[  6] seed 1000051  real off-road steps  71  P(on road) there: real 0.98  dream replaying real actions 0.98  dream steered by controller 0.99  (2.5 min)
+[  7] seed 1000056  real off-road steps  71  P(on road) there: real 0.25  dream replaying real actions 0.61  dream steered by controller 0.99  (2.8 min)
+[  8] seed 1000057  real off-road steps  71  P(on road) there: real 0.39  dream replaying real actions 0.55  dream steered by controller 0.90  (3.1 min)

@@ -1,0 +1,116 @@
+[  1] seed 1000012  real off-road steps  71  P(on road) there: real 0.07  dream replaying real actions 0.78  dream steered by controller 0.75  (0.2 min)
+[  2] seed 1000021  real off-road steps  71  P(on road) there: real 0.01  dream replaying real actions 0.92  dream steered by controller 0.78  (0.5 min)
+[  3] seed 1000022  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.87  dream steered by controller 0.83  (0.8 min)
+[  4] seed 1000033  real off-road steps  71  P(on road) there: real 0.33  dream replaying real actions 0.83  dream steered by controller 0.74  (1.2 min)
+[  5] seed 1000038  real off-road steps  71  P(on road) there: real 0.24  dream replaying real actions 0.91  dream steered by controller 0.78  (1.5 min)
+[  6] seed 1000042  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.81  dream steered by controller 0.82  (1.9 min)
+[  7] seed 1000043  real off-road steps  71  P(on road) there: real 0.02  dream replaying real actions 0.68  dream steered by controller 0.74  (2.3 min)
+[  8] seed 1000050  real off-road steps  71  P(on road) there: real 0.02  dream replaying real actions 0.92  dream steered by controller 0.90  (2.6 min)
+[  9] seed 1000051  real off-road steps  71  P(on road) there: real 0.07  dream replaying real actions 0.69  dream steered by controller 0.79  (2.9 min)
+[ 10] seed 1000057  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.89  dream steered by controller 0.88  (3.2 min)
+[ 11] seed 1000066  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.99  dream steered by controller 0.93  (3.5 min)
+[ 12] seed 1000068  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.91  dream steered by controller 0.70  (3.7 min)
+[ 13] seed 1000073  real off-road steps  29  P(on road) there: real 0.28  dream replaying real actions 0.85  dream steered by controller 0.85  (3.8 min)
+[ 14] seed 1000074  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.53  dream steered by controller 0.69  (4.0 min)
+[ 15] seed 1000078  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.79  dream steered by controller 0.82  (4.2 min)
+[ 16] seed 1000085  real off-road steps  71  P(on road) there: real 0.02  dream replaying real actions 0.91  dream steered by controller 0.87  (4.4 min)
+[ 17] seed 1000086  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.82  dream steered by controller 0.80  (4.7 min)
+[ 18] seed 1000090  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.83  dream steered by controller 0.91  (4.9 min)
+[ 19] seed 1000091  real off-road steps  71  P(on road) there: real 0.39  dream replaying real actions 0.69  dream steered by controller 0.84  (5.1 min)
+
+=== summary ===
+{
+ "tracks": 19,
+ "max_action_check": 1.8328428268432617e-06,
+ "primary_closed_minus_real": {
+  "median": 0.7627888731658459,
+  "ci95": [
+   0.6768435705453157,
+   0.8015495538711548
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 3.814697265625e-06
+ },
+ "closed_minus_open": {
+  "median": -0.015164434909820557,
+  "ci95": [
+   -0.04045826196670532,
+   0.028881847858428955
+  ],
+  "share_positive": 0.3684210526315789,
+  "wilcoxon_p": 0.5412178039550781
+ },
+ "open_minus_real": {
+  "median": 0.7779533080756664,
+  "ci95": [
+   0.6537821684032679,
+   0.847550518810749
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 3.814697265625e-06
+ },
+ "projected_closed_minus_real": {
+  "median": 0.7080693654716015,
+  "ci95": [
+   0.6383174527436495,
+   0.7835307121276855
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 3.814697265625e-06
+ },
+ "projected_open_minus_real": {
+  "median": 0.7815896682441235,
+  "ci95": [
+   0.6089126616716385,
+   0.8643996715545654
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 3.814697265625e-06
+ },
+ "mean_p_off": {
+  "real": 0.09410393924305313,
+  "open": 0.8223602112970854,
+  "closed": 0.8117109819462425,
+  "open_projected": 0.8054275857774835,
+  "closed_projected": 0.7829480892733524
+ },
+ "share_of_off_steps_dream_says_on_road": {
+  "open": 0.977020014825797,
+  "closed": 0.9977761304670126
+ },
+ "median_reward": {
+  "real": -2.932860851287842,
+  "open": -3.269721269607544,
+  "closed": 1.1622422933578491
+ },
+ "mean_gas": {
+  "real": 0.372702032327652,
+  "closed": 0.650457175154435
+ },
+ "mean_abs_steer_difference_controller_in_dream_vs_real": 0.590914564697366
+}
+Traceback (most recent call last):
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 663, in _save
+    fh = fp.fileno()
+         ^^^^^^^^^
+AttributeError: '_idat' object has no attribute 'fileno'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/diagnostics/dream_closed_loop.py", line 185, in <module>
+    main()
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/diagnostics/dream_closed_loop.py", line 180, in main
+    img.save(OUT / "closed_loop_frames.png")
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/Image.py", line 2711, in save
+    save_handler(self, fp, filename)
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/PngImagePlugin.py", line 1522, in _save
+    ImageFile._save(
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 667, in _save
+    _encode_tile(im, fp, tile, bufsize, None, exc)
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 685, in _encode_tile
+    encoder.setimage(im.im, extents)
+ValueError: cannot write empty image

@@ -1,0 +1,134 @@
+stage A (dream): track   1  (0.0 min)
+stage A (dream): track   2  (0.1 min)
+stage A (dream): track   3  (0.1 min)
+stage A (dream): track   4  (0.1 min)
+stage A (dream): track   5  (0.2 min)
+stage A (dream): track   6  (0.2 min)
+stage A (dream): track   7  (0.2 min)
+stage A (dream): track   8  (0.3 min)
+stage A (dream): track   9  (0.3 min)
+stage A (dream): track  10  (0.4 min)
+stage A (dream): track  11  (0.4 min)
+stage A (dream): track  12  (0.4 min)
+stage A (dream): track  13  (0.4 min)
+stage A (dream): track  14  (0.5 min)
+stage A (dream): track  15  (0.5 min)
+stage A (dream): track  16  (0.5 min)
+stage A (dream): track  17  (0.6 min)
+stage A (dream): track  18  (0.6 min)
+stage A (dream): track  19  (0.7 min)
+Python(61654) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Python(61655) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Python(61656) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Python(61657) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Python(61658) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+stage B (simulator):   1/76   eta  9.7 min
+stage B (simulator):   2/76   eta  4.9 min
+stage B (simulator):   3/76   eta  3.3 min
+stage B (simulator):   4/76   eta  2.5 min
+stage B (simulator):   5/76   eta  2.7 min
+stage B (simulator):   6/76   eta  2.3 min
+stage B (simulator):   7/76   eta  1.9 min
+stage B (simulator):   8/76   eta  1.7 min
+stage B (simulator):   9/76   eta  2.7 min
+stage B (simulator):  10/76   eta  2.4 min
+stage B (simulator):  11/76   eta  2.1 min
+stage B (simulator):  12/76   eta  2.0 min
+stage B (simulator):  13/76   eta  2.5 min
+stage B (simulator):  14/76   eta  2.3 min
+stage B (simulator):  15/76   eta  2.1 min
+stage B (simulator):  16/76   eta  2.0 min
+stage B (simulator):  17/76   eta  2.4 min
+stage B (simulator):  18/76   eta  2.3 min
+stage B (simulator):  19/76   eta  2.1 min
+stage B (simulator):  20/76   eta  2.0 min
+stage B (simulator):  21/76   eta  2.0 min
+stage B (simulator):  22/76   eta  1.9 min
+stage B (simulator):  23/76   eta  1.8 min
+stage B (simulator):  24/76   eta  1.7 min
+stage B (simulator):  25/76   eta  1.7 min
+stage B (simulator):  26/76   eta  1.6 min
+stage B (simulator):  27/76   eta  1.5 min
+stage B (simulator):  28/76   eta  1.4 min
+stage B (simulator):  29/76   eta  1.6 min
+stage B (simulator):  30/76   eta  1.5 min
+stage B (simulator):  31/76   eta  1.4 min
+stage B (simulator):  32/76   eta  1.4 min
+stage B (simulator):  33/76   eta  1.4 min
+stage B (simulator):  34/76   eta  1.3 min
+stage B (simulator):  35/76   eta  1.3 min
+stage B (simulator):  36/76   eta  1.2 min
+stage B (simulator):  37/76   eta  1.2 min
+stage B (simulator):  38/76   eta  1.2 min
+stage B (simulator):  39/76   eta  1.1 min
+stage B (simulator):  40/76   eta  1.1 min
+stage B (simulator):  41/76   eta  1.1 min
+stage B (simulator):  42/76   eta  1.0 min
+stage B (simulator):  43/76   eta  1.0 min
+stage B (simulator):  44/76   eta  0.9 min
+stage B (simulator):  45/76   eta  0.9 min
+stage B (simulator):  46/76   eta  0.9 min
+stage B (simulator):  47/76   eta  0.8 min
+stage B (simulator):  48/76   eta  0.8 min
+stage B (simulator):  49/76   eta  1.0 min
+stage B (simulator):  50/76   eta  0.9 min
+stage B (simulator):  51/76   eta  0.8 min
+stage B (simulator):  52/76   eta  0.8 min
+stage B (simulator):  53/76   eta  0.8 min
+stage B (simulator):  54/76   eta  0.7 min
+stage B (simulator):  55/76   eta  0.7 min
+stage B (simulator):  56/76   eta  0.6 min
+stage B (simulator):  57/76   eta  0.6 min
+stage B (simulator):  58/76   eta  0.6 min
+stage B (simulator):  59/76   eta  0.5 min
+stage B (simulator):  60/76   eta  0.5 min
+stage B (simulator):  61/76   eta  0.5 min
+stage B (simulator):  62/76   eta  0.4 min
+stage B (simulator):  63/76   eta  0.4 min
+stage B (simulator):  64/76   eta  0.4 min
+stage B (simulator):  65/76   eta  0.4 min
+stage B (simulator):  66/76   eta  0.3 min
+stage B (simulator):  67/76   eta  0.3 min
+stage B (simulator):  68/76   eta  0.2 min
+stage B (simulator):  69/76   eta  0.2 min
+stage B (simulator):  70/76   eta  0.2 min
+stage B (simulator):  71/76   eta  0.2 min
+stage B (simulator):  72/76   eta  0.1 min
+stage B (simulator):  73/76   eta  0.1 min
+stage B (simulator):  74/76   eta  0.1 min
+stage B (simulator):  75/76   eta  0.0 min
+stage B (simulator):  76/76   eta  0.0 min
+
+=== summary ===
+{
+ "tracks": 19,
+ "tracks_in_primary": 10,
+ "replays_not_matching_log": 0,
+ "primary_dream_minus_real_latent": {
+  "median": 0.5981144905090332,
+  "ci95": [
+   0.23121415078639984,
+   0.6822236776351929
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 0.001953125
+ },
+ "projected_dream_minus_real_latent": {
+  "median": 0.5482897758483887,
+  "ci95": [
+   0.1540101319551468,
+   0.6821666955947876
+  ],
+  "share_positive": 0.9,
+  "wilcoxon_p": 0.009765625
+ },
+ "window_share_on_road": {
+  "real_under_dream_actions": 0.911043557168784,
+  "dream_mean_p_on_road": 0.8197084759411059
+ },
+ "last20_share_on_road": {
+  "real_under_dream_actions": 0.7993421052631579,
+  "dream_mean_p_on_road": 0.7429874037441454
+ }
+}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_head_r02_p1/dream_actions_in_sim.json

@@ -1,0 +1,28 @@
+{
+ "round": 2,
+ "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop_head/r02/mdnrnn/best.pt",
+ "real_return_mean": 599.8132742818196,
+ "real_return_by_proposer": [
+  526.0572813415528,
+  761.3661535644532,
+  512.0163879394531
+ ],
+ "gap_mean": 48.63929915590419,
+ "gap_median": 47.357150077819824,
+ "dream_return_window_mean": 72.23700480951203,
+ "real_return_window_mean": 23.597705653607846,
+ "real_on_road_share_mean": 0.7532654243154439,
+ "candidates": 450,
+ "road_probe": {
+  "off_road_frames": 9947,
+  "frames": 144399,
+  "auc": 0.9636576771736145,
+  "ok": true
+ },
+ "road_gap_mean": 0.19161150752407527,
+ "dream_p_on_mean": 0.944876931839519,
+ "p_on_when_real_off_mean": 0.9627261602308645,
+ "branches_with_off_road": 251,
+ "head_acc_mean": 0.728301918874519,
+ "head_p_on_when_real_off_mean": 0.9716198365173961
+}

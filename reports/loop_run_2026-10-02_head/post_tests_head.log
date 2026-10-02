@@ -1,0 +1,20 @@
+=== driver 0: test-track evaluation, 23:45:43 ===
+loop_head_r02_p0: 517.9 +/- 300.7 over 100 tracks
+=== driver 0: collecting real rollouts, 23:49:42 ===
+returns matching the stored evaluation: 100/100
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/data/dream_failure/rollouts_loop_head_r02_p0.npz
+=== driver 0: closed-loop and actions-in-sim tests, 23:53:45 ===
+=== driver 0 finished, 00:00:24 ===
+=== driver 1: test-track evaluation, 00:00:24 ===
+loop_head_r02_p1: 773.5 +/- 281.2 over 100 tracks
+=== driver 1: collecting real rollouts, 00:04:23 ===
+returns matching the stored evaluation: 100/100
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/data/dream_failure/rollouts_loop_head_r02_p1.npz
+=== driver 1: closed-loop and actions-in-sim tests, 00:09:07 ===
+=== driver 1 finished, 00:15:31 ===
+=== driver 2: test-track evaluation, 00:15:31 ===
+loop_head_r02_p2: 475.4 +/- 320.5 over 100 tracks
+=== driver 2: collecting real rollouts, 00:20:12 ===
+returns matching the stored evaluation: 100/100
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/data/dream_failure/rollouts_loop_head_r02_p2.npz
+=== driver 2: closed-loop and actions-in-sim tests, 00:27:03 ===

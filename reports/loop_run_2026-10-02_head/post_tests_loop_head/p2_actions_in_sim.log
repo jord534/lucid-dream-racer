@@ -1,0 +1,89 @@
+stage A (dream): track   1  (0.1 min)
+stage A (dream): track   2  (0.1 min)
+stage A (dream): track   3  (0.1 min)
+stage A (dream): track   4  (0.2 min)
+stage A (dream): track   5  (0.2 min)
+stage A (dream): track   6  (0.3 min)
+stage A (dream): track   7  (0.3 min)
+stage A (dream): track   8  (0.4 min)
+stage A (dream): track   9  (0.4 min)
+stage A (dream): track  10  (0.5 min)
+stage A (dream): track  11  (0.5 min)
+stage B (simulator):   1/44   eta  8.3 min
+stage B (simulator):   2/44   eta  4.5 min
+stage B (simulator):   3/44   eta  2.9 min
+stage B (simulator):   4/44   eta  2.2 min
+stage B (simulator):   5/44   eta  3.3 min
+stage B (simulator):   6/44   eta  2.8 min
+stage B (simulator):   7/44   eta  2.4 min
+stage B (simulator):   8/44   eta  2.0 min
+stage B (simulator):   9/44   eta  2.6 min
+stage B (simulator):  10/44   eta  2.3 min
+stage B (simulator):  11/44   eta  2.1 min
+stage B (simulator):  12/44   eta  1.8 min
+stage B (simulator):  13/44   eta  1.9 min
+stage B (simulator):  14/44   eta  1.7 min
+stage B (simulator):  15/44   eta  1.6 min
+stage B (simulator):  16/44   eta  1.5 min
+stage B (simulator):  17/44   eta  1.7 min
+stage B (simulator):  18/44   eta  1.5 min
+stage B (simulator):  19/44   eta  1.4 min
+stage B (simulator):  20/44   eta  1.3 min
+stage B (simulator):  21/44   eta  1.2 min
+stage B (simulator):  22/44   eta  1.1 min
+stage B (simulator):  23/44   eta  1.0 min
+stage B (simulator):  24/44   eta  1.0 min
+stage B (simulator):  25/44   eta  0.9 min
+stage B (simulator):  26/44   eta  0.9 min
+stage B (simulator):  27/44   eta  0.8 min
+stage B (simulator):  28/44   eta  0.7 min
+stage B (simulator):  29/44   eta  0.7 min
+stage B (simulator):  30/44   eta  0.6 min
+stage B (simulator):  31/44   eta  0.6 min
+stage B (simulator):  32/44   eta  0.5 min
+stage B (simulator):  33/44   eta  0.5 min
+stage B (simulator):  34/44   eta  0.5 min
+stage B (simulator):  35/44   eta  0.4 min
+stage B (simulator):  36/44   eta  0.3 min
+stage B (simulator):  37/44   eta  0.3 min
+stage B (simulator):  38/44   eta  0.3 min
+stage B (simulator):  39/44   eta  0.2 min
+stage B (simulator):  40/44   eta  0.2 min
+stage B (simulator):  41/44   eta  0.1 min
+stage B (simulator):  42/44   eta  0.1 min
+stage B (simulator):  43/44   eta  0.0 min
+stage B (simulator):  44/44   eta  0.0 min
+
+=== summary ===
+{
+ "tracks": 11,
+ "tracks_in_primary": 6,
+ "replays_not_matching_log": 0,
+ "primary_dream_minus_real_latent": {
+  "median": 0.3171757161617279,
+  "ci95": [
+   0.20975111424922943,
+   0.5446763634681702
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 0.03125
+ },
+ "projected_dream_minus_real_latent": {
+  "median": 0.32085132598876953,
+  "ci95": [
+   0.21633199602365494,
+   0.541360005736351
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 0.03125
+ },
+ "window_share_on_road": {
+  "real_under_dream_actions": 0.7720454545454545,
+  "dream_mean_p_on_road": 0.9720754623413086
+ },
+ "last20_share_on_road": {
+  "real_under_dream_actions": 0.6943181818181818,
+  "dream_mean_p_on_road": 0.9505248178135265
+ }
+}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_head_r02_p2/dream_actions_in_sim.json

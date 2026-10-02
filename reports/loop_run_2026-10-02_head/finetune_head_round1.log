@@ -1,0 +1,10 @@
+step 500/5000  nll 0.978  val nll 0.980  val r_mse 0.853  on-road acc 0.992 (branches 0.984, off-road recall 0.97)  about 9.1 min left
+step 1000/5000  nll 0.973  val nll 0.981  val r_mse 0.811  on-road acc 0.991 (branches 0.987, off-road recall 0.97)  about 8.4 min left
+step 1500/5000  nll 0.981  val nll 0.988  val r_mse 0.824  on-road acc 0.993 (branches 0.985, off-road recall 0.97)  about 7.3 min left
+step 2000/5000  nll 0.972  val nll 0.992  val r_mse 0.830  on-road acc 0.993 (branches 0.988, off-road recall 0.98)  about 6.3 min left
+step 2500/5000  nll 0.992  val nll 0.985  val r_mse 0.923  on-road acc 0.991 (branches 0.986, off-road recall 0.97)  about 5.3 min left
+step 3000/5000  nll 0.984  val nll 0.984  val r_mse 0.804  on-road acc 0.992 (branches 0.990, off-road recall 0.98)  about 4.3 min left
+step 3500/5000  nll 0.992  val nll 0.982  val r_mse 0.760  on-road acc 0.992 (branches 0.987, off-road recall 0.97)  about 3.2 min left
+step 4000/5000  nll 0.964  val nll 0.985  val r_mse 0.756  on-road acc 0.992 (branches 0.985, off-road recall 0.97)  about 2.1 min left
+step 4500/5000  nll 0.998  val nll 0.985  val r_mse 0.876  on-road acc 0.993 (branches 0.984, off-road recall 0.97)  about 1.1 min left
+step 5000/5000  nll 0.996  val nll 0.983  val r_mse 0.786  on-road acc 0.993 (branches 0.990, off-road recall 0.98)  about 0.0 min left
