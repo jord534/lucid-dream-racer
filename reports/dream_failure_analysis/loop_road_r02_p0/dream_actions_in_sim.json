@@ -1,0 +1,614 @@
+{
+ "summary": {
+  "tracks": 53,
+  "tracks_in_primary": 51,
+  "replays_not_matching_log": 0,
+  "primary_dream_minus_real_latent": {
+   "median": 0.3722977042198181,
+   "ci95": [
+    0.23917123675346375,
+    0.6388609409332275
+   ],
+   "share_positive": 0.8823529411764706,
+   "wilcoxon_p": 5.230436547599729e-09
+  },
+  "projected_dream_minus_real_latent": {
+   "median": 0.37609073519706726,
+   "ci95": [
+    0.2589441239833832,
+    0.6487346887588501
+   ],
+   "share_positive": 0.8431372549019608,
+   "wilcoxon_p": 1.4999081021741457e-08
+  },
+  "window_share_on_road": {
+   "real_under_dream_actions": 0.6259905660377361,
+   "dream_mean_p_on_road": 0.6983410142502695
+  },
+  "last20_share_on_road": {
+   "real_under_dream_actions": 0.4120283018867924,
+   "dream_mean_p_on_road": 0.6866446703953563
+  }
+ },
+ "rows": [
+  {
+   "seed": 1000000,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.783993124961853,
+   "diff_projected": 0.790480375289917,
+   "real_on_share": 0.865,
+   "dream_p_on": 0.9754055142402649,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.970641016960144
+  },
+  {
+   "seed": 1000001,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.9213588833808899,
+   "diff_projected": 0.9277042150497437,
+   "real_on_share": 0.9275,
+   "dream_p_on": 0.9555003643035889,
+   "real_on_last20": 0.6375000000000001,
+   "dream_p_on_last20": 0.9903575778007507
+  },
+  {
+   "seed": 1000003,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.9519692063331604,
+   "diff_projected": 0.9596800208091736,
+   "real_on_share": 0.9525,
+   "dream_p_on": 0.9289883971214294,
+   "real_on_last20": 0.7625,
+   "dream_p_on_last20": 0.9934324622154236
+  },
+  {
+   "seed": 1000005,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.34161293506622314,
+   "diff_projected": 0.355366587638855,
+   "real_on_share": 0.4925,
+   "dream_p_on": 0.6881203055381775,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.5629147887229919
+  },
+  {
+   "seed": 1000006,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.31866389513015747,
+   "diff_projected": 0.3294186592102051,
+   "real_on_share": 0.255,
+   "dream_p_on": 0.47758185863494873,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.4715147614479065
+  },
+  {
+   "seed": 1000007,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8710145950317383,
+   "diff_projected": 0.8879777789115906,
+   "real_on_share": 0.77,
+   "dream_p_on": 0.9004271626472473,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.7834930419921875
+  },
+  {
+   "seed": 1000008,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.038599610328674316,
+   "diff_projected": -0.040653109550476074,
+   "real_on_share": 0.33,
+   "dream_p_on": 0.18381312489509583,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.10121118277311325
+  },
+  {
+   "seed": 1000009,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.0971260815858841,
+   "diff_projected": 0.11087068915367126,
+   "real_on_share": 0.5675,
+   "dream_p_on": 0.6022402048110962,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.6200816035270691
+  },
+  {
+   "seed": 1000012,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.011765100061893463,
+   "diff_projected": -0.06999142467975616,
+   "real_on_share": 0.825,
+   "dream_p_on": 0.5683144927024841,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.6548671126365662
+  },
+  {
+   "seed": 1000013,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.6984723806381226,
+   "diff_projected": 0.7164809107780457,
+   "real_on_share": 0.33749999999999997,
+   "dream_p_on": 0.9687783718109131,
+   "real_on_last20": 0.1625,
+   "dream_p_on_last20": 0.9726408123970032
+  },
+  {
+   "seed": 1000014,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.5948765873908997,
+   "diff_projected": 0.6197383999824524,
+   "real_on_share": 0.68,
+   "dream_p_on": 0.7964496612548828,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.8908611536026001
+  },
+  {
+   "seed": 1000015,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.7396900057792664,
+   "diff_projected": 0.7457388043403625,
+   "real_on_share": 0.4925,
+   "dream_p_on": 0.9147452712059021,
+   "real_on_last20": 0.32499999999999996,
+   "dream_p_on_last20": 0.9804177284240723
+  },
+  {
+   "seed": 1000017,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.3359719514846802,
+   "diff_projected": 0.5582472681999207,
+   "real_on_share": 0.8724999999999999,
+   "dream_p_on": 0.8319275379180908,
+   "real_on_last20": 0.625,
+   "dream_p_on_last20": 0.9014586210250854
+  },
+  {
+   "seed": 1000021,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.09690172225236893,
+   "diff_projected": 0.0798557698726654,
+   "real_on_share": 0.7175,
+   "dream_p_on": 0.3758257031440735,
+   "real_on_last20": 0.375,
+   "dream_p_on_last20": 0.29380249977111816
+  },
+  {
+   "seed": 1000022,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.1904030740261078,
+   "diff_projected": 0.19657856225967407,
+   "real_on_share": 0.6675,
+   "dream_p_on": 0.5680417418479919,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.5768330097198486
+  },
+  {
+   "seed": 1000024,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8173835277557373,
+   "diff_projected": 0.8218581676483154,
+   "real_on_share": 0.28750000000000003,
+   "dream_p_on": 0.9658360481262207,
+   "real_on_last20": 0.075,
+   "dream_p_on_last20": 0.9731554985046387
+  },
+  {
+   "seed": 1000028,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.903102695941925,
+   "diff_projected": 0.9079694151878357,
+   "real_on_share": 0.9099999999999999,
+   "dream_p_on": 0.9172699451446533,
+   "real_on_last20": 0.7375,
+   "dream_p_on_last20": 0.9862924814224243
+  },
+  {
+   "seed": 1000029,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.6388609409332275,
+   "diff_projected": 0.6487346887588501,
+   "real_on_share": 0.52,
+   "dream_p_on": 0.8604276180267334,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.749401867389679
+  },
+  {
+   "seed": 1000033,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.5630161762237549,
+   "diff_projected": 0.5671790838241577,
+   "real_on_share": 0.31,
+   "dream_p_on": 0.7830767035484314,
+   "real_on_last20": 0.2125,
+   "dream_p_on_last20": 0.7520585656166077
+  },
+  {
+   "seed": 1000035,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.3166106343269348,
+   "diff_projected": 0.32871800661087036,
+   "real_on_share": 0.7750000000000001,
+   "dream_p_on": 0.5175075531005859,
+   "real_on_last20": 0.4125,
+   "dream_p_on_last20": 0.5594416856765747
+  },
+  {
+   "seed": 1000036,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.37163853645324707,
+   "diff_projected": 0.3795459568500519,
+   "real_on_share": 0.745,
+   "dream_p_on": 0.9395736455917358,
+   "real_on_last20": 0.9125,
+   "dream_p_on_last20": 0.9783504009246826
+  },
+  {
+   "seed": 1000037,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.14645028114318848,
+   "diff_projected": 0.16120688617229462,
+   "real_on_share": 0.37250000000000005,
+   "dream_p_on": 0.5104086399078369,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.8990803360939026
+  },
+  {
+   "seed": 1000038,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.11908377707004547,
+   "diff_projected": -0.08047045767307281,
+   "real_on_share": 0.32749999999999996,
+   "dream_p_on": 0.4014572501182556,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.4391469359397888
+  },
+  {
+   "seed": 1000039,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8955384492874146,
+   "diff_projected": 0.9049334526062012,
+   "real_on_share": 0.28,
+   "dream_p_on": 0.9586933851242065,
+   "real_on_last20": 0.025,
+   "dream_p_on_last20": 0.9645741581916809
+  },
+  {
+   "seed": 1000042,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.09282584488391876,
+   "diff_projected": -0.12370437383651733,
+   "real_on_share": 0.9525,
+   "dream_p_on": 0.33651095628738403,
+   "real_on_last20": 0.7625,
+   "dream_p_on_last20": 0.2561434507369995
+  },
+  {
+   "seed": 1000043,
+   "futures": 4,
+   "replay_matches_log": true,
+   "real_on_share": 1.0,
+   "dream_p_on": 0.4082963764667511,
+   "real_on_last20": 1.0,
+   "dream_p_on_last20": 0.34287840127944946
+  },
+  {
+   "seed": 1000045,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.5105727314949036,
+   "diff_projected": 0.5116879940032959,
+   "real_on_share": 0.6825,
+   "dream_p_on": 0.9475337266921997,
+   "real_on_last20": 1.0,
+   "dream_p_on_last20": 0.9799045920372009
+  },
+  {
+   "seed": 1000048,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8525960445404053,
+   "diff_projected": 0.8588738441467285,
+   "real_on_share": 0.9199999999999999,
+   "dream_p_on": 0.7542425394058228,
+   "real_on_last20": 0.6000000000000001,
+   "dream_p_on_last20": 0.7793426513671875
+  },
+  {
+   "seed": 1000050,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.9452323317527771,
+   "diff_projected": 0.950560450553894,
+   "real_on_share": 0.8925,
+   "dream_p_on": 0.8205136060714722,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.769397497177124
+  },
+  {
+   "seed": 1000051,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.0576547272503376,
+   "diff_projected": 0.019232112914323807,
+   "real_on_share": 0.7875,
+   "dream_p_on": 0.4692397713661194,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.3282654881477356
+  },
+  {
+   "seed": 1000052,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.3722977042198181,
+   "diff_projected": 0.36190319061279297,
+   "real_on_share": 0.28500000000000003,
+   "dream_p_on": 0.6154455542564392,
+   "real_on_last20": 0.1625,
+   "dream_p_on_last20": 0.5612509250640869
+  },
+  {
+   "seed": 1000053,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.31063103675842285,
+   "diff_projected": 0.35392817854881287,
+   "real_on_share": 0.49249999999999994,
+   "dream_p_on": 0.7386093735694885,
+   "real_on_last20": 0.0375,
+   "dream_p_on_last20": 0.9162368774414062
+  },
+  {
+   "seed": 1000056,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.6959420442581177,
+   "diff_projected": 0.7140136361122131,
+   "real_on_share": 0.52,
+   "dream_p_on": 0.9098357558250427,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.98154616355896
+  },
+  {
+   "seed": 1000057,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.3726596236228943,
+   "diff_projected": 0.36006736755371094,
+   "real_on_share": 0.605,
+   "dream_p_on": 0.8093127608299255,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.782174289226532
+  },
+  {
+   "seed": 1000060,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.23917123675346375,
+   "diff_projected": 0.2589441239833832,
+   "real_on_share": 0.81,
+   "dream_p_on": 0.805566132068634,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.7528789043426514
+  },
+  {
+   "seed": 1000062,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.4028334617614746,
+   "diff_projected": 0.37609073519706726,
+   "real_on_share": 0.7075,
+   "dream_p_on": 0.6706634759902954,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.6143653988838196
+  },
+  {
+   "seed": 1000066,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.6211459636688232,
+   "diff_projected": 0.6237431168556213,
+   "real_on_share": 0.6475,
+   "dream_p_on": 0.74912428855896,
+   "real_on_last20": 0.25,
+   "dream_p_on_last20": 0.9557997584342957
+  },
+  {
+   "seed": 1000068,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.023750722408294678,
+   "diff_projected": -0.02439575456082821,
+   "real_on_share": 0.7825,
+   "dream_p_on": 0.4756016433238983,
+   "real_on_last20": 0.475,
+   "dream_p_on_last20": 0.40726950764656067
+  },
+  {
+   "seed": 1000071,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.0039896368980407715,
+   "diff_projected": 0.024014532566070557,
+   "real_on_share": 0.7775000000000001,
+   "dream_p_on": 0.5353330969810486,
+   "real_on_last20": 0.6625,
+   "dream_p_on_last20": 0.47541922330856323
+  },
+  {
+   "seed": 1000074,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.034817930310964584,
+   "diff_projected": -0.07990086823701859,
+   "real_on_share": 0.9225,
+   "dream_p_on": 0.3812211751937866,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.24266289174556732
+  },
+  {
+   "seed": 1000077,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.9342735409736633,
+   "diff_projected": 0.9420883059501648,
+   "real_on_share": 0.9525,
+   "dream_p_on": 0.8089864253997803,
+   "real_on_last20": 0.7625,
+   "dream_p_on_last20": 0.773290753364563
+  },
+  {
+   "seed": 1000080,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.6911484003067017,
+   "diff_projected": 0.6935207843780518,
+   "real_on_share": 0.6475,
+   "dream_p_on": 0.9262133836746216,
+   "real_on_last20": 1.0,
+   "dream_p_on_last20": 0.9611231088638306
+  },
+  {
+   "seed": 1000083,
+   "futures": 4,
+   "replay_matches_log": true,
+   "real_on_share": 0.99,
+   "dream_p_on": 0.8118380904197693,
+   "real_on_last20": 0.95,
+   "dream_p_on_last20": 0.7591496109962463
+  },
+  {
+   "seed": 1000085,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.15539804100990295,
+   "diff_projected": 0.11300929635763168,
+   "real_on_share": 0.45999999999999996,
+   "dream_p_on": 0.5191056728363037,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.29307785630226135
+  },
+  {
+   "seed": 1000086,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.22746337950229645,
+   "diff_projected": 0.2040795236825943,
+   "real_on_share": 0.2525,
+   "dream_p_on": 0.4069393277168274,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.32122668623924255
+  },
+  {
+   "seed": 1000087,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.7396051287651062,
+   "diff_projected": 0.7601937055587769,
+   "real_on_share": 0.3025,
+   "dream_p_on": 0.886589527130127,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.7404236793518066
+  },
+  {
+   "seed": 1000089,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8503388166427612,
+   "diff_projected": 0.865463137626648,
+   "real_on_share": 0.28750000000000003,
+   "dream_p_on": 0.9413894414901733,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.9745863080024719
+  },
+  {
+   "seed": 1000090,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.02088761143386364,
+   "diff_projected": -0.04634163901209831,
+   "real_on_share": 0.29750000000000004,
+   "dream_p_on": 0.2598400413990021,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.1797557771205902
+  },
+  {
+   "seed": 1000091,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.18906250596046448,
+   "diff_projected": 0.10424645245075226,
+   "real_on_share": 0.81,
+   "dream_p_on": 0.5319836139678955,
+   "real_on_last20": 0.75,
+   "dream_p_on_last20": 0.42117878794670105
+  },
+  {
+   "seed": 1000094,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.13943715393543243,
+   "diff_projected": 0.09463290870189667,
+   "real_on_share": 0.845,
+   "dream_p_on": 0.6548808813095093,
+   "real_on_last20": 0.5,
+   "dream_p_on_last20": 0.5595285892486572
+  },
+  {
+   "seed": 1000095,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8854256868362427,
+   "diff_projected": 0.8955142498016357,
+   "real_on_share": 0.29000000000000004,
+   "dream_p_on": 0.97898268699646,
+   "real_on_last20": 0.0,
+   "dream_p_on_last20": 0.9762368202209473
+  },
+  {
+   "seed": 1000096,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": -0.07213196158409119,
+   "diff_projected": -0.06106870248913765,
+   "real_on_share": 0.395,
+   "dream_p_on": 0.2849199175834656,
+   "real_on_last20": 0.25,
+   "dream_p_on_last20": 0.2320837527513504
+  },
+  {
+   "seed": 1000097,
+   "futures": 4,
+   "replay_matches_log": true,
+   "diff": 0.8692498207092285,
+   "diff_projected": 0.8781093955039978,
+   "real_on_share": 0.5825,
+   "dream_p_on": 0.9829440116882324,
+   "real_on_last20": 0.1625,
+   "dream_p_on_last20": 0.9889404773712158
+  }
+ ]
+}

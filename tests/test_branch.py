@@ -69,3 +69,45 @@ def test_road_probe_learns_a_separable_road_signal():
     _probe, info = road_probe(logs, rng)
     assert info["ok"] and info["auc"] > 0.95
     assert road_probe([{**logs[0], "on": np.ones(300, bool)}], rng)[0] is None
+
+
+def test_on_road_labels_travel_with_the_episodes_and_train_the_head(tmp_path):
+    import torch
+
+    from ldr.mdnrnn import MDNRNN
+    from ldr.train_mdnrnn import loss_fn
+
+    rng = np.random.default_rng(0)
+    eps = [_episode(100, rng) for _ in range(6)]
+    for e in eps:
+        e["on"] = rng.random(100) > 0.5
+    eps.append(_episode(100, rng))  # no flags: unknown (-1), never trained on
+    path = tmp_path / "extra.npz"
+    assemble(eps, path)
+    s = SequenceSampler(path)
+    assert set(np.unique(s.on)) == {-1, 0, 1} and (s.on[-100:] == -1).all()
+    batch = s.sample(8, "train", rng, "cpu", with_on=True)
+    assert len(batch) == 6 and batch[5].shape == (8, C.seq_len)
+    model = MDNRNN()
+    stats = {}
+    loss_fn(model, batch, on_weight=1.0, stats=stats)
+    loss_fn(model, batch, on_weight=1.0, ss_prob=0.3, stats=stats)  # scheduled-sampling path too
+    assert 0 <= stats["on_acc"] <= 1 and np.isfinite(stats["on_bce"])
+    with torch.no_grad():  # the 5-tuple callers still work and the head is optional
+        assert len(model(batch[0], batch[1])) == 6 and len(model(batch[0], batch[1], None, True)) == 7
+
+
+def test_old_checkpoints_load_without_a_trained_head(tmp_path):
+    import torch
+
+    from ldr.check_dream import load_mdnrnn
+    from ldr.mdnrnn import MDNRNN
+
+    m = MDNRNN()
+    sd = {k: v for k, v in m.state_dict().items() if not k.startswith("on_head")}
+    torch.save({"model": sd}, tmp_path / "old.pt")
+    assert load_mdnrnn(tmp_path / "old.pt").has_on is False
+    torch.save({"model": m.state_dict(), "on_trained": False}, tmp_path / "untrained.pt")
+    assert load_mdnrnn(tmp_path / "untrained.pt").has_on is False
+    torch.save({"model": m.state_dict(), "on_trained": True}, tmp_path / "trained.pt")
+    assert load_mdnrnn(tmp_path / "trained.pt").has_on is True

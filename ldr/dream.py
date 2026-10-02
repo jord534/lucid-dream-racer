@@ -15,13 +15,16 @@ class DreamSim:
     frame after teacher-forcing K real steps to build up h."""
 
     def __init__(self, rnn: MDNRNN, device, tau: float = C.tau, latents=DATA / "latents.npz",
-                 start_from: str = "good"):
+                 start_from: str = "good", road_penalty: float = 0.0):
         """start_from="good" draws warm-start states only from the better half of the
         recorded episodes (the pure-pursuit ones), so the controller is scored from
         situations a competent driver actually reaches, rather than from a spin on the
         grass left behind by the Brownian collector."""
         d = np.load(latents)
         self.rnn, self.dev, self.tau = rnn, device, tau
+        # road_penalty: reward lost per step in proportion to the on-road head's P(off the road)
+        assert not road_penalty or rnn.has_on, "road_penalty needs a world model with a trained on-road head"
+        self.road_penalty = road_penalty
         self.mu = torch.from_numpy(d["mu"]).to(device)
         self.logvar = torch.from_numpy(d["logvar"]).to(device)
         self.actions = torch.from_numpy(d["actions"]).to(device)
@@ -59,9 +62,13 @@ class DreamSim:
     @torch.no_grad()
     def step(self, a: torch.Tensor, tau: float | None = None, z_offset=None):
         z_in = self.z if z_offset is None else self.z + z_offset
-        logit, mu, logsig, r, d_logit, self.state = self.rnn.step(z_in, a, self.state)
+        logit, mu, logsig, r, d_logit, self.state, *on = self.rnn.step(
+            z_in, a, self.state, return_on=bool(self.road_penalty)
+        )
         self.z = mdn_sample(logit, mu, logsig, self.tau if tau is None else tau)
         done = torch.bernoulli(torch.sigmoid(d_logit))
+        if on:
+            r = r - self.road_penalty * (1 - torch.sigmoid(on[0]))
         reward = r * self.alive
         self.alive = self.alive * (1 - done)
         return self.z, self.h, reward, self.alive

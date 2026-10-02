@@ -1,0 +1,162 @@
+[  1] seed 1000000  real off-road steps  50  P(on road) there: real 0.30  dream replaying real actions 0.50  dream steered by controller 0.68  (0.3 min)
+[  2] seed 1000001  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.29  dream steered by controller 0.38  (0.5 min)
+[  3] seed 1000002  real off-road steps  58  P(on road) there: real 0.18  dream replaying real actions 0.46  dream steered by controller 0.75  (0.8 min)
+[  4] seed 1000003  real off-road steps  71  P(on road) there: real 0.06  dream replaying real actions 0.31  dream steered by controller 0.36  (1.1 min)
+[  5] seed 1000005  real off-road steps  43  P(on road) there: real 0.19  dream replaying real actions 0.52  dream steered by controller 0.65  (1.3 min)
+[  6] seed 1000006  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.56  dream steered by controller 0.83  (1.6 min)
+[  7] seed 1000007  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.43  dream steered by controller 0.68  (1.9 min)
+[  8] seed 1000008  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.13  dream steered by controller 0.19  (2.1 min)
+[  9] seed 1000009  real off-road steps  36  P(on road) there: real 0.14  dream replaying real actions 0.56  dream steered by controller 0.59  (2.4 min)
+[ 10] seed 1000010  real off-road steps  22  P(on road) there: real 0.23  dream replaying real actions 0.85  dream steered by controller 0.74  (2.7 min)
+[ 11] seed 1000011  real off-road steps  56  P(on road) there: real 0.39  dream replaying real actions 0.29  dream steered by controller 0.56  (2.9 min)
+[ 12] seed 1000012  real off-road steps  71  P(on road) there: real 0.07  dream replaying real actions 0.19  dream steered by controller 0.25  (3.2 min)
+[ 13] seed 1000013  real off-road steps  71  P(on road) there: real 0.06  dream replaying real actions 0.51  dream steered by controller 0.61  (3.6 min)
+[ 14] seed 1000014  real off-road steps  36  P(on road) there: real 0.21  dream replaying real actions 0.55  dream steered by controller 0.50  (3.9 min)
+[ 15] seed 1000015  real off-road steps  77  P(on road) there: real 0.08  dream replaying real actions 0.23  dream steered by controller 0.90  (4.2 min)
+[ 16] seed 1000017  real off-road steps  71  P(on road) there: real 0.15  dream replaying real actions 0.40  dream steered by controller 0.43  (4.6 min)
+[ 17] seed 1000019  real off-road steps  41  P(on road) there: real 0.16  dream replaying real actions 0.50  dream steered by controller 0.69  (4.9 min)
+[ 18] seed 1000020  real off-road steps  71  P(on road) there: real 0.19  dream replaying real actions 0.41  dream steered by controller 0.61  (5.2 min)
+[ 19] seed 1000021  real off-road steps  71  P(on road) there: real 0.15  dream replaying real actions 0.16  dream steered by controller 0.12  (5.6 min)
+[ 20] seed 1000022  real off-road steps  71  P(on road) there: real 0.08  dream replaying real actions 0.19  dream steered by controller 0.16  (5.9 min)
+[ 21] seed 1000024  real off-road steps  59  P(on road) there: real 0.23  dream replaying real actions 0.22  dream steered by controller 0.10  (6.3 min)
+[ 22] seed 1000025  real off-road steps  71  P(on road) there: real 0.14  dream replaying real actions 0.25  dream steered by controller 0.79  (6.6 min)
+[ 23] seed 1000027  real off-road steps  44  P(on road) there: real 0.33  dream replaying real actions 0.62  dream steered by controller 0.82  (6.9 min)
+[ 24] seed 1000028  real off-road steps  71  P(on road) there: real 0.07  dream replaying real actions 0.20  dream steered by controller 0.42  (7.3 min)
+[ 25] seed 1000029  real off-road steps  51  P(on road) there: real 0.30  dream replaying real actions 0.61  dream steered by controller 0.72  (7.6 min)
+[ 26] seed 1000030  real off-road steps  51  P(on road) there: real 0.21  dream replaying real actions 0.56  dream steered by controller 0.76  (7.9 min)
+[ 27] seed 1000032  real off-road steps  52  P(on road) there: real 0.20  dream replaying real actions 0.55  dream steered by controller 0.67  (8.3 min)
+[ 28] seed 1000033  real off-road steps  78  P(on road) there: real 0.08  dream replaying real actions 0.43  dream steered by controller 0.76  (8.6 min)
+[ 29] seed 1000034  real off-road steps  37  P(on road) there: real 0.12  dream replaying real actions 0.55  dream steered by controller 0.47  (8.9 min)
+[ 30] seed 1000035  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.29  dream steered by controller 0.66  (9.3 min)
+[ 31] seed 1000036  real off-road steps  42  P(on road) there: real 0.12  dream replaying real actions 0.54  dream steered by controller 0.77  (9.6 min)
+[ 32] seed 1000037  real off-road steps  54  P(on road) there: real 0.24  dream replaying real actions 0.59  dream steered by controller 0.79  (9.9 min)
+[ 33] seed 1000038  real off-road steps  55  P(on road) there: real 0.22  dream replaying real actions 0.44  dream steered by controller 0.48  (10.3 min)
+[ 34] seed 1000040  real off-road steps  52  P(on road) there: real 0.18  dream replaying real actions 0.35  dream steered by controller 0.86  (10.6 min)
+[ 35] seed 1000041  real off-road steps  47  P(on road) there: real 0.19  dream replaying real actions 0.39  dream steered by controller 0.75  (10.9 min)
+[ 36] seed 1000042  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.13  dream steered by controller 0.09  (11.3 min)
+[ 37] seed 1000043  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.19  dream steered by controller 0.15  (11.6 min)
+[ 38] seed 1000044  real off-road steps  75  P(on road) there: real 0.20  dream replaying real actions 0.48  dream steered by controller 0.72  (12.0 min)
+[ 39] seed 1000045  real off-road steps  51  P(on road) there: real 0.29  dream replaying real actions 0.42  dream steered by controller 0.79  (12.3 min)
+[ 40] seed 1000046  real off-road steps  67  P(on road) there: real 0.16  dream replaying real actions 0.39  dream steered by controller 0.73  (12.6 min)
+[ 41] seed 1000047  real off-road steps  48  P(on road) there: real 0.19  dream replaying real actions 0.28  dream steered by controller 0.98  (12.9 min)
+[ 42] seed 1000048  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.23  dream steered by controller 0.28  (13.2 min)
+[ 43] seed 1000049  real off-road steps  78  P(on road) there: real 0.17  dream replaying real actions 0.40  dream steered by controller 0.84  (13.4 min)
+[ 44] seed 1000050  real off-road steps  71  P(on road) there: real 0.08  dream replaying real actions 0.28  dream steered by controller 0.42  (13.6 min)
+[ 45] seed 1000051  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.13  dream steered by controller 0.16  (13.8 min)
+[ 46] seed 1000052  real off-road steps  45  P(on road) there: real 0.25  dream replaying real actions 0.45  dream steered by controller 0.77  (14.0 min)
+[ 47] seed 1000053  real off-road steps  80  P(on road) there: real 0.12  dream replaying real actions 0.46  dream steered by controller 0.61  (14.2 min)
+[ 48] seed 1000054  real off-road steps  80  P(on road) there: real 0.09  dream replaying real actions 0.35  dream steered by controller 0.75  (14.4 min)
+[ 49] seed 1000055  real off-road steps  46  P(on road) there: real 0.24  dream replaying real actions 0.34  dream steered by controller 0.68  (14.6 min)
+[ 50] seed 1000056  real off-road steps  30  P(on road) there: real 0.15  dream replaying real actions 0.40  dream steered by controller 0.77  (14.8 min)
+[ 51] seed 1000057  real off-road steps  65  P(on road) there: real 0.09  dream replaying real actions 0.10  dream steered by controller 0.87  (15.0 min)
+[ 52] seed 1000058  real off-road steps  44  P(on road) there: real 0.31  dream replaying real actions 0.41  dream steered by controller 0.98  (15.2 min)
+[ 53] seed 1000059  real off-road steps  81  P(on road) there: real 0.08  dream replaying real actions 0.17  dream steered by controller 0.92  (15.4 min)
+[ 54] seed 1000060  real off-road steps  44  P(on road) there: real 0.21  dream replaying real actions 0.45  dream steered by controller 0.55  (15.6 min)
+[ 55] seed 1000061  real off-road steps  34  P(on road) there: real 0.13  dream replaying real actions 0.26  dream steered by controller 0.55  (15.8 min)
+[ 56] seed 1000062  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.22  dream steered by controller 0.22  (15.9 min)
+[ 57] seed 1000063  real off-road steps  71  P(on road) there: real 0.07  dream replaying real actions 0.54  dream steered by controller 0.58  (16.1 min)
+[ 58] seed 1000064  real off-road steps  66  P(on road) there: real 0.29  dream replaying real actions 0.36  dream steered by controller 0.60  (16.3 min)
+[ 59] seed 1000065  real off-road steps  31  P(on road) there: real 0.23  dream replaying real actions 0.55  dream steered by controller 0.72  (16.5 min)
+[ 60] seed 1000066  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.20  dream steered by controller 0.12  (16.7 min)
+[ 61] seed 1000067  real off-road steps  78  P(on road) there: real 0.16  dream replaying real actions 0.31  dream steered by controller 0.76  (16.9 min)
+[ 62] seed 1000068  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.21  dream steered by controller 0.13  (17.1 min)
+[ 63] seed 1000069  real off-road steps  35  P(on road) there: real 0.20  dream replaying real actions 0.53  dream steered by controller 0.66  (17.3 min)
+[ 64] seed 1000070  real off-road steps  25  P(on road) there: real 0.14  dream replaying real actions 0.42  dream steered by controller 0.41  (17.5 min)
+[ 65] seed 1000071  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.09  dream steered by controller 0.11  (17.7 min)
+[ 66] seed 1000072  real off-road steps  22  P(on road) there: real 0.24  dream replaying real actions 0.30  dream steered by controller 0.33  (17.9 min)
+[ 67] seed 1000073  real off-road steps  34  P(on road) there: real 0.14  dream replaying real actions 0.33  dream steered by controller 0.34  (18.1 min)
+[ 68] seed 1000074  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.14  dream steered by controller 0.13  (18.3 min)
+[ 69] seed 1000075  real off-road steps  46  P(on road) there: real 0.21  dream replaying real actions 0.47  dream steered by controller 0.58  (18.5 min)
+[ 70] seed 1000076  real off-road steps  60  P(on road) there: real 0.31  dream replaying real actions 0.37  dream steered by controller 0.56  (18.7 min)
+[ 71] seed 1000077  real off-road steps  71  P(on road) there: real 0.03  dream replaying real actions 0.29  dream steered by controller 0.30  (18.9 min)
+[ 72] seed 1000078  real off-road steps  38  P(on road) there: real 0.20  dream replaying real actions 0.11  dream steered by controller 0.17  (19.1 min)
+[ 73] seed 1000079  real off-road steps  41  P(on road) there: real 0.28  dream replaying real actions 0.52  dream steered by controller 0.75  (19.3 min)
+[ 74] seed 1000080  real off-road steps  32  P(on road) there: real 0.16  dream replaying real actions 0.45  dream steered by controller 0.89  (19.5 min)
+[ 75] seed 1000081  real off-road steps  39  P(on road) there: real 0.16  dream replaying real actions 0.43  dream steered by controller 0.61  (19.7 min)
+[ 76] seed 1000082  real off-road steps  45  P(on road) there: real 0.15  dream replaying real actions 0.48  dream steered by controller 0.88  (19.9 min)
+[ 77] seed 1000083  real off-road steps  46  P(on road) there: real 0.20  dream replaying real actions 0.18  dream steered by controller 0.22  (20.1 min)
+[ 78] seed 1000084  real off-road steps  51  P(on road) there: real 0.24  dream replaying real actions 0.34  dream steered by controller 0.91  (20.3 min)
+[ 79] seed 1000085  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.15  dream steered by controller 0.15  (20.5 min)
+[ 80] seed 1000086  real off-road steps  50  P(on road) there: real 0.21  dream replaying real actions 0.45  dream steered by controller 0.64  (20.7 min)
+[ 81] seed 1000088  real off-road steps  42  P(on road) there: real 0.68  dream replaying real actions 0.46  dream steered by controller 0.98  (20.9 min)
+[ 82] seed 1000089  real off-road steps  24  P(on road) there: real 0.25  dream replaying real actions 0.48  dream steered by controller 0.51  (21.1 min)
+[ 83] seed 1000090  real off-road steps  25  P(on road) there: real 0.27  dream replaying real actions 0.31  dream steered by controller 0.22  (21.3 min)
+[ 84] seed 1000091  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.20  dream steered by controller 0.23  (21.5 min)
+[ 85] seed 1000092  real off-road steps  71  P(on road) there: real 0.45  dream replaying real actions 0.69  dream steered by controller 0.74  (21.7 min)
+[ 86] seed 1000093  real off-road steps  43  P(on road) there: real 0.15  dream replaying real actions 0.46  dream steered by controller 0.76  (21.8 min)
+[ 87] seed 1000094  real off-road steps  71  P(on road) there: real 0.05  dream replaying real actions 0.19  dream steered by controller 0.17  (22.0 min)
+[ 88] seed 1000096  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.32  dream steered by controller 0.33  (22.2 min)
+[ 89] seed 1000099  real off-road steps  60  P(on road) there: real 0.23  dream replaying real actions 0.42  dream steered by controller 0.54  (22.4 min)
+
+=== summary ===
+{
+ "tracks": 89,
+ "max_action_check": 9.834766387939453e-07,
+ "primary_closed_minus_real": {
+  "median": 0.42036035656929016,
+  "ci95": [
+   0.3113081157207489,
+   0.47798919677734375
+  ],
+  "share_positive": 0.9550561797752809,
+  "wilcoxon_p": 5.9384162712881965e-16
+ },
+ "closed_minus_open": {
+  "median": 0.14465898275375366,
+  "ci95": [
+   0.08679842948913574,
+   0.20026999711990356
+  ],
+  "share_positive": 0.8314606741573034,
+  "wilcoxon_p": 6.930130873469792e-12
+ },
+ "open_minus_real": {
+  "median": 0.21607965230941772,
+  "ci95": [
+   0.16873202100396156,
+   0.24569542706012726
+  ],
+  "share_positive": 0.9438202247191011,
+  "wilcoxon_p": 3.556543377239327e-15
+ },
+ "projected_closed_minus_real": {
+  "median": 0.41955941915512085,
+  "ci95": [
+   0.315855473279953,
+   0.48656296730041504
+  ],
+  "share_positive": 0.9550561797752809,
+  "wilcoxon_p": 6.350885395563504e-16
+ },
+ "projected_open_minus_real": {
+  "median": 0.21235983818769455,
+  "ci95": [
+   0.1618436612188816,
+   0.25519320368766785
+  ],
+  "share_positive": 0.9325842696629213,
+  "wilcoxon_p": 7.759174247085771e-15
+ },
+ "mean_p_off": {
+  "real": 0.1620408097135552,
+  "open": 0.3699634111999126,
+  "closed": 0.5546593657705221,
+  "open_projected": 0.36499325784572056,
+  "closed_projected": 0.5580042989903622
+ },
+ "share_of_off_steps_dream_says_on_road": {
+  "open": 0.25760123148766617,
+  "closed": 0.6112420379636059
+ },
+ "median_reward": {
+  "real": 36.4285888671875,
+  "open": 40.49660110473633,
+  "closed": 72.563720703125
+ },
+ "mean_gas": {
+  "real": 0.0996370640991444,
+  "closed": 0.21767398581076203
+ },
+ "mean_abs_steer_difference_controller_in_dream_vs_real": 0.6347415182697639
+}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_road_r02_p1/dream_closed_loop.json and /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_road_r02_p1/closed_loop_frames.png

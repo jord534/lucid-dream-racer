@@ -25,10 +25,14 @@ from .utils import get_device, load_ckpt, to_uint8, upscale
 def load_mdnrnn(path=RUNS / "mdnrnn" / "best.pt", device="cpu") -> MDNRNN:
     """Infers shared vs per-dimension mixtures from the checkpoint's head size, so
     models trained before that option existed still load."""
-    sd = load_ckpt(path, device)["model"]
+    ck = load_ckpt(path, device)
+    sd = ck["model"]
     out = sd["head.weight"].shape[0]
     m = MDNRNN(shared=out == C.n_gauss + C.z_dim * C.n_gauss * 2 + 2)
-    m.load_state_dict(sd)
+    missing, unexpected = m.load_state_dict(sd, strict=False)
+    # checkpoints from before the on-road head existed lack exactly its weights
+    assert not unexpected and all(k.startswith("on_head") for k in missing), (missing, unexpected)
+    m.has_on = not missing and bool(ck.get("on_trained", False))
     return m.to(device).eval()
 
 

@@ -1,5 +1,9 @@
 """M-model: LSTM + mixture density head over each latent dimension, plus
-reward and termination heads.  p(z_{t+1}, r_t, d_t | z_t, a_t, h_t)."""
+reward and termination heads.  p(z_{t+1}, r_t, d_t | z_t, a_t, h_t).
+
+on_head (optional, off unless asked for with return_on=True): P(a wheel is on the road after the
+action), read from the LSTM output like the reward and done heads. Trained with the real on-road
+flag (train_mdnrnn --on-weight); `has_on` says whether a loaded checkpoint carries a trained one."""
 from __future__ import annotations
 
 import math
@@ -23,8 +27,10 @@ class MDNRNN(nn.Module):
         self.z_dim, self.h_dim, self.k, self.shared = z_dim, h_dim, k, shared
         self.lstm = nn.LSTM(z_dim + a_dim, h_dim, batch_first=True)
         self.head = nn.Linear(h_dim, (k + z_dim * k * 2 if shared else z_dim * k * 3) + 2)
+        self.on_head = nn.Linear(h_dim, 1)
+        self.has_on = False
 
-    def forward(self, z, a, state=None):
+    def forward(self, z, a, state=None, return_on=False):
         """z: (B,L,z), a: (B,L,3) -> logits, mu, logsig, reward, done logit, state.
         mu and logsig are (B,L,z,k); logits are (B,L,k) if shared else (B,L,z,k)."""
         out, state = self.lstm(torch.cat([z, a], -1), state)
@@ -35,12 +41,14 @@ class MDNRNN(nn.Module):
             mu, logsig = p[..., self.k: -2].view(B, L, self.z_dim, self.k, 2).unbind(-1)
         else:
             logit, mu, logsig = p[..., :-2].view(B, L, self.z_dim, self.k, 3).unbind(-1)
-        return logit, mu, logsig.clamp(-7, 2), p[..., -2], p[..., -1], state
+        out6 = logit, mu, logsig.clamp(-7, 2), p[..., -2], p[..., -1], state
+        return (*out6, self.on_head(out)[..., 0]) if return_on else out6
 
-    def step(self, z, a, state=None):
-        """Single step for rollouts: z (B,z), a (B,3)."""
-        logit, mu, logsig, r, d, state = self(z[:, None], a[:, None], state)
-        return logit[:, 0], mu[:, 0], logsig[:, 0], r[:, 0], d[:, 0], state
+    def step(self, z, a, state=None, return_on=False):
+        """Single step for rollouts: z (B,z), a (B,3). With return_on, a 7th output: on-road logit."""
+        o = self(z[:, None], a[:, None], state, return_on)
+        out = (o[0][:, 0], o[1][:, 0], o[2][:, 0], o[3][:, 0], o[4][:, 0], o[5])
+        return (*out, o[6][:, 0]) if return_on else out
 
     def initial_state(self, batch: int, device):
         zeros = torch.zeros(1, batch, self.h_dim, device=device)

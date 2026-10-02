@@ -45,8 +45,35 @@ candidates 0.26 and 0.24).
 ## Caveats
 One run; three drivers per round, retrained from scratch each round; validation tracks only; the road
 probe is retrained each round on that round's own real rollouts, so the road numbers are comparable
-across rounds only roughly. The independent failure tests and the 100-test-track evaluation have not
-been run on this run's drivers (`runs/loop_road/r02/proposer{0,1,2}`, model `runs/loop_road/r02/mdnrnn`).
+across rounds only roughly. The independent checks on this run's drivers are in the next section.
+
+## Independent checks on this run's round-2 drivers (added 2 October 2026)
+
+100 test tracks and the two dream-failure tests, per driver, each in the round-2 model it was trained in
+(`run_post_tests.sh`, `post_tests.log`, `post_tests/`, `../eval_loop_road_r02_p*.json`,
+`../dream_failure_analysis/loop_road_r02_p*/`). Same procedure and same table as in
+`../loop_run_2026-10-01/README.md`: median over tracks of the dream's P(on road) minus the real car's
+over the steps where the real car is off the road (0 would be agreement).
+
+| Driver | Test return | Tracks with an off-road window | Closed-loop test | Dream actions in the simulator | Extra forgiveness when the controller steers in the dream |
+|---|---|---|---|---|---|
+| p0 | 653.5 | 53 | 0.38 | 0.37 (51 tracks) | 0.28 |
+| p1 | 594.6 | 89 | 0.42 | 0.52 (89 tracks) | 0.14 |
+| p2 | 754.9 | 79 | 0.52 | 0.68 (78 tracks) | 0.30 |
+| **Mean of the 3** | **667.7** | | **0.44** | **0.52** | 0.24 |
+| first run's round-2 drivers, for comparison | 630.7 | | 0.51 | 0.47 | 0.07 |
+
+What it means. The test return of these drivers (668) is close to the first run's round-2 drivers (631):
+no difference that can be told apart from the spread between drivers (595 to 755). The road-status
+disagreement is the same story: the dream still shows the car on the road more than the simulator does,
+for every driver (all medians clearly above 0), and the averages (0.44 and 0.52) are within the spread of the
+first run's drivers (0.32 to 0.61). So the independent tests agree with the loop's own measure: ranking
+branches by road status and oversampling the moment the car leaves the road did not close the gap.
+The extra forgiveness specific to the controller's own steering is somewhat larger than in the first
+run's drivers (0.24 against 0.07); with three drivers each I would not read much into that.
+
+Caveats. Three drivers per run, different tracks produce off-road windows for different drivers (53 to 89
+tracks), and the on-road probe is trained per driver on its own real rollouts.
 
 ## Files
 `results.md`, `measure_round{0,1,2}.json`, `critic_round{0,1}.json`, `state.json`, `loop.log`. The models

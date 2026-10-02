@@ -54,6 +54,9 @@ def main():
     p.add_argument("--sigma0", type=float, default=0.1)
     p.add_argument("--start-from", default="good", choices=["good", "all"],
                    help="which recorded episodes warm starts are drawn from")
+    p.add_argument("--road-penalty", type=float, default=0.0,
+                   help="reward lost per dream step times the on-road head's P(off road); "
+                        "needs a world model trained with --on-weight")
     p.add_argument("--real-every", type=int, default=25)
     p.add_argument("--real-tracks", type=int, default=8)
     p.add_argument("--workers", type=int, default=4)
@@ -63,7 +66,8 @@ def main():
     a = p.parse_args()
     dev = get_device(a.device)
     a.out.mkdir(parents=True, exist_ok=True)
-    sim = DreamSim(load_mdnrnn(device=dev), dev, tau=a.tau, start_from=a.start_from)
+    sim = DreamSim(load_mdnrnn(device=dev), dev, tau=a.tau, start_from=a.start_from,
+                   road_penalty=a.road_penalty)
     es_path = a.out / "es.pkl"
     if es_path.exists():                                  # resume
         es, start, best = pickle.loads(es_path.read_bytes())

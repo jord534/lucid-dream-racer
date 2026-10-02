@@ -26,6 +26,15 @@ class SequenceSampler:
         d = np.load(path)
         self.mu, self.logvar = d["mu"], d["logvar"]
         self.act, self.rew, self.done = d["actions"], d["rewards"], d["dones"]
+        # on-road flag after each action: 1 on, 0 off, -1 unknown. Branches carry it in the npz;
+        # the original data in a sidecar file written by ldr.label_road.
+        side = Path(path).with_name(Path(path).stem + "_onroad.npy")
+        if "onroad" in d.files:
+            self.on = d["onroad"].astype(np.int8)
+        elif side.exists():
+            self.on = np.load(side).astype(np.int8)
+        else:
+            self.on = np.full(len(self.act), -1, np.int8)
         self.L = L
         onset = d["onset"] if "onset" in d.files else np.full(len(d["ep_len"]), -1)
         starts = {"train": [], "val": []}
@@ -46,7 +55,7 @@ class SequenceSampler:
         self.starts = {k: cat(v) for k, v in starts.items()}
         self.near_onset = {k: cat(v) for k, v in near.items()}
 
-    def sample(self, batch, split, rng, device, onset_frac=0.0):
+    def sample(self, batch, split, rng, device, onset_frac=0.0, with_on=False):
         """onset_frac: share of the batch drawn from windows around an off-road onset (only
         episodes that record one, i.e. branches collected with on-road flags)."""
         pool = self.near_onset[split]
@@ -61,35 +70,50 @@ class SequenceSampler:
             mu, lv = torch.from_numpy(self.mu[ix]), torch.from_numpy(self.logvar[ix])
             return mu + torch.randn_like(mu) * (0.5 * lv).exp()
         t = lambda x: torch.from_numpy(x).to(device)
-        return (z(o).to(device), t(self.act[a]), z(o + 1).to(device),
-                t(np.clip(self.rew[a], -1, 10)), t(self.done[a].astype(np.float32)))
+        out = (z(o).to(device), t(self.act[a]), z(o + 1).to(device),
+               t(np.clip(self.rew[a], -1, 10)), t(self.done[a].astype(np.float32)))
+        return (*out, t(self.on[a].astype(np.float32))) if with_on else out
 
 
-def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0):
+def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight: float = 0.0,
+            stats: dict | None = None):
     """ss_prob > 0 is scheduled sampling: at each step, with that probability, the input
     latent is the model's own sample from the previous step instead of the recorded one.
     Teacher forcing alone never scores the model on its own outputs, which is exactly the
     regime the dream runs in."""
-    z, a, z_next, r, d = batch
+    z, a, z_next, r, d, *rest = batch
+    ron = on_weight > 0
     if ss_prob <= 0:
-        logit, mu, logsig, r_hat, d_hat, _ = model(z, a)
+        logit, mu, logsig, r_hat, d_hat, _, *on_hat = model(z, a, return_on=ron)
     else:
         B, L, _ = z.shape
         state, zin, outs = None, z[:, 0], []
         for t in range(L):
-            step = model.step(zin, a[:, t], state)
-            outs.append(step[:5])
+            step = model.step(zin, a[:, t], state, return_on=ron)
+            outs.append(step[:5] + step[6:])
             state = step[5]
             if t + 1 < L:
                 own = mdn_sample(step[0], step[1], step[2], 1.0)
                 use = (torch.rand(B, 1, device=z.device) < ss_prob).float()
                 zin = use * own + (1 - use) * z[:, t + 1]
-        logit, mu, logsig, r_hat, d_hat = [torch.stack(o, 1) for o in zip(*outs)]
+        logit, mu, logsig, r_hat, d_hat, *on_hat = [torch.stack(o, 1) for o in zip(*outs)]
     nll = mdn_nll(logit, mu, logsig, z_next)
     r_loss = F.mse_loss(r_hat, r)
     d_loss = F.binary_cross_entropy_with_logits(
         d_hat, d, pos_weight=torch.tensor(done_pos_weight, device=d.device))
-    return nll + r_loss + d_loss, nll, r_loss, d_loss
+    total = nll + r_loss + d_loss
+    if ron:
+        on = rest[0]
+        known = on >= 0
+        if known.any():
+            lg, y = on_hat[0][known], on[known]
+            on_loss = F.binary_cross_entropy_with_logits(lg, y)
+            total = total + on_weight * on_loss
+            if stats is not None:
+                pred, off = lg > 0, y < 0.5
+                stats.update(on_bce=on_loss.item(), on_acc=(pred == (y > 0.5)).float().mean().item(),
+                             off_recall=(~pred[off]).float().mean().item() if off.any() else float("nan"))
+    return total, nll, r_loss, d_loss
 
 
 def main():
@@ -107,6 +131,8 @@ def main():
                    help="npz of extra episodes in the latents.npz format (e.g. real branches)")
     p.add_argument("--extra-frac", type=float, default=0.5,
                    help="share of every training batch drawn from --extra")
+    p.add_argument("--on-weight", type=float, default=0.0,
+                   help="weight of the on-road head loss (0: head not trained)")
     p.add_argument("--extra-onset-frac", type=float, default=0.0,
                    help="share of the --extra part of every batch centred on an off-road onset")
     p.add_argument("--eval-every", type=int, default=500)
@@ -121,12 +147,17 @@ def main():
     model = (load_mdnrnn(args.init_from, dev) if args.init_from
              else MDNRNN(shared=args.shared_mixture).to(dev)).train()
 
+    won = args.on_weight > 0
+    trained_on = won or (args.init_from is not None
+                         and bool(load_ckpt(args.init_from, "cpu").get("on_trained", False)))
+
     def draw(split, n):
         if extra is None or not len(extra.starts[split]):
-            return data.sample(n, split, rng, dev)
+            return data.sample(n, split, rng, dev, with_on=won)
         k = round(n * args.extra_frac)
         on = args.extra_onset_frac if split == "train" else 0.0
-        a, b = data.sample(n - k, split, rng, dev), extra.sample(k, split, rng, dev, on)
+        a = data.sample(n - k, split, rng, dev, with_on=won)
+        b = extra.sample(k, split, rng, dev, on, with_on=won)
         return tuple(torch.cat([x, y]) for x, y in zip(a, b))
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)
@@ -140,7 +171,9 @@ def main():
     t_start = time.time()
     for step in range(start, args.steps):
         ss = args.ss_prob * min(1.0, 2 * step / args.steps)   # ramp in over the first half
-        loss, nll, rl, dl = loss_fn(model, draw("train", args.batch), ss_prob=ss)
+        tstats = {}
+        loss, nll, rl, dl = loss_fn(model, draw("train", args.batch), ss_prob=ss,
+                                    on_weight=args.on_weight, stats=tstats)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   # LSTMs spike
@@ -148,19 +181,33 @@ def main():
         if (step + 1) % args.eval_every == 0 or step + 1 == args.steps:
             model.eval()
             with torch.no_grad():
-                vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev))
+                vstats = {}
+                vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev, with_on=won),
+                                         on_weight=args.on_weight, stats=vstats)
+                xstats = {}
+                if won and extra is not None and len(extra.starts["val"]):
+                    loss_fn(model, extra.sample(256, "val", rng, dev, with_on=True),
+                            on_weight=args.on_weight, stats=xstats)
                 # validation always teacher-forced, so the number stays comparable across runs
                 ve = (loss_fn(model, extra.sample(256, "val", rng, dev))[1].item()
                       if extra is not None and len(extra.starts["val"]) else float("nan"))
             model.train()
             log.log(step=step + 1, nll=nll.item(), r_mse=rl.item(), d_bce=dl.item(),
-                    val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item(), val_nll_extra=ve)
+                    val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item(), val_nll_extra=ve,
+                    on_bce=tstats.get("on_bce", float("nan")),
+                    val_on_acc=vstats.get("on_acc", float("nan")),
+                    val_on_off_recall=vstats.get("off_recall", float("nan")),
+                    val_on_acc_extra=xstats.get("on_acc", float("nan")),
+                    val_on_off_recall_extra=xstats.get("off_recall", float("nan")))
             eta = (time.time() - t_start) / (step + 1 - start) * (args.steps - step - 1)
             print(f"step {step + 1}/{args.steps}  nll {nll.item():.3f}  "
                   f"val nll {vn.item():.3f}  val r_mse {vr.item():.3f}  "
-                  f"about {eta / 60:.1f} min left", flush=True)
+                  + (f"on-road acc {vstats.get('on_acc', float('nan')):.3f} (branches "
+                     f"{xstats.get('on_acc', float('nan')):.3f}, off-road recall "
+                     f"{xstats.get('off_recall', float('nan')):.2f})  " if won else "")
+                  + f"about {eta / 60:.1f} min left", flush=True)
             payload = dict(model=model.state_dict(), opt=opt.state_dict(),
-                           sched=sched.state_dict(), step=step + 1)
+                           sched=sched.state_dict(), step=step + 1, on_trained=trained_on)
             save_ckpt(ck, **payload)
             sel = vl.item() if np.isnan(ve) else 0.5 * (vn.item() + ve)   # with extra, judge both
             if sel < best:

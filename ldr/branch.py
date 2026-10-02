@@ -133,14 +133,22 @@ def dream_branch(rnn, theta, log, t0, W, B, tau):
     *_, state = rnn(mu[None, :t0], act[None, :t0])
     st = tuple(s.expand(1, B, -1).contiguous() for s in state)
     th = torch.as_tensor(np.asarray(theta), dtype=torch.float32)[None].expand(B, -1)
-    z, acts, rs, zs = mu[t0][None].expand(B, -1).clone(), [], [], []
+    z, acts, rs, zs, ons = mu[t0][None].expand(B, -1).clone(), [], [], [], []
+    head = getattr(rnn, "has_on", False)
     for _ in range(W):
         a = act_batched(th, z, st[0][0])
-        logit, m, ls, r, _, st = rnn.step(z, a, st)
+        logit, m, ls, r, _, st, *on = rnn.step(z, a, st, return_on=head)
         z = mdn_sample(logit, m, ls, tau)
         acts.append(a), rs.append(r), zs.append(z)
-    # actions (W,B,3), rewards (W,B), latents after each step (W,B,z)
-    return torch.stack(acts).numpy(), torch.stack(rs).numpy(), torch.stack(zs)
+        if on:
+            ons.append(torch.sigmoid(on[0]))
+    # actions (W,B,3), rewards (W,B), latents after each step (W,B,z), on-road head P (W,B) or None
+    return (
+        torch.stack(acts).numpy(),
+        torch.stack(rs).numpy(),
+        torch.stack(zs),
+        torch.stack(ons).numpy() if ons else None,
+    )
 
 
 def _progress(it, n, label):
@@ -234,7 +242,7 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
             continue
         t0, W = st
         theta = thetas[k // len(seeds)]
-        acts, rs, zs = dream_branch(rnn, theta, log, t0, W, futures, tau)
+        acts, rs, zs, head_p = dream_branch(rnn, theta, log, t0, W, futures, tau)
         with torch.no_grad():
             p_on = (
                 torch.sigmoid(probe(zs.reshape(-1, C.z_dim))[:, 0]).view(W, futures).numpy()
@@ -250,6 +258,7 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
                     "acts": acts[:, b].astype(np.float32),
                     "dream_r": rs[:, b],
                     "dream_p_on": p_on[:, b] if p_on is not None else None,
+                    "head_p_on": head_p[:, b] if head_p is not None else None,
                 }
             )
             replay.append((log["seed"], log["act"][:t0], plan[-1]["acts"]))
@@ -268,6 +277,12 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
             c["p_on_when_real_off"] = float(p[~on].mean()) if (~on).any() else None
         else:
             c["dream_p_on_mean"] = c["road_gap"] = c["p_on_when_real_off"] = None
+        if c["head_p_on"] is not None and m:
+            h, on = c["head_p_on"][:m], r["on"]
+            c["head_p_on_when_real_off"] = float(h[~on].mean()) if (~on).any() else None
+            c["head_acc"] = float(((h > 0.5) == on).mean())
+        else:
+            c["head_p_on_when_real_off"] = c["head_acc"] = None
     return logs, plan, {"probe": pinfo}
 
 
@@ -323,6 +338,12 @@ def assemble(episodes, path: Path, val_frac=0.1, seed=0):
         dones=cat("done"),
         curv=np.zeros(int((T + 1).sum()), np.float32),
         onset=np.array([e.get("onset", -1) for e in episodes], int),  # -1: unknown or none
+        onroad=np.concatenate(  # flag after each action; -1 where the episode carries none
+            [
+                np.asarray(e["on"], np.int8) if "on" in e else np.full(len(e["act"]), -1, np.int8)
+                for e in episodes
+            ]
+        ),
     )
 
 

@@ -128,6 +128,18 @@ def main():
         help="share of the branch part of each fine-tune batch centred on an off-road onset",
     )
     p.add_argument(
+        "--on-weight",
+        type=float,
+        default=0.0,
+        help="weight of the on-road head loss in the fine-tune (0: head not trained)",
+    )
+    p.add_argument(
+        "--road-penalty",
+        type=float,
+        default=0.0,
+        help="dream reward lost per step times the head's P(off road); needs --on-weight earlier",
+    )
+    p.add_argument(
         "--start-from",
         type=Path,
         default=None,
@@ -306,6 +318,10 @@ changes as noise.
 
     def proposers(rd, r):
         env = dict(os.environ, LDR_RUNS=str(rd))
+        has_head = load_mdnrnn(rd / "mdnrnn" / "best.pt").has_on
+        penalty = a.road_penalty if has_head else 0.0  # rounds whose model has no head: none
+        if a.road_penalty and not has_head:
+            say("  this round's world model has no on-road head: no road penalty for its proposers")
         for s in range(a.proposers):
             if (rd / f"proposer{s}" / "best.pt").exists():
                 continue
@@ -321,6 +337,8 @@ changes as noise.
                     10 * (r + a.round_offset) + s,
                     "--generations",
                     a.generations,
+                    "--road-penalty",
+                    penalty,
                     "--real-every",
                     min(25, a.generations),
                     "--workers",
@@ -360,6 +378,11 @@ changes as noise.
             e["dream_p_on_mean"] = float(np.mean([c["dream_p_on_mean"] for c in road]))
             e["p_on_when_real_off_mean"] = float(np.mean(off)) if off else None
             e["branches_with_off_road"] = len(off)
+        hd = [c for c in plan if c.get("head_acc") is not None]
+        if hd:
+            hoff = [c["head_p_on_when_real_off"] for c in hd if c["head_p_on_when_real_off"] is not None]
+            e["head_acc_mean"] = float(np.mean([c["head_acc"] for c in hd]))
+            e["head_p_on_when_real_off_mean"] = float(np.mean(hoff)) if hoff else None
         state["ledger"] = [x for x in state["ledger"] if x["round"] != r] + [e]
         state["ledger"].sort(key=lambda x: x["round"])
         (rd / "measure.json").write_text(json.dumps(e, indent=1))
@@ -431,6 +454,8 @@ changes as noise.
                 a.extra_frac,
                 "--extra-onset-frac",
                 a.onset_frac,
+                "--on-weight",
+                a.on_weight,
                 "--steps",
                 a.finetune_steps,
                 "--lr",
