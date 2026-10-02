@@ -23,8 +23,10 @@ signed-rank p-value. Repeated at tau = 1.15 (the training temperature) and tau =
 Writes reports/dream_failure_analysis/dream_fidelity.json."""
 import argparse
 import json
+import os
 import time
 from multiprocessing import Pool
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -37,8 +39,18 @@ from ldr.envs import make_env
 from ldr.mdnrnn import mdn_sample
 from ldr.utils import preprocess, to_tensor
 
-OUT = REPORTS / "dream_failure_analysis"
-STORE = DATA / "dream_failure" / "rollouts_dream_v3.npz"
+# Which controller and world model are diagnosed. The defaults are the original analysis
+# (controller runs/dream_v3, world model runs/vae and runs/mdnrnn). To diagnose another, e.g. a
+# controller of the propose-critic loop (all three scripts read these):
+#   LDR_DIAG_TAG=loop_r02_p0 LDR_DIAG_CTRL=runs/loop/r02/proposer0/best.pt LDR_DIAG_MODEL=runs/loop/r02
+# Its rollouts go to data/dream_failure/rollouts_<tag>.npz and its results to
+# reports/dream_failure_analysis/<tag>/.
+TAG = os.environ.get("LDR_DIAG_TAG", "")
+CTRL = Path(os.environ.get("LDR_DIAG_CTRL", RUNS / "dream_v3" / "best.pt"))
+_MODEL = Path(os.environ["LDR_DIAG_MODEL"]) if "LDR_DIAG_MODEL" in os.environ else RUNS
+VAE_PATH, RNN_PATH = _MODEL / "vae" / "best.pt", _MODEL / "mdnrnn" / "best.pt"
+OUT = REPORTS / "dream_failure_analysis" / TAG
+STORE = DATA / "dream_failure" / f"rollouts_{TAG or 'dream_v3'}.npz"
 TRACKS, WORKERS = 100, 6
 RUN, LEAD, WARM, HORIZON, FOLDS = 20, 30, 40, 100, 5
 TAUS = {1.15: 32, 0.05: 8}                  # temperature -> dream samples per track
@@ -48,7 +60,7 @@ _AGENT = None
 
 def _init():
     global _AGENT
-    _AGENT = WorldModelAgent()
+    _AGENT = WorldModelAgent(VAE_PATH, RNN_PATH)
 
 
 def _first_run(flags, start=0):
@@ -96,8 +108,8 @@ def _collect_one(job):
 
 
 def collect():
-    theta = torch.load(RUNS / "dream_v3" / "best.pt", weights_only=False)["theta"]
-    ref = json.loads((REPORTS / "eval_wm_dream_v3.json").read_text())["returns"]
+    theta = torch.load(CTRL, weights_only=False)["theta"]
+    ref = json.loads((REPORTS / f"eval_{TAG or 'wm_dream_v3'}.json").read_text())["returns"]
     jobs = [(theta, SEED_TEST + i) for i in range(TRACKS)]
     res, t0 = [], time.time()
     print(f"collecting {len(jobs)} rollouts, {WORKERS} workers", flush=True)
@@ -195,7 +207,7 @@ def analyse():
     print("probe on real latents, held-out tracks:", json.dumps(
         {k: round(v, 3) for k, v in probe_stats.items()}), flush=True)
 
-    rnn = load_mdnrnn(device="cpu")
+    rnn = load_mdnrnn(RNN_PATH, device="cpu")
     out = dict(probe=probe_stats, tau={})
     for tau, B in TAUS.items():
         torch.manual_seed(0)

@@ -5,6 +5,8 @@ real state 30 steps before the car first leaves the road (or at a random step if
 let the controller steer inside the dream; run the same actions in the real simulator. The
 exploit gap is the dream's predicted return minus the real return over that window. The real
 outcomes of the chosen candidates become new training episodes for the world model.
+The road-status gap is the same comparison for "is the car on the road": a small probe reads
+P(on road) from each dream latent, and the real on-road flags come from the simulator.
 (Used by ldr/loop.py; the same measurements as diagnostics/dream_closed_loop.py and
 dream_actions_in_sim.py.)"""
 
@@ -25,6 +27,8 @@ from .mdnrnn import mdn_sample
 from .utils import preprocess, to_tensor
 
 RUN, LEAD, PREFIX, WINDOW, MIN_WINDOW = 20, 30, 60, 100, 20
+ONSET_RUN = 10  # off-road run that counts as "the car left the road" in a training episode
+MIN_OFF_FRAMES = 200  # fewer real off-road frames than this: the road probe is not trusted
 _AG: WorldModelAgent | None = None
 
 
@@ -37,12 +41,12 @@ def _wheels_on(env) -> bool:
     return any(len(w.tiles) > 0 for w in env.unwrapped.car.wheels)
 
 
-def _first_run(flags, start=0):
+def _first_run(flags, start=0, run=RUN):
     n = 0
     for i in range(start, len(flags)):
         n = n + 1 if flags[i] else 0
-        if n == RUN:
-            return i - RUN + 1
+        if n == run:
+            return i - run + 1
     return None
 
 
@@ -129,13 +133,14 @@ def dream_branch(rnn, theta, log, t0, W, B, tau):
     *_, state = rnn(mu[None, :t0], act[None, :t0])
     st = tuple(s.expand(1, B, -1).contiguous() for s in state)
     th = torch.as_tensor(np.asarray(theta), dtype=torch.float32)[None].expand(B, -1)
-    z, acts, rs = mu[t0][None].expand(B, -1).clone(), [], []
+    z, acts, rs, zs = mu[t0][None].expand(B, -1).clone(), [], [], []
     for _ in range(W):
         a = act_batched(th, z, st[0][0])
         logit, m, ls, r, _, st = rnn.step(z, a, st)
         z = mdn_sample(logit, m, ls, tau)
-        acts.append(a), rs.append(r)
-    return torch.stack(acts).numpy(), torch.stack(rs).numpy()  # (W,B,3), (W,B)
+        acts.append(a), rs.append(r), zs.append(z)
+    # actions (W,B,3), rewards (W,B), latents after each step (W,B,z)
+    return torch.stack(acts).numpy(), torch.stack(rs).numpy(), torch.stack(zs)
 
 
 def _progress(it, n, label):
@@ -153,11 +158,75 @@ def _progress(it, n, label):
     return out
 
 
+def _auc(p, y):
+    from scipy.stats import rankdata
+
+    r = rankdata(p)
+    n1, n0 = int(y.sum()), int((~y).sum())
+    return float((r[y].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
+
+
+def _fit_probe(X, y):
+    torch.manual_seed(0)
+    m = torch.nn.Sequential(torch.nn.Linear(C.z_dim, 64), torch.nn.ReLU(), torch.nn.Linear(64, 1))
+    opt = torch.optim.Adam(m.parameters(), 3e-3, weight_decay=1e-4)
+    X, y = torch.from_numpy(X), torch.from_numpy(y.astype(np.float32))
+    with torch.enable_grad():
+        for _ in range(300):
+            opt.zero_grad()
+            torch.nn.functional.binary_cross_entropy_with_logits(m(X)[:, 0], y).backward()
+            opt.step()
+    return m.eval()
+
+
+def road_probe(logs, rng, folds=5):
+    """Probe latent -> P(car on road), trained on the real latents of these logs (sampled the way
+    the world model sees them), with the real on-road flag as the label. Returns (probe, info);
+    info has the held-out AUC (tracks held out in turn) and the number of real off-road frames."""
+    X = [
+        lg["mu"] + rng.standard_normal(lg["mu"].shape).astype(np.float32) * np.exp(0.5 * lg["logvar"])
+        for lg in logs
+    ]
+    y = [np.r_[True, lg["on"][:-1]] for lg in logs]  # label of obs_t = state after step t-1
+    off = int(sum((~v).sum() for v in y))
+    info = {"off_road_frames": off, "frames": int(sum(len(v) for v in y)), "auc": float("nan")}
+    info["ok"] = off >= MIN_OFF_FRAMES
+    if not info["ok"]:
+        return None, info
+    cat = lambda xs, ix: np.concatenate([xs[i] for i in ix])
+    folds = min(folds, len(logs))
+    fold = np.arange(len(logs)) % folds
+    P, Y = [], []
+    for f in range(folds if folds > 1 else 0):
+        tr, te = np.flatnonzero(fold != f), np.flatnonzero(fold == f)
+        pr = _fit_probe(cat(X, tr), cat(y, tr))
+        with torch.no_grad():
+            P.append(torch.sigmoid(pr(torch.from_numpy(cat(X, te)))[:, 0]).numpy())
+        Y.append(cat(y, te))
+    if P:
+        info["auc"] = _auc(np.concatenate(P), np.concatenate(Y))
+    return _fit_probe(cat(X, range(len(logs))), cat(y, range(len(logs)))), info
+
+
 def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
     """Real rollouts of each controller on each track, then dream-steered branches replayed in
-    the real simulator. Returns (logs, candidates); every candidate has its exploit gap."""
+    the real simulator. Returns (logs, candidates, info); every candidate has its exploit gap
+    (reward) and its road-status gap (dream's P(on road) minus the real on-road share, over the
+    window; None when the probe could not be trusted, see info["probe"])."""
     jobs = [(th, int(s)) for th in thetas for s in seeds]
     logs = _progress(pool.imap(rollout_log, jobs, chunksize=1), len(jobs), "real rollouts")
+    probe, pinfo = road_probe(logs, rng)
+    if probe is None:
+        print(
+            f"  road probe not trusted: only {pinfo['off_road_frames']} real off-road frames",
+            flush=True,
+        )
+    else:
+        print(
+            f"  road probe: held-out AUC {pinfo['auc']:.3f} on {pinfo['frames']} real frames "
+            f"({pinfo['off_road_frames']} off-road)",
+            flush=True,
+        )
     plan, replay = [], []
     for k, log in enumerate(logs):
         st = start_state(log, rng)
@@ -165,7 +234,13 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
             continue
         t0, W = st
         theta = thetas[k // len(seeds)]
-        acts, rs = dream_branch(rnn, theta, log, t0, W, futures, tau)
+        acts, rs, zs = dream_branch(rnn, theta, log, t0, W, futures, tau)
+        with torch.no_grad():
+            p_on = (
+                torch.sigmoid(probe(zs.reshape(-1, C.z_dim))[:, 0]).view(W, futures).numpy()
+                if probe is not None
+                else None
+            )
         for b in range(futures):
             plan.append(
                 {
@@ -174,6 +249,7 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
                     "W": W,
                     "acts": acts[:, b].astype(np.float32),
                     "dream_r": rs[:, b],
+                    "dream_p_on": p_on[:, b] if p_on is not None else None,
                 }
             )
             replay.append((log["seed"], log["act"][:t0], plan[-1]["acts"]))
@@ -185,7 +261,14 @@ def evaluate_candidates(rnn, thetas, seeds, pool, futures, tau, rng):
         c["real_ret"] = float(np.clip(r["rew"], -1, 10).sum())
         c["gap"] = c["dream_ret"] - c["real_ret"]
         c["real_on_share"] = float(r["on"].mean())
-    return logs, plan
+        if c["dream_p_on"] is not None and m:
+            p, on = c["dream_p_on"][:m], r["on"]
+            c["dream_p_on_mean"] = float(p.mean())
+            c["road_gap"] = c["dream_p_on_mean"] - c["real_on_share"]
+            c["p_on_when_real_off"] = float(p[~on].mean()) if (~on).any() else None
+        else:
+            c["dream_p_on_mean"] = c["road_gap"] = c["p_on_when_real_off"] = None
+    return logs, plan, {"probe": pinfo}
 
 
 def build_episode(c, log):
@@ -194,7 +277,11 @@ def build_episode(c, log):
     P = min(PREFIX, t0)
     done = np.zeros(P + m, bool)
     done[-1] = r["terminated"]
+    on = np.concatenate([log["on"][t0 - P : t0], r["on"]])  # flag after each action
+    onset = _first_run(~on, run=ONSET_RUN)
     return {
+        "on": on,
+        "onset": -1 if onset is None else onset,
         "mu": np.concatenate([log["mu"][t0 - P : t0 + 1], r["mu"]]),
         "logvar": np.concatenate([log["logvar"][t0 - P : t0 + 1], r["logvar"]]),
         "act": np.concatenate([log["act"][t0 - P : t0], c["acts"][:m]]),
@@ -202,12 +289,15 @@ def build_episode(c, log):
         "done": done,
         "seed": log["seed"],
         "gap": c["gap"],
+        "road_gap": c["road_gap"],
     }
 
 
-def select(plan, keep_top, keep_random, rng):
+def select(plan, keep_top, keep_random, rng, key="gap"):
+    """The keep_top candidates with the largest `key` ("gap": reward; "road_gap": road status),
+    plus keep_random of the rest."""
     ok = [i for i, c in enumerate(plan) if min(PREFIX, c["t0"]) + c["m"] >= C.seq_len]
-    ok.sort(key=lambda i: -plan[i]["gap"])
+    ok.sort(key=lambda i: -plan[i][key])
     top, rest = ok[:keep_top], ok[keep_top:]
     rand = list(rng.choice(rest, min(keep_random, len(rest)), replace=False)) if rest else []
     return top + [int(i) for i in rand]
@@ -232,6 +322,7 @@ def assemble(episodes, path: Path, val_frac=0.1, seed=0):
         rewards=cat("rew"),
         dones=cat("done"),
         curv=np.zeros(int((T + 1).sum()), np.float32),
+        onset=np.array([e.get("onset", -1) for e in episodes], int),  # -1: unknown or none
     )
 
 

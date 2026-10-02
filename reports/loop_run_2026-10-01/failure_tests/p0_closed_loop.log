@@ -1,0 +1,96 @@
+[  1] seed 1000001  real off-road steps  71  P(on road) there: real 0.22  dream replaying real actions 0.80  dream steered by controller 0.91  (0.2 min)
+[  2] seed 1000006  real off-road steps  48  P(on road) there: real 0.24  dream replaying real actions 0.79  dream steered by controller 0.87  (0.4 min)
+[  3] seed 1000021  real off-road steps  75  P(on road) there: real 0.05  dream replaying real actions 0.63  dream steered by controller 0.71  (0.6 min)
+[  4] seed 1000022  real off-road steps  72  P(on road) there: real 0.13  dream replaying real actions 0.77  dream steered by controller 0.80  (0.8 min)
+[  5] seed 1000024  real off-road steps  43  P(on road) there: real 0.42  dream replaying real actions 0.52  dream steered by controller 0.89  (1.0 min)
+[  6] seed 1000025  real off-road steps  71  P(on road) there: real 0.06  dream replaying real actions 0.92  dream steered by controller 0.96  (1.2 min)
+[  7] seed 1000033  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.63  dream steered by controller 0.71  (1.4 min)
+[  8] seed 1000035  real off-road steps  71  P(on road) there: real 0.28  dream replaying real actions 0.74  dream steered by controller 0.84  (1.6 min)
+[  9] seed 1000037  real off-road steps  44  P(on road) there: real 0.34  dream replaying real actions 0.76  dream steered by controller 0.95  (1.8 min)
+[ 10] seed 1000038  real off-road steps  71  P(on road) there: real 0.89  dream replaying real actions 0.89  dream steered by controller 0.92  (2.0 min)
+[ 11] seed 1000042  real off-road steps  74  P(on road) there: real 0.04  dream replaying real actions 0.50  dream steered by controller 0.64  (2.1 min)
+[ 12] seed 1000043  real off-road steps  72  P(on road) there: real 0.03  dream replaying real actions 0.84  dream steered by controller 0.68  (2.4 min)
+[ 13] seed 1000046  real off-road steps  71  P(on road) there: real 0.04  dream replaying real actions 0.86  dream steered by controller 0.92  (2.6 min)
+[ 14] seed 1000051  real off-road steps  74  P(on road) there: real 0.02  dream replaying real actions 0.49  dream steered by controller 0.67  (2.9 min)
+[ 15] seed 1000060  real off-road steps  47  P(on road) there: real 0.35  dream replaying real actions 0.77  dream steered by controller 0.87  (3.0 min)
+[ 16] seed 1000066  real off-road steps  71  P(on road) there: real 0.72  dream replaying real actions 0.56  dream steered by controller 0.96  (3.2 min)
+[ 17] seed 1000069  real off-road steps  71  P(on road) there: real 0.30  dream replaying real actions 0.57  dream steered by controller 0.65  (3.3 min)
+[ 18] seed 1000073  real off-road steps  71  P(on road) there: real 0.32  dream replaying real actions 0.62  dream steered by controller 0.50  (3.4 min)
+[ 19] seed 1000074  real off-road steps  74  P(on road) there: real 0.03  dream replaying real actions 0.53  dream steered by controller 0.70  (3.6 min)
+[ 20] seed 1000084  real off-road steps  24  P(on road) there: real 0.36  dream replaying real actions 0.90  dream steered by controller 0.98  (3.6 min)
+[ 21] seed 1000085  real off-road steps  71  P(on road) there: real 0.00  dream replaying real actions 0.74  dream steered by controller 0.87  (3.8 min)
+[ 22] seed 1000088  real off-road steps  72  P(on road) there: real 0.37  dream replaying real actions 0.73  dream steered by controller 0.97  (3.9 min)
+[ 23] seed 1000090  real off-road steps  71  P(on road) there: real 0.28  dream replaying real actions 0.73  dream steered by controller 0.85  (4.0 min)
+
+=== summary ===
+{
+ "tracks": 23,
+ "max_action_check": 8.940696716308594e-07,
+ "primary_closed_minus_real": {
+  "median": 0.6126218140125275,
+  "ci95": [
+   0.5765854120254517,
+   0.6590417996048927
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 2.384185791015625e-07
+ },
+ "closed_minus_open": {
+  "median": 0.10076391696929932,
+  "ci95": [
+   0.07128435373306274,
+   0.1285269856452942
+  ],
+  "share_positive": 0.9130434782608695,
+  "wilcoxon_p": 0.00047516822814941406
+ },
+ "open_minus_real": {
+  "median": 0.46977453865110874,
+  "ci95": [
+   0.4226841926574707,
+   0.5765982866287231
+  ],
+  "share_positive": 0.9565217391304348,
+  "wilcoxon_p": 1.1920928955078125e-06
+ },
+ "projected_closed_minus_real": {
+  "median": 0.5965263694524765,
+  "ci95": [
+   0.5333537235856056,
+   0.6110427677631378
+  ],
+  "share_positive": 0.9565217391304348,
+  "wilcoxon_p": 4.76837158203125e-07
+ },
+ "projected_open_minus_real": {
+  "median": 0.4108790159225464,
+  "ci95": [
+   0.36031708121299744,
+   0.5479046009480942
+  ],
+  "share_positive": 0.9130434782608695,
+  "wilcoxon_p": 3.337860107421875e-06
+ },
+ "mean_p_off": {
+  "real": 0.23945520825825795,
+  "open": 0.7078806421031123,
+  "closed": 0.8178461945575216,
+  "open_projected": 0.6659452358017797,
+  "closed_projected": 0.7811555395955625
+ },
+ "share_of_off_steps_dream_says_on_road": {
+  "open": 0.8702514948672532,
+  "closed": 0.972600144541357
+ },
+ "median_reward": {
+  "real": 10.969561576843262,
+  "open": 20.910341262817383,
+  "closed": 62.173065185546875
+ },
+ "mean_gas": {
+  "real": 0.14847194411508416,
+  "closed": 0.2403030382550281
+ },
+ "mean_abs_steer_difference_controller_in_dream_vs_real": 0.4895134062870689
+}
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_r02_p0/dream_closed_loop.json and /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/dream_failure_analysis/loop_r02_p0/closed_loop_frames.png

@@ -12,6 +12,12 @@ After the last round it only measures. Success looks like: exploit gap falling a
 rising from one round to the next. Every stage is resumable (marker files), the cost is capped,
 and results are written to <out>/results.md in plain language after each measure.
 
+Targeting road status: --select-by road ranks the critic's branches by the road-status gap (the
+dream's P(on road) minus the real on-road share) instead of the reward gap, and --onset-frac
+centres part of the branch half of every fine-tune batch on the moment the real car leaves the
+road. --start-from DIR continues from the world model (and proposers) of an earlier run's round;
+--round-offset keeps the seeds the same as the round numbers they continue.
+
     python -m ldr.loop --rounds 2 --price-eur-hour 1.2 --budget-eur 5 --out runs/loop
     python -m ldr.loop --tiny --price-eur-hour 0 --out runs/loop_tiny      # local smoke test
 """
@@ -109,6 +115,37 @@ def main():
     p.add_argument("--finetune-steps", type=int, default=5000)
     p.add_argument("--finetune-lr", type=float, default=3e-4)
     p.add_argument("--extra-frac", type=float, default=0.5)
+    p.add_argument(
+        "--select-by",
+        choices=["reward", "road"],
+        default="reward",
+        help="rank the critic's branches by reward gap or by road-status gap",
+    )
+    p.add_argument(
+        "--onset-frac",
+        type=float,
+        default=0.0,
+        help="share of the branch part of each fine-tune batch centred on an off-road onset",
+    )
+    p.add_argument(
+        "--start-from",
+        type=Path,
+        default=None,
+        help="round directory (e.g. runs/loop/r02): its world model, vae and proposers become round 0",
+    )
+    p.add_argument(
+        "--prior-branches",
+        type=Path,
+        nargs="*",
+        default=[],
+        help="branches.pkl files of earlier rounds, included in every fine-tune",
+    )
+    p.add_argument(
+        "--round-offset",
+        type=int,
+        default=0,
+        help="round number of round 0 in the run being continued (sets seeds)",
+    )
     p.add_argument("--measure-tracks", type=int, default=50)
     p.add_argument(
         "--workers",
@@ -157,11 +194,15 @@ def main():
             subprocess.run(a.finish_cmd, shell=True, check=False)
         sys.exit(0)
 
+    def fmt(x, nd):
+        return "-" if x is None else f"{x:.{nd}f}"
+
     def write_results():
         rows = "\n".join(
             f"| {e['round']} | {e['real_return_mean']:.0f} | {e['gap_mean']:.1f} | "
             f"{e['dream_return_window_mean']:.1f} | {e['real_return_window_mean']:.1f} | "
-            f"{e['real_on_road_share_mean']:.2f} | {e['candidates']} |"
+            f"{e['real_on_road_share_mean']:.2f} | {fmt(e.get('road_gap_mean'), 2)} | "
+            f"{fmt(e.get('p_on_when_real_off_mean'), 2)} | {e['candidates']} |"
             for e in state["ledger"]
         )
         (out / "results.md").write_text(f"""# Propose-critic loop results
@@ -177,16 +218,21 @@ Round 0 is the world model we started from; each later round is that model fine-
 branches found where the dream was most wrong. Everything is measured on the same fixed
 validation tracks (seeds {SEED_VAL + 100} and up), never on the test tracks.
 
-| Round | Real return | Exploit gap | Dream ret. | Real ret. | On-road share | Branches |
-|---|---|---|---|---|---|---|
+| Round | Real return | Exploit gap | Dream ret. | Real ret. | On-road share | Road gap | Dream on-road when real off | Branches |
+|---|---|---|---|---|---|---|---|---|
 {rows}
 
 **Columns.** Real return: mean real return of the dream-trained controllers on the validation
 tracks. Exploit gap: the dream's predicted return minus the real return for the dream's own
 actions, over a window of up to 100 steps (large and positive means the dream is being exploited).
 Dream return and Real return (window): the two halves of that gap. Real on-road share: how much of
-the window the real car stays on the road under those actions. Branches: how many dream-steered
-branches were measured.
+the window the real car stays on the road under those actions. Road gap: the dream's P(on road)
+minus the real on-road share over the window (positive: the dream shows the car on the road more
+than the simulator does; "-" where the road probe could not be trusted or the round predates it).
+Dream on-road when real off: the dream's mean P(on road) over the window steps where the real car
+is off the road, among branches that have such steps (the closer to 0 the better; the failure tests
+measure the same thing). Branches: how many dream-steered branches were measured. Critic settings:
+rank by {a.select_by} gap, off-road-onset share of branch batches {a.onset_frac}.
 
 **How to read it.** If the loop works, the gap falls and the real return rises from round to round.
 One run, one seed per round: treat small
@@ -234,10 +280,15 @@ changes as noise.
     def round_dir(r):
         rd = out / f"r{r:02d}"
         rd.mkdir(parents=True, exist_ok=True)
+        src = a.start_from.resolve() if a.start_from else None
         if not (rd / "vae").exists():
-            os.symlink(BASE / "vae", rd / "vae")
+            os.symlink((src or BASE) / "vae", rd / "vae")
         if r == 0 and not (rd / "mdnrnn").exists():
-            os.symlink(BASE / "mdnrnn", rd / "mdnrnn")
+            os.symlink((src or BASE) / "mdnrnn", rd / "mdnrnn")
+        if r == 0 and src:
+            for s in range(a.proposers):  # the earlier run's adversaries are reused
+                if (src / f"proposer{s}").exists() and not (rd / f"proposer{s}").exists():
+                    os.symlink(src / f"proposer{s}", rd / f"proposer{s}")
         return rd
 
     def thetas_of(rd):
@@ -267,7 +318,7 @@ changes as noise.
                     "--out",
                     rd / f"proposer{s}",
                     "--seed",
-                    10 * r + s,
+                    10 * (r + a.round_offset) + s,
                     "--generations",
                     a.generations,
                     "--real-every",
@@ -284,7 +335,7 @@ changes as noise.
         rnn = load_mdnrnn(rd / "mdnrnn" / "best.pt")
         seeds = SEED_VAL + 100 + np.arange(a.measure_tracks)
         with pool_for(rd) as pool:
-            logs, plan = branch.evaluate_candidates(
+            logs, plan, info = branch.evaluate_candidates(
                 rnn, thetas_of(rd), seeds, pool, a.futures, C.tau, rng
             )
         ret = np.array([float(l["rew"].sum()) for l in logs]).reshape(a.proposers, -1)
@@ -300,7 +351,15 @@ changes as noise.
             "real_return_window_mean": float(g("real_ret").mean()),
             "real_on_road_share_mean": float(g("real_on_share").mean()),
             "candidates": len(plan),
+            "road_probe": info["probe"],
         }
+        road = [c for c in plan if c["road_gap"] is not None]
+        if road:
+            off = [c["p_on_when_real_off"] for c in road if c["p_on_when_real_off"] is not None]
+            e["road_gap_mean"] = float(np.mean([c["road_gap"] for c in road]))
+            e["dream_p_on_mean"] = float(np.mean([c["dream_p_on_mean"] for c in road]))
+            e["p_on_when_real_off_mean"] = float(np.mean(off)) if off else None
+            e["branches_with_off_road"] = len(off)
         state["ledger"] = [x for x in state["ledger"] if x["round"] != r] + [e]
         state["ledger"].sort(key=lambda x: x["round"])
         (rd / "measure.json").write_text(json.dumps(e, indent=1))
@@ -313,20 +372,33 @@ changes as noise.
 
     def critic(rd, r):
         rnn = load_mdnrnn(rd / "mdnrnn" / "best.pt")
-        seeds = SEED_TRAIN + 1000 * (r + 1) + np.arange(a.tracks)
+        seeds = SEED_TRAIN + 1000 * (r + a.round_offset + 1) + np.arange(a.tracks)
         with pool_for(rd) as pool:
-            logs, plan = branch.evaluate_candidates(
+            logs, plan, info = branch.evaluate_candidates(
                 rnn, thetas_of(rd), seeds, pool, a.futures, C.tau, rng
             )
-        pick = branch.select(plan, a.keep_top, a.keep_random, rng)
+        key = "road_gap" if a.select_by == "road" else "gap"
+        if key == "road_gap" and not info["probe"]["ok"]:
+            say("  road probe not trusted: ranking by reward gap this round instead")
+            key = "gap"
+        pick = branch.select(plan, a.keep_top, a.keep_random, rng, key)
         episodes = [branch.build_episode(plan[i], logs[plan[i]["log"]]) for i in pick]
         branch.save_episodes(episodes, rd / "branches.pkl")
         gaps = np.array([c["gap"] for c in plan])
+        road = [c["road_gap"] for c in plan if c["road_gap"] is not None]
         (rd / "critic.json").write_text(
             json.dumps(
                 {
                     "candidates": len(plan),
                     "kept": len(episodes),
+                    "ranked_by": key,
+                    "road_probe": info["probe"],
+                    "road_gap_mean_all": float(np.mean(road)) if road else None,
+                    "road_gap_mean_kept": float(
+                        np.mean([e["road_gap"] for e in episodes if e["road_gap"] is not None])
+                    )
+                    if road and episodes
+                    else None,
                     "gap_mean_all": float(gaps.mean()),
                     "gap_mean_kept": float(np.mean([e["gap"] for e in episodes]))
                     if episodes
@@ -338,7 +410,7 @@ changes as noise.
         say(f"  kept {len(episodes)} of {len(plan)} candidates (mean gap {gaps.mean():.1f})")
 
     def finetune(rd, r):
-        eps = [
+        eps = [e for f in a.prior_branches for e in branch.load_episodes(f)] + [
             e
             for k in range(r + 1)
             for e in branch.load_episodes(out / f"r{k:02d}" / "branches.pkl")
@@ -357,6 +429,8 @@ changes as noise.
                 extra,
                 "--extra-frac",
                 a.extra_frac,
+                "--extra-onset-frac",
+                a.onset_frac,
                 "--steps",
                 a.finetune_steps,
                 "--lr",
@@ -368,7 +442,7 @@ changes as noise.
                 "--out",
                 nxt / "mdnrnn",
                 "--seed",
-                r + 1,
+                r + 1 + a.round_offset,
                 *dev_args,
             ],
             nxt / "finetune.log",

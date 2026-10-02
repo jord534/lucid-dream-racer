@@ -33,9 +33,10 @@ import torch
 from PIL import Image, ImageDraw
 from scipy.stats import wilcoxon
 
-from dream_fidelity import FOLDS, HORIZON, LEAD, OUT, STORE, _ci, _first_run, _train_probe
+from dream_fidelity import (CTRL, FOLDS, HORIZON, LEAD, OUT, RNN_PATH, STORE, VAE_PATH, _ci,
+                            _first_run, _train_probe)
 from ldr.check_dream import load_mdnrnn
-from ldr.config import C, RUNS
+from ldr.config import C
 from ldr.controller import act_batched
 from ldr.encode import load_vae
 from ldr.mdnrnn import mdn_sample
@@ -70,9 +71,9 @@ def main():
                   for f in range(FOLDS)}
     prob = lambda f, z: torch.sigmoid(probes[f](z)[:, 0])
 
-    rnn, vae = load_mdnrnn(device="cpu"), load_vae(device="cpu")
+    rnn, vae = load_mdnrnn(RNN_PATH, device="cpu"), load_vae(VAE_PATH, device="cpu")
     project = lambda z: vae.encode(vae.decode(z))[0]
-    theta = torch.load(RUNS / "dream_v3" / "best.pt", weights_only=False)["theta"]
+    theta = torch.load(CTRL, weights_only=False)["theta"]
     theta = torch.as_tensor(np.asarray(theta), dtype=torch.float32)[None].expand(B, -1)
 
     rows, sheet, t_start = [], {}, time.time()

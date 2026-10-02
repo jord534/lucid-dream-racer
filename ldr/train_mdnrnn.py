@@ -18,24 +18,42 @@ from .mdnrnn import MDNRNN, mdn_nll, mdn_sample
 from .utils import CSVLogger, get_device, load_ckpt, save_ckpt, seed_everything
 
 
+ONSET_AT = 16  # an onset sits at least this many steps into a training window and this far from its end
+
+
 class SequenceSampler:
     def __init__(self, path: Path = DATA / "latents.npz", L: int = C.seq_len):
         d = np.load(path)
         self.mu, self.logvar = d["mu"], d["logvar"]
         self.act, self.rew, self.done = d["actions"], d["rewards"], d["dones"]
         self.L = L
+        onset = d["onset"] if "onset" in d.files else np.full(len(d["ep_len"]), -1)
         starts = {"train": [], "val": []}
+        near = {"train": [], "val": []}  # windows that contain an off-road onset (see below)
         for e, T in enumerate(d["ep_len"]):
             if T < L:
                 continue
             t = np.arange(T - L + 1)
             pair = np.stack([d["obs_start"][e] + t, d["act_start"][e] + t], 1)
-            starts["val" if d["is_val"][e] else "train"].append(pair)
+            split = "val" if d["is_val"][e] else "train"
+            starts[split].append(pair)
+            if onset[e] >= 0:  # onset falls between steps ONSET_AT and L - ONSET_AT of the window
+                ok = (t <= onset[e] - ONSET_AT) & (t >= onset[e] - (L - ONSET_AT))
+                if ok.any():
+                    near[split].append(pair[ok])
         empty = np.zeros((0, 2), int)
-        self.starts = {k: np.concatenate(v) if v else empty for k, v in starts.items()}
+        cat = lambda v: np.concatenate(v) if v else empty
+        self.starts = {k: cat(v) for k, v in starts.items()}
+        self.near_onset = {k: cat(v) for k, v in near.items()}
 
-    def sample(self, batch, split, rng, device):
-        s = self.starts[split][rng.integers(len(self.starts[split]), size=batch)]
+    def sample(self, batch, split, rng, device, onset_frac=0.0):
+        """onset_frac: share of the batch drawn from windows around an off-road onset (only
+        episodes that record one, i.e. branches collected with on-road flags)."""
+        pool = self.near_onset[split]
+        n_on = round(batch * onset_frac) if len(pool) else 0
+        s = self.starts[split][rng.integers(len(self.starts[split]), size=batch - n_on)]
+        if n_on:
+            s = np.concatenate([s, pool[rng.integers(len(pool), size=n_on)]])
         ar = np.arange(self.L)
         o = s[:, :1] + ar                       # obs indices t .. t+L-1
         a = s[:, 1:] + ar                       # action indices t .. t+L-1
@@ -89,6 +107,8 @@ def main():
                    help="npz of extra episodes in the latents.npz format (e.g. real branches)")
     p.add_argument("--extra-frac", type=float, default=0.5,
                    help="share of every training batch drawn from --extra")
+    p.add_argument("--extra-onset-frac", type=float, default=0.0,
+                   help="share of the --extra part of every batch centred on an off-road onset")
     p.add_argument("--eval-every", type=int, default=500)
     p.add_argument("--out", type=Path, default=RUNS / "mdnrnn")
     p.add_argument("--device", default=None)
@@ -105,7 +125,8 @@ def main():
         if extra is None or not len(extra.starts[split]):
             return data.sample(n, split, rng, dev)
         k = round(n * args.extra_frac)
-        a, b = data.sample(n - k, split, rng, dev), extra.sample(k, split, rng, dev)
+        on = args.extra_onset_frac if split == "train" else 0.0
+        a, b = data.sample(n - k, split, rng, dev), extra.sample(k, split, rng, dev, on)
         return tuple(torch.cat([x, y]) for x, y in zip(a, b))
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)

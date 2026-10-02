@@ -34,10 +34,11 @@ import numpy as np
 import torch
 
 from dream_closed_loop import _stats
-from dream_fidelity import FOLDS, HORIZON, LEAD, OUT, STORE, _first_run, _train_probe
+from dream_fidelity import (CTRL, FOLDS, HORIZON, LEAD, OUT, RNN_PATH, STORE, VAE_PATH,
+                            _first_run, _train_probe)
 from ldr.agent import WorldModelAgent
 from ldr.check_dream import load_mdnrnn
-from ldr.config import C, RUNS
+from ldr.config import C
 from ldr.controller import act_batched
 from ldr.encode import load_vae
 from ldr.envs import make_env
@@ -50,7 +51,7 @@ _AG = None
 
 def _init():
     global _AG
-    _AG = WorldModelAgent()                              # used only for its VAE (CPU, 1 thread)
+    _AG = WorldModelAgent(VAE_PATH, RNN_PATH)                              # used only for its VAE (CPU, 1 thread)
 
 
 def _replay(job):
@@ -95,8 +96,8 @@ def main():
                   for f in range(FOLDS)}
     prob = lambda f, z: torch.sigmoid(probes[f](z)[:, 0])
 
-    rnn, vae = load_mdnrnn(device="cpu"), load_vae(device="cpu")
-    theta = torch.load(RUNS / "dream_v3" / "best.pt", weights_only=False)["theta"]
+    rnn, vae = load_mdnrnn(RNN_PATH, device="cpu"), load_vae(VAE_PATH, device="cpu")
+    theta = torch.load(CTRL, weights_only=False)["theta"]
     theta = torch.as_tensor(np.asarray(theta), dtype=torch.float32)[None].expand(B, -1)
 
     plan, jobs, t_start = {}, [], time.time()

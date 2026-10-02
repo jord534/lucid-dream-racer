@@ -69,13 +69,41 @@ controllers (493 to 784) is large and each controller also varies a lot between 
 the 300 runs reach 900. One loop run, three controllers: the 631 is an estimate with that spread
 around it. Reproduce: `reports/loop_run_2026-10-01/run_test_eval.sh` (about 11 minutes).
 
+## The two dream-failure tests on the round-2 controllers (added 2 October 2026)
+
+Each round-2 controller, in the round-2 world model it was trained in, on the 100 test tracks, with the
+unchanged tests of `reports/dream_failure_analysis/` (`run_failure_tests.sh`, `failure_tests.log`, logs in
+`failure_tests/`, results in `reports/dream_failure_analysis/loop_r02_p{0,1,2}/`). The numbers are the median,
+over tracks, of the dream's P(on road) minus the real car's, over the steps where the real car is off the
+road (0 would be agreement; the original dream-trained controller is for reference).
+
+| Controller (test return) | Tracks with an off-road window | Closed-loop test | Dream actions run in the simulator | Extra forgiveness when the controller steers in the dream (closed minus open) |
+|---|---|---|---|---|
+| original dream_v3 (252) | 100 | 0.83 | 0.82 | 0.56 |
+| loop p0 (784) | 23 | 0.61 | 0.40 (21 tracks) | 0.10 |
+| loop p1 (616) | 82 | 0.61 | 0.64 (81 tracks) | 0.12 |
+| loop p2 (493) | 86 | 0.32 | 0.36 (86 tracks) | -0.02 |
+
+What it means. The dream still shows the car on the road more than the simulator does for every
+controller (all medians clearly above 0, 95% intervals in the json files). It is less forgiving than before,
+and the part that was specific to the controller's own steering (last column) has mostly gone. The
+disagreement is not fixed. It is smallest for the controller that drives worst in reality (p2, 493) and
+largest for p1, so it does not track the test return in a simple way.
+
+Caveats. Different controllers drive different tracks off the road, so the rows are not the same test
+on the same cases; with few off-road windows (p0: 23 tracks) the numbers are rough. The open-loop
+column of the json files (real actions replayed in the dream) is higher than in the original analysis (0.40
+to 0.47 against 0.23), which this comparison cannot explain; off-road moments of better drivers are
+shorter and differ in kind from those of the original poor driver. The on-road probe is trained, per
+controller, on that controller's own real rollouts (cross-fitted over tracks), as before.
+
 ## Caveats
 
 One run, one seed per round. Three controllers per round, each retrained from scratch with a different
 seed, so round-to-round differences include controller-seed variation (the spread above is the best
 guide to it). Results are on validation tracks. The stronger tests used in the dream-failure analysis
 (`diagnostics/dream_closed_loop.py`, `dream_actions_in_sim.py`) have not been run on the new models
-(see below if added). The projection of 1.6 hours was low by about 35%; the
+(results below). The projection of 1.6 hours was low by about 35%; the
 measured stage times (`state.json`) are a better guide: about 10 min proposers, 13 min measure, 10 min
 critic and 9 min fine-tune per round.
 
