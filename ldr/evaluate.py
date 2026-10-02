@@ -14,14 +14,14 @@ import numpy as np
 import torch
 
 from .agent import Perturb, WorldModelAgent
-from .config import REPORTS, SEED_TEST
+from .config import REPORTS, RUNS, SEED_TEST
 
 _AGENT = None
 
 
-def _init():
+def _init(vae_path, rnn_path):
     global _AGENT
-    _AGENT = WorldModelAgent()
+    _AGENT = WorldModelAgent(vae_path, rnn_path)
 
 
 def _run(job):
@@ -34,6 +34,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--ckpt", type=Path, required=True)
     p.add_argument("--name", required=True)
+    p.add_argument("--vae", type=Path, default=RUNS / "vae" / "best.pt")
+    p.add_argument("--rnn", type=Path, default=RUNS / "mdnrnn" / "best.pt",
+                   help="world model the controller reads its memory from (must be the one it was trained with)")
     p.add_argument("--tracks", type=int, default=100)
     p.add_argument("--workers", type=int, default=8)
     p.add_argument("--obs-noise", type=float, default=0.0)
@@ -43,10 +46,10 @@ def main():
     theta = torch.load(a.ckpt, weights_only=False)["theta"]
     pert = dict(obs_noise=a.obs_noise, road_friction=a.road_friction, gas_cap=a.gas_cap)
     jobs = [(theta, SEED_TEST + i, pert) for i in range(a.tracks)]
-    with Pool(a.workers, initializer=_init) as pool:
+    with Pool(a.workers, initializer=_init, initargs=(a.vae, a.rnn)) as pool:
         res = pool.map(_run, jobs)
     returns = np.array([r for _, r, _ in res])
-    out = dict(name=a.name, ckpt=str(a.ckpt), perturb=pert, seeds=[s for s, _, _ in res],
+    out = dict(name=a.name, ckpt=str(a.ckpt), vae=str(a.vae), rnn=str(a.rnn), perturb=pert, seeds=[s for s, _, _ in res],
                returns=returns.tolist(), mean=float(returns.mean()), std=float(returns.std()))
     REPORTS.mkdir(exist_ok=True)
     (REPORTS / f"eval_{a.name}.json").write_text(json.dumps(out, indent=1))

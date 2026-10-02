@@ -48,13 +48,34 @@ candidates, so the selection did pick out the places where the dream is most wro
   from each round's own controllers, so window numbers are not strictly comparable between rounds.
 - The dream still overpays: a gap of 57 remains and the real car is on the road only 47% of the window.
 
+## Test-track result (added 2 October 2026)
+
+The three round-2 controllers on the 100 test tracks (seeds 1,000,000 to 1,000,099), each reading its
+memory from the round-2 world model it was trained in (`run_test_eval.sh`, `test_eval.log`,
+`../eval_loop_r02_p{0,1,2}.json`):
+
+| Controller | Test mean | Std over tracks |
+|---|---|---|
+| 0 | 783.7 | 245.0 |
+| 1 | 616.0 | 283.6 |
+| 2 | 492.5 | 302.4 |
+| Mean of the 3 | **630.7** | |
+
+Compare: the earlier dream-trained controller 251.7, the simulator-trained controller 908.4, the paper
+906. So the loop took dream-trained controllers from about 250 to about 630 on unseen tracks, still
+about 280 below the simulator-trained one. The test mean (631) is close to the validation mean for the
+same controllers (640), so the gain is not specific to the validation tracks. The spread between
+controllers (493 to 784) is large and each controller also varies a lot between tracks; only 14% of
+the 300 runs reach 900. One loop run, three controllers: the 631 is an estimate with that spread
+around it. Reproduce: `reports/loop_run_2026-10-01/run_test_eval.sh` (about 11 minutes).
+
 ## Caveats
 
 One run, one seed per round. Three controllers per round, each retrained from scratch with a different
 seed, so round-to-round differences include controller-seed variation (the spread above is the best
 guide to it). Results are on validation tracks. The stronger tests used in the dream-failure analysis
-(`diagnostics/dream_closed_loop.py`, `dream_actions_in_sim.py`, and the test-set evaluation of the final
-controllers) have not been run on the new models. The projection of 1.6 hours was low by about 35%; the
+(`diagnostics/dream_closed_loop.py`, `dream_actions_in_sim.py`) have not been run on the new models
+(see below if added). The projection of 1.6 hours was low by about 35%; the
 measured stage times (`state.json`) are a better guide: about 10 min proposers, 13 min measure, 10 min
 critic and 9 min fine-tune per round.
 
