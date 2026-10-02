@@ -1,0 +1,15 @@
+{
+ "candidates": 360,
+ "kept": 180,
+ "ranked_by": "road_gap",
+ "road_probe": {
+  "off_road_frames": 29633,
+  "frames": 114414,
+  "auc": 0.9930451512336731,
+  "ok": true
+ },
+ "road_gap_mean_all": 0.24243646436598568,
+ "road_gap_mean_kept": 0.4851079385148154,
+ "gap_mean_all": 52.96028904372619,
+ "gap_mean_kept": 74.69873909528057
+}

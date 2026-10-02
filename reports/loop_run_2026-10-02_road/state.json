@@ -1,0 +1,103 @@
+{
+ "hours": 1.997625014980634,
+ "ledger": [
+  {
+   "round": 0,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop_road/r00/mdnrnn/best.pt",
+   "real_return_mean": 639.7268069458008,
+   "real_return_by_proposer": [
+    762.5101846313477,
+    599.9807940673828,
+    556.6894421386719
+   ],
+   "gap_mean": 56.43407243549824,
+   "gap_median": 57.439094603061676,
+   "dream_return_window_mean": 82.16226288126575,
+   "real_return_window_mean": 25.72819044576751,
+   "real_on_road_share_mean": 0.4903315001351543,
+   "candidates": 450,
+   "road_probe": {
+    "off_road_frames": 38145,
+    "frames": 142218,
+    "auc": 0.9938267469406128,
+    "ok": true
+   },
+   "road_gap_mean": 0.27052204190463747,
+   "dream_p_on_mean": 0.7608535420397917,
+   "p_on_when_real_off_mean": 0.7403599141991851,
+   "branches_with_off_road": 411
+  },
+  {
+   "round": 1,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop_road/r01/mdnrnn/best.pt",
+   "real_return_mean": 699.2829359944661,
+   "real_return_by_proposer": [
+    697.7157574462891,
+    674.1296505737305,
+    726.0033999633789
+   ],
+   "gap_mean": 51.57234308620294,
+   "gap_median": 54.43518924713135,
+   "dream_return_window_mean": 77.34302043113443,
+   "real_return_window_mean": 25.770677344931496,
+   "real_on_road_share_mean": 0.5593753935353246,
+   "candidates": 450,
+   "road_probe": {
+    "off_road_frames": 30143,
+    "frames": 140106,
+    "auc": 0.9940216541290283,
+    "ok": true
+   },
+   "road_gap_mean": 0.2334353496508842,
+   "dream_p_on_mean": 0.7928107431862089,
+   "p_on_when_real_off_mean": 0.7751808593474045,
+   "branches_with_off_road": 395
+  },
+  {
+   "round": 2,
+   "model": "/Users/jordanbonil/Documents/source/lucid-dream-racer/runs/loop_road/r02/mdnrnn/best.pt",
+   "real_return_mean": 688.036791229248,
+   "real_return_by_proposer": [
+    669.6976681518555,
+    637.2127647399902,
+    757.1999407958984
+   ],
+   "gap_mean": 48.190412997371624,
+   "gap_median": 48.05250549316406,
+   "dream_return_window_mean": 78.83559409181277,
+   "real_return_window_mean": 30.64518109444115,
+   "real_on_road_share_mean": 0.5563980029438675,
+   "candidates": 450,
+   "road_probe": {
+    "off_road_frames": 24161,
+    "frames": 140710,
+    "auc": 0.992196261882782,
+    "ok": true
+   },
+   "road_gap_mean": 0.19190226732875823,
+   "dream_p_on_mean": 0.7483002702726258,
+   "p_on_when_real_off_mean": 0.7120010590479346,
+   "branches_with_off_road": 393
+  }
+ ],
+ "stage_min": {
+  "proposers": [
+   3.2146771748860675e-06,
+   11.22126873334249,
+   10.04591688712438
+  ],
+  "measure": [
+   13.581606630484263,
+   13.741910898685456,
+   13.407945815722147
+  ],
+  "critic": [
+   26.974076684316,
+   11.030496482054392
+  ],
+  "finetune": [
+   10.277650316556295,
+   9.576625967025757
+  ]
+ }
+}
