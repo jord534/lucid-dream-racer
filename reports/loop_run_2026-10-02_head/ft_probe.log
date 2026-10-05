@@ -1,0 +1,10 @@
+step 400/4000  nll 1.037  val nll 1.055  val r_mse 0.786  probe acc 0.989 (off-road recall 0.99; free-running pass 0.85/0.89)  on-road acc 0.994 (branches 0.986, off-road recall 0.97)  about 22.4 min left
+step 800/4000  nll 1.034  val nll 1.053  val r_mse 0.825  probe acc 0.983 (off-road recall 0.98; free-running pass 0.77/0.83)  on-road acc 0.990 (branches 0.987, off-road recall 0.98)  about 19.5 min left
+step 1200/4000  nll 1.028  val nll 1.039  val r_mse 0.866  probe acc 0.990 (off-road recall 0.99; free-running pass 0.90/0.92)  on-road acc 0.992 (branches 0.985, off-road recall 0.98)  about 16.8 min left
+step 1600/4000  nll 1.029  val nll 1.038  val r_mse 0.860  probe acc 0.990 (off-road recall 0.99; free-running pass 0.85/0.90)  on-road acc 0.993 (branches 0.986, off-road recall 0.98)  about 14.4 min left
+step 2000/4000  nll 1.020  val nll 1.041  val r_mse 0.751  probe acc 0.990 (off-road recall 0.99; free-running pass 0.86/0.82)  on-road acc 0.992 (branches 0.986, off-road recall 0.98)  about 12.0 min left
+step 2400/4000  nll 1.013  val nll 1.022  val r_mse 0.801  probe acc 0.989 (off-road recall 0.99; free-running pass 0.86/0.94)  on-road acc 0.992 (branches 0.980, off-road recall 0.97)  about 9.6 min left
+step 2800/4000  nll 1.029  val nll 1.021  val r_mse 0.800  probe acc 0.992 (off-road recall 0.99; free-running pass 0.92/0.90)  on-road acc 0.995 (branches 0.984, off-road recall 0.96)  about 7.3 min left
+step 3200/4000  nll 1.013  val nll 1.024  val r_mse 0.838  probe acc 0.993 (off-road recall 0.99; free-running pass 0.93/0.93)  on-road acc 0.993 (branches 0.984, off-road recall 0.97)  about 4.9 min left
+step 3600/4000  nll 1.009  val nll 1.019  val r_mse 0.775  probe acc 0.990 (off-road recall 0.99; free-running pass 0.82/0.84)  on-road acc 0.990 (branches 0.982, off-road recall 0.97)  about 2.4 min left
+step 4000/4000  nll 1.003  val nll 1.025  val r_mse 0.788  probe acc 0.992 (off-road recall 0.99; free-running pass 0.88/0.91)  on-road acc 0.993 (branches 0.986, off-road recall 0.97)  about 0.0 min left

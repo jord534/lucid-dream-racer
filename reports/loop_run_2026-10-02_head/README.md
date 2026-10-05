@@ -75,3 +75,38 @@ the window) but did not reach the target, and made the case that matters worse: 
 the road the dream now catches fewer departures (59% to 39%), and even teacher-forced detection of departures
 fell. The frames also got worse (validation NLL up, probe accuracy down). Scheduled sampling to 1.0 traded
 sharpness and detection of departures for stability. This is one model, one training run, one setting.
+
+## 4. A task loss through a frozen road probe: `runs/ft_probe`, `../head_horizon_probe.md` (added 5 October 2026)
+
+Idea: the latent the dream samples must read, through a probe trained on real latents, as the true road
+status. `ldr/road_probe.py` trains the probe (held-out AUC 0.999 on original episodes, 0.997 on branches;
+`road_probe.json`; it is trained on episodes disjoint from those of the separate probe the test uses).
+`ldr/train_mdnrnn.py --probe` adds, to the usual teacher-forced pass, the cross-entropy of the model's
+predicted P(on road) (the probe averaged over the predicted mixture) against the exact flag, and, with
+`--free-task-weight`, a second pass of 100 free-running steps (20 recorded, then own samples) scored only on
+road status (head and probe) and reward, with no latent likelihood. Command: `python -m ldr.train_mdnrnn
+--init-from runs/loop_head/r02/mdnrnn/best.pt --extra runs/loop_head/extra_r01.npz --extra-frac 0.5
+--extra-onset-frac 0.5 --on-weight 1.0 --probe runs/road_probe/probe.pt --probe-weight 1.0 --free-task-weight 1.0
+--free-batch 16 --free-len 120 --free-warm 20 --steps 4000 --lr 3e-4 --eval-every 400 --out runs/ft_probe
+--seed 11` (`ft_probe.log`, `ft_probe_log.csv`). Teacher-forced validation loss 1.025 (about 0.98 before,
+1.068 after the previous attempt). Checkpoint tested: `last.pt`.
+Targets set beforehand: free-running accuracy of at least 0.90 at steps 70 to 100 on driver rollouts (random
+starts), and at least 85% of departures caught at steps 20 to 40 of the windows that start 30 steps before the
+car leaves the road. Both missed.
+
+| Measure (free-running, replayed real actions) | Original model | After free-running training | After probe task loss |
+|---|---|---|---|
+| Driver rollouts, random start, steps 70 to 100: head accuracy | 0.29 | 0.43 | 0.28 |
+| same, test probe (independent of the training probe) | 0.31 | 0.47 | 0.63 |
+| Held-out original episodes, steps 70 to 100: head accuracy | 0.83 | 0.87 | 0.91 |
+| Departures caught, steps 20 to 40, driver rollouts: head / test probe | 0.59 / 0.65 | 0.39 / 0.53 | 0.19 / 0.60 |
+| Departures caught, steps 20 to 40, original episodes: head / test probe | 0.61 / 0.64 | 0.48 / 0.51 | 0.48 / 0.40 |
+
+What it means. The long-horizon reading of the dream's latent improved in some regimes (test probe on driver
+rollouts 0.31 to 0.63; held-out original episodes head 0.83 to 0.91), so the model did learn something that
+carries to a probe it was not trained against. The case that matters is unchanged or worse: at the moment the
+car leaves the road the dream still catches about 60% (test probe) and the head catches fewer (19 to 48%). Two
+different ways of making the loss care about road status (free-running training; this one) have now failed to
+fix this. The information needed (where the car is relative to the road edge, tens of steps from a real start)
+does not appear to be tracked by the dream's state, and a loss on its outputs does not create it. One model,
+one training run per attempt.

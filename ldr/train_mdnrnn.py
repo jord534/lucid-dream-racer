@@ -75,12 +75,69 @@ class SequenceSampler:
         return (*out, t(self.on[a].astype(np.float32))) if with_on else out
 
 
+def probe_prob(probe, logit, mu, logsig):
+    """P(on road) under the model's predicted next-latent distribution, as judged by the frozen
+    road probe: sum_k pi_k * sigmoid(probe(mu_k + sigma_k * eps)). Differentiable in every MDN
+    output. Shared-mixture models only (one component for the whole frame)."""
+    assert logit.dim() == mu.dim() - 1, "probe loss needs a shared-mixture world model"
+    zk = (mu + logsig.exp() * torch.randn_like(mu)).transpose(-1, -2)   # (..., K, z)
+    pk = torch.sigmoid(probe(zk)[..., 0])                               # (..., K)
+    return (F.softmax(logit, -1) * pk).sum(-1)
+
+
+def probe_bce(p, y, stats=None, key="probe"):
+    """Cross-entropy of P(on road) against the exact flag y (1 on, 0 off, -1 unknown: ignored)."""
+    known = y >= 0
+    if not known.any():
+        return p.sum() * 0
+    p, y = p[known].clamp(1e-4, 1 - 1e-4), y[known]
+    loss = -(y * p.log() + (1 - y) * (1 - p).log()).mean()
+    if stats is not None:
+        off = y < 0.5
+        stats.update({f"{key}_bce": loss.item(), f"{key}_acc": ((p > 0.5) == (y > 0.5)).float().mean().item(),
+                      f"{key}_off_recall": (p[off] < 0.5).float().mean().item() if off.any() else float("nan")})
+    return loss
+
+
+def free_task_loss(model, batch, probe, warm, probe_weight=1.0, on_weight=1.0, r_weight=1.0,
+                   stats: dict | None = None):
+    """Free-running supervision of what matters for control, with no latent likelihood. The first
+    `warm` inputs are recorded; after that the model is fed its own samples, as when a controller
+    drives the dream. From then on it is scored only on quantities with exact labels: the on-road
+    head, the road status read from its predicted latent by the frozen probe, and the reward.
+    (The latent likelihood is left to the teacher-forced pass: scoring it against the real future
+    from a drifted history only teaches smoothing, as the free-running run showed.)"""
+    z, a, _zn, r, _d, on = batch
+    B, L, _ = z.shape
+    state, zin, outs = None, z[:, 0], []
+    for t in range(L):
+        step = model.step(zin, a[:, t], state, return_on=True)
+        outs.append((step[0], step[1], step[2], step[3], step[6]))
+        state = step[5]
+        if t + 1 < L:
+            zin = z[:, t + 1] if t + 1 < warm else mdn_sample(step[0], step[1], step[2], 1.0)
+    logit, mu, logsig, r_hat, on_hat = [torch.stack(o, 1)[:, warm:] for o in zip(*outs)]
+    r, on = r[:, warm:], on[:, warm:]
+    known = on >= 0
+    on_loss = (F.binary_cross_entropy_with_logits(on_hat[known], on[known]) if known.any()
+               else on_hat.sum() * 0)
+    pl = probe_bce(probe_prob(probe, logit, mu, logsig), on, stats, "free_probe")
+    rl = F.mse_loss(r_hat, r)
+    if stats is not None:
+        stats.update(free_on_bce=on_loss.item(), free_r_mse=rl.item())
+        if known.any():
+            pred = on_hat[known] > 0
+            stats["free_on_acc"] = (pred == (on[known] > 0.5)).float().mean().item()
+    return probe_weight * pl + on_weight * on_loss + r_weight * rl
+
+
 def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight: float = 0.0,
-            stats: dict | None = None):
+            stats: dict | None = None, free_warm: int = 0, probe=None, probe_weight: float = 0.0):
     """ss_prob > 0 is scheduled sampling: at each step, with that probability, the input
     latent is the model's own sample from the previous step instead of the recorded one.
     Teacher forcing alone never scores the model on its own outputs, which is exactly the
-    regime the dream runs in."""
+    regime the dream runs in. free_warm: the first free_warm inputs are always the recorded ones
+    (the dream is started from a real warm-up); own samples are used only after that."""
     z, a, z_next, r, d, *rest = batch
     ron = on_weight > 0
     if ss_prob <= 0:
@@ -95,6 +152,7 @@ def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight:
             if t + 1 < L:
                 own = mdn_sample(step[0], step[1], step[2], 1.0)
                 use = (torch.rand(B, 1, device=z.device) < ss_prob).float()
+                use = use * float(t + 1 >= free_warm)
                 zin = use * own + (1 - use) * z[:, t + 1]
         logit, mu, logsig, r_hat, d_hat, *on_hat = [torch.stack(o, 1) for o in zip(*outs)]
     nll = mdn_nll(logit, mu, logsig, z_next)
@@ -102,6 +160,9 @@ def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight:
     d_loss = F.binary_cross_entropy_with_logits(
         d_hat, d, pos_weight=torch.tensor(done_pos_weight, device=d.device))
     total = nll + r_loss + d_loss
+    if probe is not None and rest:
+        pl = probe_bce(probe_prob(probe, logit, mu, logsig), rest[0], stats)
+        total = total + probe_weight * pl
     if ron:
         on = rest[0]
         known = on >= 0
@@ -131,6 +192,18 @@ def main():
                    help="npz of extra episodes in the latents.npz format (e.g. real branches)")
     p.add_argument("--extra-frac", type=float, default=0.5,
                    help="share of every training batch drawn from --extra")
+    p.add_argument("--seq-len", type=int, default=C.seq_len,
+                   help="training window length (long windows let own samples compound)")
+    p.add_argument("--free-warm", type=int, default=0,
+                   help="steps at the start of every window that always use the recorded inputs")
+    p.add_argument("--probe", type=Path, default=None,
+                   help="frozen road probe (ldr.road_probe): task loss on the predicted latent")
+    p.add_argument("--probe-weight", type=float, default=1.0,
+                   help="weight of the probe task loss in the teacher-forced pass")
+    p.add_argument("--free-task-weight", type=float, default=0.0,
+                   help="weight of the extra free-running pass scored on road status and reward only")
+    p.add_argument("--free-batch", type=int, default=16)
+    p.add_argument("--free-len", type=int, default=120)
     p.add_argument("--on-weight", type=float, default=0.0,
                    help="weight of the on-road head loss (0: head not trained)")
     p.add_argument("--extra-onset-frac", type=float, default=0.0,
@@ -142,23 +215,32 @@ def main():
     args = p.parse_args()
     seed_everything(args.seed)
     dev = get_device(args.device)
-    data = SequenceSampler()
-    extra = SequenceSampler(args.extra) if args.extra else None
+    data = SequenceSampler(L=args.seq_len)
+    extra = SequenceSampler(args.extra, L=args.seq_len) if args.extra else None
     model = (load_mdnrnn(args.init_from, dev) if args.init_from
              else MDNRNN(shared=args.shared_mixture).to(dev)).train()
 
-    won = args.on_weight > 0
-    trained_on = won or (args.init_from is not None
-                         and bool(load_ckpt(args.init_from, "cpu").get("on_trained", False)))
+    probe = None
+    if args.probe:
+        from .road_probe import load_probe
+        probe = load_probe(args.probe, dev)
+    won = args.on_weight > 0 or probe is not None   # the probe loss needs the on-road labels
+    if args.free_task_weight > 0:
+        assert probe is not None and args.on_weight > 0, "free-running pass needs --probe and --on-weight"
+        data_f = SequenceSampler(L=args.free_len)
+        extra_f = SequenceSampler(args.extra, L=args.free_len) if args.extra else None
+    trained_on = args.on_weight > 0 or (args.init_from is not None
+                                        and bool(load_ckpt(args.init_from, "cpu").get("on_trained", False)))
 
-    def draw(split, n):
-        if extra is None or not len(extra.starts[split]):
-            return data.sample(n, split, rng, dev, with_on=won)
+    def draw(split, n, d=None, x=None):
+        d, x = (data, extra) if d is None else (d, x)
+        if x is None or not len(x.starts[split]):
+            return d.sample(n, split, rng, dev, with_on=won)
         k = round(n * args.extra_frac)
         on = args.extra_onset_frac if split == "train" else 0.0
-        a = data.sample(n - k, split, rng, dev, with_on=won)
-        b = extra.sample(k, split, rng, dev, on, with_on=won)
-        return tuple(torch.cat([x, y]) for x, y in zip(a, b))
+        a = d.sample(n - k, split, rng, dev, with_on=won)
+        b = x.sample(k, split, rng, dev, on, with_on=won)
+        return tuple(torch.cat([u, v]) for u, v in zip(a, b))
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)
     start, ck = 0, args.out / "last.pt"
@@ -173,7 +255,13 @@ def main():
         ss = args.ss_prob * min(1.0, 2 * step / args.steps)   # ramp in over the first half
         tstats = {}
         loss, nll, rl, dl = loss_fn(model, draw("train", args.batch), ss_prob=ss,
-                                    on_weight=args.on_weight, stats=tstats)
+                                    on_weight=args.on_weight, stats=tstats,
+                                    free_warm=args.free_warm, probe=probe,
+                                    probe_weight=args.probe_weight)
+        if args.free_task_weight > 0:
+            loss = loss + args.free_task_weight * free_task_loss(
+                model, draw("train", args.free_batch, data_f, extra_f), probe, args.free_warm,
+                stats=tstats)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   # LSTMs spike
@@ -183,7 +271,8 @@ def main():
             with torch.no_grad():
                 vstats = {}
                 vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev, with_on=won),
-                                         on_weight=args.on_weight, stats=vstats)
+                                         on_weight=args.on_weight, stats=vstats, probe=probe,
+                                         probe_weight=args.probe_weight)
                 xstats = {}
                 if won and extra is not None and len(extra.starts["val"]):
                     loss_fn(model, extra.sample(256, "val", rng, dev, with_on=True),
@@ -198,10 +287,20 @@ def main():
                     val_on_acc=vstats.get("on_acc", float("nan")),
                     val_on_off_recall=vstats.get("off_recall", float("nan")),
                     val_on_acc_extra=xstats.get("on_acc", float("nan")),
-                    val_on_off_recall_extra=xstats.get("off_recall", float("nan")))
+                    val_on_off_recall_extra=xstats.get("off_recall", float("nan")),
+                    probe_bce=tstats.get("probe_bce", float("nan")),
+                    val_probe_acc=vstats.get("probe_acc", float("nan")),
+                    val_probe_off_recall=vstats.get("probe_off_recall", float("nan")),
+                    free_on_acc=tstats.get("free_on_acc", float("nan")),
+                    free_probe_acc=tstats.get("free_probe_acc", float("nan")),
+                    free_probe_off_recall=tstats.get("free_probe_off_recall", float("nan")))
             eta = (time.time() - t_start) / (step + 1 - start) * (args.steps - step - 1)
             print(f"step {step + 1}/{args.steps}  nll {nll.item():.3f}  "
                   f"val nll {vn.item():.3f}  val r_mse {vr.item():.3f}  "
+                  + (f"probe acc {vstats.get('probe_acc', float('nan')):.3f} (off-road recall "
+                     f"{vstats.get('probe_off_recall', float('nan')):.2f}; free-running pass "
+                     f"{tstats.get('free_probe_acc', float('nan')):.2f}/"
+                     f"{tstats.get('free_probe_off_recall', float('nan')):.2f})  " if probe is not None else "")
                   + (f"on-road acc {vstats.get('on_acc', float('nan')):.3f} (branches "
                      f"{xstats.get('on_acc', float('nan')):.3f}, off-road recall "
                      f"{xstats.get('off_recall', float('nan')):.2f})  " if won else "")

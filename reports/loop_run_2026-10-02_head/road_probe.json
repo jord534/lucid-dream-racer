@@ -1,0 +1,14 @@
+{
+ "held-out original episodes": {
+  "auc": 0.999070942401886,
+  "accuracy": 0.9854916398667035,
+  "off_road_recall": 0.983005366726297,
+  "frames": 68719
+ },
+ "held-out branches": {
+  "auc": 0.9965876340866089,
+  "accuracy": 0.9714119504695421,
+  "off_road_recall": 0.9595120685180379,
+  "frames": 12033
+ }
+}

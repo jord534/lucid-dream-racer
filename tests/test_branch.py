@@ -111,3 +111,31 @@ def test_old_checkpoints_load_without_a_trained_head(tmp_path):
     assert load_mdnrnn(tmp_path / "untrained.pt").has_on is False
     torch.save({"model": m.state_dict(), "on_trained": True}, tmp_path / "trained.pt")
     assert load_mdnrnn(tmp_path / "trained.pt").has_on is True
+
+
+def test_probe_task_loss_is_differentiable_and_free_pass_runs():
+    import torch
+
+    from ldr.mdnrnn import MDNRNN
+    from ldr.road_probe import make_probe
+    from ldr.train_mdnrnn import free_task_loss, loss_fn
+
+    torch.manual_seed(0)
+    probe = make_probe().eval()
+    for p in probe.parameters():
+        p.requires_grad_(False)
+    model = MDNRNN(shared=True)
+    B, L = 4, 40
+    z, a = torch.randn(B, L, C.z_dim), torch.rand(B, L, 3)
+    on = (torch.rand(B, L) > 0.5).float()
+    on[0, :5] = -1  # unknown labels are ignored
+    batch = (z, a, z, torch.zeros(B, L), torch.zeros(B, L), on)
+    stats = {}
+    loss = loss_fn(model, batch, on_weight=1.0, probe=probe, probe_weight=1.0, stats=stats)[0]
+    loss.backward()
+    assert np.isfinite(stats["probe_bce"]) and model.lstm.weight_hh_l0.grad is not None
+    assert all(p.grad is None for p in probe.parameters())  # the probe stays frozen
+    model.zero_grad()
+    fstats = {}
+    free_task_loss(model, batch, probe, warm=10, stats=fstats).backward()
+    assert {"free_probe_bce", "free_on_bce", "free_r_mse"} <= set(fstats)
