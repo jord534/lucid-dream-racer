@@ -18,3 +18,5 @@ loop_head_r02_p2: 475.4 +/- 320.5 over 100 tracks
 returns matching the stored evaluation: 100/100
 wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/data/dream_failure/rollouts_loop_head_r02_p2.npz
 === driver 2: closed-loop and actions-in-sim tests, 00:27:03 ===
+=== driver 2 finished, 00:32:04 ===
+=== all done 00:32:04 ===

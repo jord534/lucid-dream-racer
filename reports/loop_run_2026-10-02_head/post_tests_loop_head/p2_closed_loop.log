@@ -6,3 +6,103 @@
 [  6] seed 1000051  real off-road steps  71  P(on road) there: real 0.98  dream replaying real actions 0.98  dream steered by controller 0.99  (2.5 min)
 [  7] seed 1000056  real off-road steps  71  P(on road) there: real 0.25  dream replaying real actions 0.61  dream steered by controller 0.99  (2.8 min)
 [  8] seed 1000057  real off-road steps  71  P(on road) there: real 0.39  dream replaying real actions 0.55  dream steered by controller 0.90  (3.1 min)
+[  9] seed 1000059  real off-road steps  71  P(on road) there: real 0.81  dream replaying real actions 0.76  dream steered by controller 0.98  (3.3 min)
+[ 10] seed 1000077  real off-road steps  71  P(on road) there: real 0.55  dream replaying real actions 0.77  dream steered by controller 0.99  (3.4 min)
+[ 11] seed 1000079  real off-road steps  71  P(on road) there: real 0.40  dream replaying real actions 1.00  dream steered by controller 0.96  (3.6 min)
+
+=== summary ===
+{
+ "tracks": 11,
+ "max_action_check": 3.2782554626464844e-07,
+ "primary_closed_minus_real": {
+  "median": 0.5294196307659149,
+  "ci95": [
+   0.17399835586547852,
+   0.657570868730545
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 0.0009765625
+ },
+ "closed_minus_open": {
+  "median": 0.2193976640701294,
+  "ci95": [
+   -0.012136220932006836,
+   0.34765803813934326
+  ],
+  "share_positive": 0.7272727272727273,
+  "wilcoxon_p": 0.0537109375
+ },
+ "open_minus_real": {
+  "median": 0.2265866994857788,
+  "ci95": [
+   0.08838331699371338,
+   0.6016077697277069
+  ],
+  "share_positive": 0.9090909090909091,
+  "wilcoxon_p": 0.0029296875
+ },
+ "projected_closed_minus_real": {
+  "median": 0.5289917290210724,
+  "ci95": [
+   0.17566514015197754,
+   0.662802129983902
+  ],
+  "share_positive": 1.0,
+  "wilcoxon_p": 0.0009765625
+ },
+ "projected_open_minus_real": {
+  "median": 0.16112321615219116,
+  "ci95": [
+   0.0873439610004425,
+   0.6011814177036285
+  ],
+  "share_positive": 0.9090909090909091,
+  "wilcoxon_p": 0.0068359375
+ },
+ "mean_p_off": {
+  "real": 0.5090854831717231,
+  "open": 0.8097180453213778,
+  "closed": 0.9689242297952826,
+  "open_projected": 0.7636893770911477,
+  "closed_projected": 0.9663408073511991
+ },
+ "share_of_off_steps_dream_says_on_road": {
+  "open": 0.9103713188220229,
+  "closed": 1.0
+ },
+ "median_reward": {
+  "real": 21.44654655456543,
+  "open": 22.859508514404297,
+  "closed": 47.48701477050781
+ },
+ "mean_gas": {
+  "real": 0.04949151271615516,
+  "closed": 0.17545755343003708
+ },
+ "mean_abs_steer_difference_controller_in_dream_vs_real": 0.5334289724176581
+}
+Traceback (most recent call last):
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 663, in _save
+    fh = fp.fileno()
+         ^^^^^^^^^
+AttributeError: '_idat' object has no attribute 'fileno'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/diagnostics/dream_closed_loop.py", line 185, in <module>
+    main()
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/diagnostics/dream_closed_loop.py", line 180, in main
+    img.save(OUT / "closed_loop_frames.png")
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/Image.py", line 2711, in save
+    save_handler(self, fp, filename)
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/PngImagePlugin.py", line 1522, in _save
+    ImageFile._save(
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 667, in _save
+    _encode_tile(im, fp, tile, bufsize, None, exc)
+  File "/Users/jordanbonil/Documents/source/lucid-dream-racer/.venv/lib/python3.12/site-packages/PIL/ImageFile.py", line 685, in _encode_tile
+    encoder.setimage(im.im, extents)
+ValueError: cannot write empty image
