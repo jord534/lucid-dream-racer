@@ -110,3 +110,8 @@ different ways of making the loss care about road status (free-running training;
 fix this. The information needed (where the car is relative to the road edge, tens of steps from a real start)
 does not appear to be tracked by the dream's state, and a loss on its outputs does not create it. One model,
 one training run per attempt.
+
+Note (5 October 2026): `../head_horizon.*` (the original model's curves) was re-run with the rollouts of all six
+drivers (`loop_head` and `loop_road`, round 2), as the two later runs used; the first run had four. With six,
+the test probe gives 0.35 (not 0.31) at steps 70 to 100 of random starts and 0.63 (not 0.65) of off-road steps
+recognised at steps 20 to 40. The technical note uses the six-driver numbers throughout.

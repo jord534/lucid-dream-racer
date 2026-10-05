@@ -12,6 +12,7 @@ not evidence of anything.
 | original dream controller | 252 | 252 | 0.83 | 0.83 | 0.82 | 0.82 |
 | first loop | 784, 616, 493 | 631 | 0.61, 0.61, 0.32 | 0.51 | 0.40, 0.64, 0.36 | 0.47 |
 | road-ranked loop | 653, 595, 755 | 668 | 0.38, 0.42, 0.52 | 0.44 | 0.37, 0.52, 0.68 | 0.52 |
+| on-road head + penalty | 518, 774, 475 | 589 | 0.60, 0.76, 0.53 | 0.63 | 0.34, 0.60, 0.32 | 0.42 |
 
 Validation measurements per round (50 validation tracks, 3 drivers; rounds of consecutive runs are
 placed end to end; the road columns exist from the road-ranked run on; head accuracy only for runs with an
@@ -25,3 +26,9 @@ on-road head):
 | road-ranked loop | 2 | 640 | 56.4 | 0.27 | 0.74 | - |
 | road-ranked loop | 3 | 699 | 51.6 | 0.23 | 0.78 | - |
 | road-ranked loop | 4 | 688 | 48.2 | 0.19 | 0.71 | - |
+| on-road head + penalty | 4 | 688 | 48.2 | 0.19 | 0.71 | - |
+| on-road head + penalty | 5 | 231 | 40.8 | 0.14 | 0.98 | 0.83 |
+| on-road head + penalty | 6 | 600 | 48.6 | 0.19 | 0.96 | 0.73 |
+| control (no head) | 4 | 688 | 48.2 | 0.19 | 0.71 | - |
+| control (no head) | 5 | 564 | 50.5 | 0.28 | 0.75 | - |
+| control (no head) | 6 | 754 | 52.9 | 0.27 | 0.76 | - |

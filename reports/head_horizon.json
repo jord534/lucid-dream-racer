@@ -265,266 +265,267 @@
    ]
   },
   "test-track rollouts of dream-trained drivers | random start": {
-   "windows": 1500,
+   "windows": 1800,
    "bins": [
     {
      "steps": "0-5",
-     "n": 120000,
-     "off_share": 0.12226666666666666,
+     "n": 144000,
+     "off_share": 0.11966666666666667,
      "teacher-forced head": {
-      "acc": 0.9920083333333334,
-      "off_recall": 0.9479961832061069
+      "acc": 0.9909513888888889,
+      "off_recall": 0.9387766945218199
      },
      "free-running head": {
-      "acc": 0.991225,
-      "off_recall": 0.9439067611777535
+      "acc": 0.9905694444444444,
+      "off_recall": 0.9391248839368617
      },
      "free-running latent probe": {
-      "acc": 0.9641,
-      "off_recall": 0.8630043620501636
+      "acc": 0.9642986111111111,
+      "off_recall": 0.877205199628598
      },
      "teacher-forced latent probe": {
-      "acc": 0.9692416666666667,
-      "off_recall": 0.8876090512540894
+      "acc": 0.9674375,
+      "off_recall": 0.9023909006499535
      }
     },
     {
      "steps": "5-10",
-     "n": 120000,
-     "off_share": 0.12453333333333333,
+     "n": 144000,
+     "off_share": 0.12366666666666666,
      "teacher-forced head": {
-      "acc": 0.9926916666666666,
-      "off_recall": 0.9510840471092077
+      "acc": 0.9910833333333333,
+      "off_recall": 0.9339622641509434
      },
      "free-running head": {
-      "acc": 0.986325,
-      "off_recall": 0.9238490364025695
+      "acc": 0.98825,
+      "off_recall": 0.9241913746630728
      },
      "free-running latent probe": {
-      "acc": 0.961625,
-      "off_recall": 0.8634903640256959
+      "acc": 0.9620694444444444,
+      "off_recall": 0.8644991015274034
      },
      "teacher-forced latent probe": {
-      "acc": 0.9693833333333334,
-      "off_recall": 0.9019004282655246
+      "acc": 0.9661736111111111,
+      "off_recall": 0.8992587601078167
      }
     },
     {
      "steps": "10-20",
-     "n": 240000,
-     "off_share": 0.1314,
+     "n": 288000,
+     "off_share": 0.12627777777777777,
      "teacher-forced head": {
-      "acc": 0.9912,
-      "off_recall": 0.9465690005073567
+      "acc": 0.9913784722222222,
+      "off_recall": 0.9375
      },
      "free-running head": {
-      "acc": 0.9734625,
-      "off_recall": 0.881183409436834
+      "acc": 0.9751527777777778,
+      "off_recall": 0.8775846898372195
      },
      "free-running latent probe": {
-      "acc": 0.9536583333333334,
-      "off_recall": 0.8459221207508879
+      "acc": 0.9521180555555555,
+      "off_recall": 0.8413715354157502
      },
      "teacher-forced latent probe": {
-      "acc": 0.9689333333333333,
-      "off_recall": 0.8929794520547946
+      "acc": 0.9667326388888889,
+      "off_recall": 0.9036790585129785
      }
     },
     {
      "steps": "20-40",
-     "n": 480000,
-     "off_share": 0.13786666666666667,
+     "n": 576000,
+     "off_share": 0.13297222222222221,
      "teacher-forced head": {
-      "acc": 0.9900729166666666,
-      "off_recall": 0.93772666827853
+      "acc": 0.9889079861111111,
+      "off_recall": 0.9288959682473366
      },
      "free-running head": {
-      "acc": 0.8692833333333333,
-      "off_recall": 0.8308147969052224
+      "acc": 0.8728923611111111,
+      "off_recall": 0.8078911635679966
      },
      "free-running latent probe": {
-      "acc": 0.8310354166666667,
-      "off_recall": 0.8005923597678917
+      "acc": 0.8358489583333333,
+      "off_recall": 0.7871187591393357
      },
      "teacher-forced latent probe": {
-      "acc": 0.9641541666666666,
-      "off_recall": 0.8790951402321083
+      "acc": 0.9629027777777778,
+      "off_recall": 0.8920775015667433
      }
     },
     {
      "steps": "40-70",
-     "n": 720000,
-     "off_share": 0.1491111111111111,
+     "n": 864000,
+     "off_share": 0.1410925925925926,
      "teacher-forced head": {
-      "acc": 0.9890958333333333,
-      "off_recall": 0.9400428464977645
+      "acc": 0.9889224537037037,
+      "off_recall": 0.9363187426171413
      },
      "free-running head": {
-      "acc": 0.4959277777777778,
-      "off_recall": 0.8008569299552906
+      "acc": 0.524425925925926,
+      "off_recall": 0.7886943824648904
      },
      "free-running latent probe": {
-      "acc": 0.48545,
-      "off_recall": 0.7741896423248882
+      "acc": 0.5129305555555556,
+      "off_recall": 0.765430174563591
      },
      "teacher-forced latent probe": {
-      "acc": 0.9609666666666666,
-      "off_recall": 0.8847801788375559
+      "acc": 0.9589074074074074,
+      "off_recall": 0.895130594566216
      }
     },
     {
      "steps": "70-100",
-     "n": 720000,
-     "off_share": 0.1578,
+     "n": 864000,
+     "off_share": 0.14883333333333335,
      "teacher-forced head": {
-      "acc": 0.9888319444444444,
-      "off_recall": 0.9426577242641881
+      "acc": 0.9883819444444445,
+      "off_recall": 0.9356258554186886
      },
      "free-running head": {
-      "acc": 0.2884138888888889,
-      "off_recall": 0.7984262779890157
+      "acc": 0.3394988425925926,
+      "off_recall": 0.7909590021152171
      },
      "free-running latent probe": {
-      "acc": 0.3057,
-      "off_recall": 0.7705252781298408
+      "acc": 0.3518136574074074,
+      "off_recall": 0.7644799054373522
      },
      "teacher-forced latent probe": {
-      "acc": 0.9571291666666667,
-      "off_recall": 0.8718930432333474
+      "acc": 0.9562881944444445,
+      "off_recall": 0.8910196590767699
      }
     }
    ]
   },
   "test-track rollouts of dream-trained drivers | 30 steps before leaving the road": {
-   "windows": 264,
+   "windows": 275,
    "bins": [
     {
      "steps": "0-5",
-     "n": 21120,
-     "off_share": 0.05909090909090909,
+     "n": 22000,
+     "off_share": 0.05672727272727273,
      "teacher-forced head": {
-      "acc": 0.9876893939393939,
-      "off_recall": 0.9671474358974359
+      "acc": 0.9877727272727272,
+      "off_recall": 0.9647435897435898
      },
      "free-running head": {
-      "acc": 0.9866950757575758,
-      "off_recall": 0.9551282051282052
+      "acc": 0.9873636363636363,
+      "off_recall": 0.9575320512820513
      },
      "free-running latent probe": {
-      "acc": 0.8867424242424242,
-      "off_recall": 0.39503205128205127
+      "acc": 0.8895909090909091,
+      "off_recall": 0.4254807692307692
      },
      "teacher-forced latent probe": {
-      "acc": 0.9008522727272728,
+      "acc": 0.9057727272727273,
       "off_recall": 0.483974358974359
      }
     },
     {
      "steps": "5-10",
-     "n": 21120,
-     "off_share": 0.04621212121212121,
+     "n": 22000,
+     "off_share": 0.04436363636363636,
      "teacher-forced head": {
-      "acc": 0.983001893939394,
-      "off_recall": 0.7848360655737705
+      "acc": 0.9834545454545455,
+      "off_recall": 0.7991803278688525
      },
      "free-running head": {
-      "acc": 0.9675662878787878,
-      "off_recall": 0.6956967213114754
+      "acc": 0.9681818181818181,
+      "off_recall": 0.6823770491803278
      },
      "free-running latent probe": {
-      "acc": 0.8571969696969697,
-      "off_recall": 0.29918032786885246
+      "acc": 0.8664545454545455,
+      "off_recall": 0.305327868852459
      },
      "teacher-forced latent probe": {
-      "acc": 0.8778409090909091,
-      "off_recall": 0.3975409836065574
+      "acc": 0.8814090909090909,
+      "off_recall": 0.3985655737704918
      }
     },
     {
      "steps": "10-20",
-     "n": 42240,
-     "off_share": 0.008333333333333333,
+     "n": 44000,
+     "off_share": 0.008,
      "teacher-forced head": {
-      "acc": 0.9933001893939394,
-      "off_recall": 0.48295454545454547
+      "acc": 0.9932045454545455,
+      "off_recall": 0.4715909090909091
      },
      "free-running head": {
-      "acc": 0.9314393939393939,
-      "off_recall": 0.35795454545454547
+      "acc": 0.9396136363636364,
+      "off_recall": 0.39204545454545453
      },
      "free-running latent probe": {
-      "acc": 0.9245501893939394,
-      "off_recall": 0.5056818181818182
+      "acc": 0.9260909090909091,
+      "off_recall": 0.42045454545454547
      },
      "teacher-forced latent probe": {
-      "acc": 0.9308475378787879,
-      "off_recall": 0.22443181818181818
+      "acc": 0.93225,
+      "off_recall": 0.22727272727272727
      }
     },
     {
      "steps": "20-40",
-     "n": 84480,
+     "n": 88000,
      "off_share": 0.55,
      "teacher-forced head": {
-      "acc": 0.9472892992424242,
-      "off_recall": 0.93741391184573
+      "acc": 0.9395909090909091,
+      "off_recall": 0.9225413223140496
      },
      "free-running head": {
-      "acc": 0.698544034090909,
-      "off_recall": 0.58619576446281
+      "acc": 0.6868181818181818,
+      "off_recall": 0.5589876033057851
      },
      "free-running latent probe": {
-      "acc": 0.6698626893939394,
-      "off_recall": 0.6496642561983471
+      "acc": 0.6607386363636364,
+      "off_recall": 0.6259917355371901
      },
      "teacher-forced latent probe": {
-      "acc": 0.7887428977272727,
-      "off_recall": 0.9060563016528925
+      "acc": 0.7858068181818182,
+      "off_recall": 0.9073140495867769
      }
     },
     {
      "steps": "40-70",
-     "n": 126528,
-     "off_share": 0.8883409205867476,
+     "n": 131808,
+     "off_share": 0.8928137897547949,
      "teacher-forced head": {
-      "acc": 0.9588312468386444,
-      "off_recall": 0.9585409252669039
+      "acc": 0.9528860160233066,
+      "off_recall": 0.9517080217539089
      },
      "free-running head": {
-      "acc": 0.6481411229135053,
-      "off_recall": 0.6931227758007118
+      "acc": 0.6317370721048798,
+      "off_recall": 0.6744136641740313
      },
      "free-running latent probe": {
-      "acc": 0.6478566009104704,
-      "off_recall": 0.6929626334519573
+      "acc": 0.6372602573440156,
+      "off_recall": 0.6798011556764106
      },
      "teacher-forced latent probe": {
-      "acc": 0.8758298558421851,
-      "off_recall": 0.8693772241992882
+      "acc": 0.8796355304685604,
+      "off_recall": 0.873963290278722
      }
     },
     {
      "steps": "70-100",
-     "n": 125776,
-     "off_share": 0.6761226307085613,
+     "n": 131056,
+     "off_share": 0.689171041386888,
      "teacher-forced head": {
-      "acc": 0.9557228724080906,
-      "off_recall": 0.9523283160865476
+      "acc": 0.9496703699182029,
+      "off_recall": 0.9435783879539416
      },
      "free-running head": {
-      "acc": 0.5360561633379977,
-      "off_recall": 0.6702845719661336
+      "acc": 0.5350079355390063,
+      "off_recall": 0.662344995571302
      },
      "free-running latent probe": {
-      "acc": 0.536294682610355,
-      "off_recall": 0.6638287864534337
+      "acc": 0.5303458063728482,
+      "off_recall": 0.6512953941541186
      },
      "teacher-forced latent probe": {
-      "acc": 0.8446205953441038,
-      "off_recall": 0.8317144873000941
+      "acc": 0.8513841411305091,
+      "off_recall": 0.8411204605845881
      }
     }
    ]
   }
- }
+ },
+ "tag": ""
 }

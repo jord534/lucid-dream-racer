@@ -131,6 +131,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--model", type=Path, default=Path("runs/loop_head/r02/mdnrnn/best.pt"))
     p.add_argument("--tau", type=float, default=C.tau)
+    p.add_argument("--tag", default="", help="suffix of the output files")
     a = p.parse_args()
     t_start = time.time()
     rnn = load_mdnrnn(a.model)
@@ -167,7 +168,8 @@ def main():
     for name, eps in sets.items():
         for kind, fn in (("random start", random_starts), ("30 steps before leaving the road", onset_starts)):
             out["results"][f"{name} | {kind}"] = collect(rnn, probe, eps, fn, a.tau, rng, f"{name} | {kind}")
-    (REPORTS / "head_horizon.json").write_text(json.dumps(out, indent=1))
+    out["tag"] = a.tag
+    (REPORTS / f"head_horizon{a.tag}.json").write_text(json.dumps(out, indent=1))
     write_outputs(out, time.time() - t_start)
 
 
@@ -194,12 +196,12 @@ def write_outputs(out, secs):
                 for c in COND) + " |")
     ax[0][0].legend(fontsize=6)
     fig.tight_layout()
-    fig.savefig(REPORTS / "head_horizon.png", dpi=120)
-    (REPORTS / "head_horizon.md").write_text(
+    fig.savefig(REPORTS / f"head_horizon{out['tag']}.png", dpi=120)
+    (REPORTS / f"head_horizon{out['tag']}.md").write_text(
         f"# Head accuracy against dream step\n\nModel `{out['model']}`, real actions replayed, 16 dream samples "
         f"per window, temperature {out['tau']}. Made by `python diagnostics/head_horizon.py` ({secs / 60:.1f} min). "
         "See the script's docstring for the question and how to read it.\n" + "\n".join(lines) + "\n")
-    print((REPORTS / "head_horizon.md").read_text())
+    print((REPORTS / f"head_horizon{out['tag']}.md").read_text())
 
 
 if __name__ == "__main__":
