@@ -84,6 +84,23 @@ bash scripts/run_all.sh
 Everything ran on one Apple Silicon laptop. Controller training in the simulator takes
 about 12 hours for 300 generations; inside the model, about 20 minutes for 500.
 
+## Ensemble uncertainty experiment
+
+The opt-in ensemble experiment is documented in
+[`diagnostics/ensemble_uncertainty.md`](diagnostics/ensemble_uncertainty.md). Start with a
+two-member pilot, then use `--members 5` for the full ensemble:
+
+```bash
+python -m ldr.train_ensemble --members 2 --parallel-members 2
+python -m ldr.train_ensemble --members 5 --parallel-members 2
+python diagnostics/ensemble_uncertainty.py --ensemble runs/mdnrnn_ensemble
+```
+
+Follow training progress and its rolling ETA with
+`python scripts/ensemble_progress.py runs/mdnrnn_ensemble --watch`.
+The completed two-member pilot results are in
+[`reports/ensemble_uncertainty/summary.md`](reports/ensemble_uncertainty/summary.md).
+
 ## Limitations
 
 Single seed per configuration. Every repair-loop result rests on one run of three drivers,

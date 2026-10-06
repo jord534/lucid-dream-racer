@@ -24,7 +24,7 @@ class MDNRNN(nn.Module):
     def __init__(self, z_dim=C.z_dim, a_dim=C.a_dim, h_dim=C.h_dim, k=C.n_gauss,
                  shared: bool = C.shared_mixture):
         super().__init__()
-        self.z_dim, self.h_dim, self.k, self.shared = z_dim, h_dim, k, shared
+        self.z_dim, self.a_dim, self.h_dim, self.k, self.shared = z_dim, a_dim, h_dim, k, shared
         self.lstm = nn.LSTM(z_dim + a_dim, h_dim, batch_first=True)
         self.head = nn.Linear(h_dim, (k + z_dim * k * 2 if shared else z_dim * k * 3) + 2)
         self.on_head = nn.Linear(h_dim, 1)
