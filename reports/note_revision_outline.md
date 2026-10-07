@@ -1,7 +1,8 @@
 # Outline for revising the technical note (LDR-TN-01)
 
-Status: plan only. `reports/technical_note.md` is not edited. Two runs are still going (the on-road-head
-run `runs/loop_head` and its control `runs/loop_ctrl`); their rows are marked PENDING. Every number below
+Status: archived plan for issue 2, completed in `reports/technical_note.md` (tag `v1.1-tn01`). The
+on-road-head run `runs/loop_head` and control `runs/loop_ctrl` are complete; the former PENDING row
+was resolved in section 3.9. Issue 3 adds the ensemble pilot in section 3.11. Every number below
 comes from a file named in the Evidence column; nothing is estimated.
 
 ## What the note can now claim, and on what evidence
