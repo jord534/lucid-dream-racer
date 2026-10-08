@@ -34,6 +34,18 @@ class WorldModelAgent:
 
     def reset(self):
         self.state = self.rnn.initial_state(1, self.dev)
+        self._tiles = None                  # road tiles of the current track (road-map models)
+
+    def patch(self, env) -> np.ndarray:
+        """Road-map models (ldr.road_map): the road patch at the car's true pose on the current track.
+        Every patch point lies inside the camera's current view, so this stands in for reading the
+        road off the current frame perfectly."""
+        from .road_geometry import env_pose, env_tiles
+        from .road_map import read_patch
+        assert env is not None, "a road-map world model needs the environment to read its road patch"
+        if self._tiles is None:
+            self._tiles = env_tiles(env)
+        return read_patch(env_pose(env)[None], self._tiles[None])[0]
 
     @torch.no_grad()
     def encode(self, frame96: np.ndarray) -> np.ndarray:
@@ -45,18 +57,21 @@ class WorldModelAgent:
         return self.state[0][0, 0].cpu().numpy()
 
     @torch.no_grad()
-    def observe(self, z: np.ndarray, a: np.ndarray) -> None:
+    def observe(self, z: np.ndarray, a: np.ndarray, patch: np.ndarray | None = None) -> None:
         zt = torch.from_numpy(z[None]).float().to(self.dev)
         at = torch.from_numpy(a[None]).float().to(self.dev)
-        *_, self.state = self.rnn.step(zt, at, self.state)
+        pt = None if patch is None else torch.from_numpy(patch[None]).float().to(self.dev)
+        *_, self.state = self.rnn.step(zt, at, self.state, patch=pt)
 
-    def act(self, theta: np.ndarray, frame96: np.ndarray, rng=None, p: Perturb = Perturb()):
+    def act(self, theta: np.ndarray, frame96: np.ndarray, rng=None, p: Perturb = Perturb(), env=None):
+        """env is needed only by road-map world models (the road patch is read from it)."""
+        patch = self.patch(env) if self.rnn.map_input else None
         z = self.encode(frame96)
         if p.latent_noise and rng is not None:
             z = z + p.latent_noise * rng.standard_normal(z.shape).astype(np.float32)
         a = act_np(theta, z, self.h)
         a[1] = min(a[1], p.gas_cap)
-        self.observe(z, a)                  # h_{t+1} = f(h_t, z_t, a_t)
+        self.observe(z, a, patch)           # h_{t+1} = f(h_t, z_t, a_t)
         return a
 
     def rollout(self, theta, seed: int, max_steps=C.max_steps, p: Perturb = Perturb(),
@@ -74,7 +89,7 @@ class WorldModelAgent:
         for t in range(1, max_steps + 1):
             if p.obs_noise:
                 obs = np.clip(obs + rng.normal(0, p.obs_noise, obs.shape), 0, 255).astype(np.uint8)
-            obs, r, term, trunc, _ = env.step(self.act(theta, obs, rng, p))
+            obs, r, term, trunc, _ = env.step(self.act(theta, obs, rng, p, env))
             total += r
             since_pos = 0 if r > 0 else since_pos + 1
             if term or trunc:

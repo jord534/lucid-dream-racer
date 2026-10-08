@@ -1,0 +1,35 @@
+../runs/pose_state/pose_s0/best.pt: pose head 4, pose input True, trained pose True
+  tau 1.15 | original data, held-out validation episodes | random start: 210 windows
+  tau 1.15 | original data, held-out validation episodes | 30 steps before leaving the road: 52 windows
+
+original data, held-out validation episodes | random start (210 windows), tau 1.15
+  real: probe on real frame          0-5: 0.96/0.97 lat 0.05 hdg 1  5-10: 0.98/0.98 lat 0.04 hdg 1  10-20: 0.98/0.97 lat 0.04 hdg 1  20-40: 0.96/0.96 lat 0.05 hdg 1  40-70: 0.95/0.94 lat 0.04 hdg 2  70-100: 0.96/0.93 lat 0.04 hdg 2
+  real: probe on 1-step prediction   0-5: 0.96/0.96 lat 0.05 hdg 1  5-10: 0.97/0.97 lat 0.04 hdg 1  10-20: 0.97/0.96 lat 0.04 hdg 1  20-40: 0.96/0.95 lat 0.05 hdg 1  40-70: 0.95/0.94 lat 0.04 hdg 2  70-100: 0.95/0.93 lat 0.04 hdg 2
+  own                                0-5: 0.96/0.96 lat 0.08 hdg 3  5-10: 0.97/0.96 lat 0.13 hdg 5  10-20: 0.97/0.96 lat 0.19 hdg 8  20-40: 0.94/0.94 lat 0.30 hdg 16  40-70: 0.89/0.90 lat 0.55 hdg 27  70-100: 0.82/0.89 lat 0.94 hdg 35
+  oracle (own latent, true pose)     0-5: 0.96/0.96 lat 0.05 hdg 2  5-10: 0.97/0.96 lat 0.05 hdg 2  10-20: 0.97/0.96 lat 0.05 hdg 2  20-40: 0.96/0.95 lat 0.05 hdg 2  40-70: 0.95/0.93 lat 0.06 hdg 2  70-100: 0.93/0.92 lat 0.07 hdg 3
+  real + own pose                    0-5: 0.96/0.96 lat 0.08 hdg 3  5-10: 0.97/0.97 lat 0.12 hdg 4  10-20: 0.97/0.96 lat 0.16 hdg 6  20-40: 0.96/0.95 lat 0.20 hdg 9  40-70: 0.95/0.93 lat 0.30 hdg 13  70-100: 0.95/0.93 lat 0.37 hdg 16
+
+original data, held-out validation episodes | 30 steps before leaving the road (52 windows), tau 1.15
+  real: probe on real frame          0-5: 0.94/- lat 0.06 hdg 2  5-10: 0.96/0.95 lat 0.07 hdg 2  10-20: 0.93/0.69 lat 0.06 hdg 2  20-40: 0.75/0.87 lat 0.05 hdg 2  40-70: 0.91/0.90 lat 0.06 hdg 2  70-100: 0.97/0.98 lat 0.05 hdg 2
+  real: probe on 1-step prediction   0-5: 0.94/- lat 0.06 hdg 2  5-10: 0.96/0.90 lat 0.07 hdg 2  10-20: 0.90/0.74 lat 0.06 hdg 2  20-40: 0.75/0.87 lat 0.05 hdg 2  40-70: 0.90/0.89 lat 0.06 hdg 2  70-100: 0.96/0.97 lat 0.05 hdg 2
+  own                                0-5: 0.94/- lat 0.11 hdg 4  5-10: 0.96/0.64 lat 0.18 hdg 6  10-20: 0.88/0.63 lat 0.27 hdg 10  20-40: 0.68/0.71 lat 0.51 hdg 27  40-70: 0.76/0.77 lat 1.02 hdg 44  70-100: 0.75/0.80 lat 1.48 hdg 58
+  oracle (own latent, true pose)     0-5: 0.93/- lat 0.06 hdg 2  5-10: 0.96/0.91 lat 0.06 hdg 2  10-20: 0.90/0.80 lat 0.07 hdg 2  20-40: 0.75/0.82 lat 0.07 hdg 3  40-70: 0.88/0.89 lat 0.09 hdg 4  70-100: 0.93/0.95 lat 0.09 hdg 4
+  real + own pose                    0-5: 0.94/- lat 0.11 hdg 3  5-10: 0.96/0.91 lat 0.19 hdg 5  10-20: 0.89/0.68 lat 0.24 hdg 6  20-40: 0.73/0.84 lat 0.35 hdg 11  40-70: 0.88/0.88 lat 0.42 hdg 15  70-100: 0.95/0.96 lat 0.48 hdg 16
+written /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/pose_state/horizon/pose_s0_tau1.15_val.json (0.3 min)
+  tau 0.05 | original data, held-out validation episodes | random start: 210 windows
+  tau 0.05 | original data, held-out validation episodes | 30 steps before leaving the road: 52 windows
+
+original data, held-out validation episodes | random start (210 windows), tau 0.05
+  real: probe on real frame          0-5: 0.96/0.97 lat 0.05 hdg 1  5-10: 0.98/0.98 lat 0.04 hdg 1  10-20: 0.98/0.97 lat 0.04 hdg 1  20-40: 0.96/0.96 lat 0.05 hdg 1  40-70: 0.95/0.94 lat 0.04 hdg 2  70-100: 0.96/0.93 lat 0.04 hdg 2
+  real: probe on 1-step prediction   0-5: 0.97/0.98 lat 0.05 hdg 1  5-10: 0.99/1.00 lat 0.04 hdg 1  10-20: 0.99/0.99 lat 0.04 hdg 1  20-40: 0.97/0.98 lat 0.05 hdg 1  40-70: 0.97/0.96 lat 0.04 hdg 2  70-100: 0.97/0.95 lat 0.04 hdg 2
+  own                                0-5: 0.97/0.99 lat 0.08 hdg 3  5-10: 0.99/0.99 lat 0.12 hdg 4  10-20: 0.98/0.99 lat 0.17 hdg 7  20-40: 0.97/0.97 lat 0.27 hdg 14  40-70: 0.92/0.94 lat 0.45 hdg 22  70-100: 0.87/0.92 lat 0.84 hdg 31
+  oracle (own latent, true pose)     0-5: 0.97/0.99 lat 0.04 hdg 1  5-10: 0.99/1.00 lat 0.04 hdg 1  10-20: 0.99/0.99 lat 0.04 hdg 2  20-40: 0.98/0.98 lat 0.04 hdg 2  40-70: 0.96/0.96 lat 0.04 hdg 2  70-100: 0.95/0.95 lat 0.05 hdg 2
+  real + own pose                    0-5: 0.97/0.99 lat 0.08 hdg 3  5-10: 0.99/1.00 lat 0.12 hdg 4  10-20: 0.98/0.99 lat 0.16 hdg 6  20-40: 0.97/0.98 lat 0.20 hdg 9  40-70: 0.96/0.96 lat 0.30 hdg 13  70-100: 0.97/0.95 lat 0.37 hdg 16
+
+original data, held-out validation episodes | 30 steps before leaving the road (52 windows), tau 0.05
+  real: probe on real frame          0-5: 0.94/- lat 0.06 hdg 2  5-10: 0.96/0.95 lat 0.07 hdg 2  10-20: 0.93/0.69 lat 0.06 hdg 2  20-40: 0.75/0.87 lat 0.05 hdg 2  40-70: 0.91/0.90 lat 0.06 hdg 2  70-100: 0.97/0.98 lat 0.05 hdg 2
+  real: probe on 1-step prediction   0-5: 0.96/- lat 0.06 hdg 2  5-10: 0.98/0.99 lat 0.07 hdg 2  10-20: 0.96/0.89 lat 0.06 hdg 2  20-40: 0.78/0.89 lat 0.05 hdg 2  40-70: 0.92/0.91 lat 0.06 hdg 2  70-100: 0.98/0.99 lat 0.05 hdg 2
+  own                                0-5: 0.96/- lat 0.11 hdg 3  5-10: 0.98/0.95 lat 0.17 hdg 6  10-20: 0.94/0.64 lat 0.26 hdg 9  20-40: 0.70/0.74 lat 0.48 hdg 25  40-70: 0.79/0.82 lat 1.02 hdg 38  70-100: 0.81/0.87 lat 1.44 hdg 53
+  oracle (own latent, true pose)     0-5: 0.96/- lat 0.06 hdg 2  5-10: 0.98/0.94 lat 0.06 hdg 2  10-20: 0.96/0.87 lat 0.06 hdg 2  20-40: 0.79/0.87 lat 0.05 hdg 3  40-70: 0.91/0.92 lat 0.07 hdg 3  70-100: 0.95/0.96 lat 0.08 hdg 3
+  real + own pose                    0-5: 0.96/- lat 0.11 hdg 3  5-10: 0.98/0.96 lat 0.19 hdg 5  10-20: 0.96/0.76 lat 0.24 hdg 6  20-40: 0.76/0.85 lat 0.35 hdg 11  40-70: 0.91/0.90 lat 0.42 hdg 15  70-100: 0.97/0.98 lat 0.48 hdg 16
+written /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/pose_state/horizon/pose_s0_tau0.05_val.json (0.3 min)

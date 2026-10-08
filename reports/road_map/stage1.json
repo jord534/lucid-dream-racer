@@ -1,0 +1,181 @@
+{
+ "sources": {
+  "data": {
+   "runs": 1400,
+   "replays_not_matching": 0,
+   "steps": 1359000,
+   "wheel_exact": {
+    "agree_before_action": 0.9996784400294334,
+    "agree_after_action": 0.9955643855776306
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9993325974981604,
+    "agree_after_action": 0.9953532008830022
+   }
+  },
+  "test_loop_head_r02_p0": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 99834,
+   "wheel_exact": {
+    "agree_before_action": 0.9994591021095017,
+    "agree_after_action": 0.9968147124226215
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9994290522266963,
+    "agree_after_action": 0.9967245627742052
+   }
+  },
+  "test_loop_head_r02_p1": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 90305,
+   "wheel_exact": {
+    "agree_before_action": 0.9999667792481036,
+    "agree_after_action": 0.9992027019544876
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.999900337744311,
+    "agree_after_action": 0.9992248491224185
+   }
+  },
+  "test_loop_head_r02_p2": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 95295,
+   "wheel_exact": {
+    "agree_before_action": 0.9999160501600294,
+    "agree_after_action": 0.99948580723018
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9998635815100477,
+    "agree_after_action": 0.9994753135001836
+   }
+  },
+  "test_loop_road_r02_p0": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 88398,
+   "wheel_exact": {
+    "agree_before_action": 0.9998529378492726,
+    "agree_after_action": 0.9973868187063055
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9997737505373425,
+    "agree_after_action": 0.9973076313943754
+   }
+  },
+  "test_loop_road_r02_p1": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 96762,
+   "wheel_exact": {
+    "agree_before_action": 0.9996796262995804,
+    "agree_after_action": 0.9935098489076291
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9993695872346582,
+    "agree_after_action": 0.9933238254686757
+   }
+  },
+  "test_loop_road_r02_p2": {
+   "runs": 100,
+   "replays_not_matching": 0,
+   "steps": 95901,
+   "wheel_exact": {
+    "agree_before_action": 0.999739314501413,
+    "agree_after_action": 0.9944734674299538
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9995620483623737,
+    "agree_after_action": 0.9943170561308016
+   }
+  },
+  "dev_loop_head_r02_p0": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 49896,
+   "wheel_exact": {
+    "agree_before_action": 0.9936267436267436,
+    "agree_after_action": 0.9908008658008658
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9935064935064936,
+    "agree_after_action": 0.9907206990540324
+   }
+  },
+  "dev_loop_head_r02_p1": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 45729,
+   "wheel_exact": {
+    "agree_before_action": 0.9999343961162501,
+    "agree_after_action": 0.9991034135887511
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9998906601937502,
+    "agree_after_action": 0.999147149511251
+   }
+  },
+  "dev_loop_head_r02_p2": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 48246,
+   "wheel_exact": {
+    "agree_before_action": 0.9972018405670936,
+    "agree_after_action": 0.9968080255357957
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9970982050325415,
+    "agree_after_action": 0.9968287526427061
+   }
+  },
+  "dev_loop_road_r02_p0": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 46698,
+   "wheel_exact": {
+    "agree_before_action": 0.9997858580667266,
+    "agree_after_action": 0.9971304980941368
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.999743029680072,
+    "agree_after_action": 0.9970020129341728
+   }
+  },
+  "dev_loop_road_r02_p1": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 48555,
+   "wheel_exact": {
+    "agree_before_action": 0.9996910719802286,
+    "agree_after_action": 0.9932241787663474
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9994027391617754,
+    "agree_after_action": 0.9932241787663474
+   }
+  },
+  "dev_loop_road_r02_p2": {
+   "runs": 50,
+   "replays_not_matching": 0,
+   "steps": 47459,
+   "wheel_exact": {
+    "agree_before_action": 0.9997260793527044,
+    "agree_after_action": 0.9940158873975431
+   },
+   "wheel_geo": {
+    "agree_before_action": 0.9995785836195453,
+    "agree_after_action": 0.9938262500263385
+   }
+  }
+ },
+ "data_flags_equal_latents_onroad": true,
+ "alignment": "before_action",
+ "criteria": {
+  "1 every replay reproduces its recording": true,
+  "2 actual wheel shapes agree with the game >= 0.995": true,
+  "3 wheels from the pose agree with the game >= 0.98": true
+ },
+ "passed": true
+}

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import time
 from pathlib import Path
 
@@ -14,15 +15,18 @@ import torch.nn.functional as F
 
 from .check_dream import load_mdnrnn
 from .config import DATA, RUNS, C
-from .mdnrnn import MDNRNN, mdn_nll, mdn_sample
+from .mdnrnn import MDNRNN, POSE_DIM, mdn_nll, mdn_sample, pose_features
+from .progress import progress
 from .utils import CSVLogger, get_device, load_ckpt, save_ckpt, seed_everything
-
 
 ONSET_AT = 16  # an onset sits at least this many steps into a training window and this far from its end
 
 
 class SequenceSampler:
-    def __init__(self, path: Path = DATA / "latents.npz", L: int = C.seq_len):
+    def __init__(self, path: Path = DATA / "latents.npz", L: int = C.seq_len, pose: bool = False,
+                 road_map: bool = False):
+        """pose=True also loads the exact pose labels (ldr.label_pose sidecar files) for with_pose;
+        road_map=True the road patch and motion labels (ldr.label_patch) for with_map."""
         d = np.load(path)
         self.mu, self.logvar = d["mu"], d["logvar"]
         self.act, self.rew, self.done = d["actions"], d["rewards"], d["dones"]
@@ -35,6 +39,19 @@ class SequenceSampler:
             self.on = np.load(side).astype(np.int8)
         else:
             self.on = np.full(len(self.act), -1, np.int8)
+        self.pose = None
+        if pose:
+            from .label_pose import load_pose_obs
+            raw = load_pose_obs(path, d)
+            assert raw is not None, f"{path} has no pose labels: run python -m ldr.label_pose"
+            self.pose = pose_features(raw).astype(np.float32)   # indexed like mu
+        self.patch = self.motion = None
+        if road_map:
+            from .road_map import MOTION_SCALE
+            side = lambda s: Path(path).with_name(Path(path).stem + s)
+            assert side("_patch.npy").exists(), f"{path} has no road-patch labels: run python -m ldr.label_patch"
+            self.patch = np.load(side("_patch.npy"))                        # indexed like mu
+            self.motion = (np.load(side("_motion.npy")) / MOTION_SCALE).astype(np.float32)
         self.L = L
         onset = d["onset"] if "onset" in d.files else np.full(len(d["ep_len"]), -1)
         starts = {"train": [], "val": []}
@@ -55,9 +72,13 @@ class SequenceSampler:
         self.starts = {k: cat(v) for k, v in starts.items()}
         self.near_onset = {k: cat(v) for k, v in near.items()}
 
-    def sample(self, batch, split, rng, device, onset_frac=0.0, with_on=False):
+    def sample(self, batch, split, rng, device, onset_frac=0.0, with_on=False, with_pose=False, with_map=False):
         """onset_frac: share of the batch drawn from windows around an off-road onset (only
-        episodes that record one, i.e. branches collected with on-road flags)."""
+        episodes that record one, i.e. branches collected with on-road flags).
+        with_pose appends two tensors (B,L,4) of pose features: the pose at each input observation
+        (q_t) and after each action (q_{t+1}, the pose head's target).
+        with_map appends the road patch at each input observation (B,L,MAP_DIM) and the scaled motion
+        over each step (B,L,3), the motion head's target."""
         pool = self.near_onset[split]
         n_on = round(batch * onset_frac) if len(pool) else 0
         s = self.starts[split][rng.integers(len(self.starts[split]), size=batch - n_on)]
@@ -72,7 +93,15 @@ class SequenceSampler:
         t = lambda x: torch.from_numpy(x).to(device)
         out = (z(o).to(device), t(self.act[a]), z(o + 1).to(device),
                t(np.clip(self.rew[a], -1, 10)), t(self.done[a].astype(np.float32)))
-        return (*out, t(self.on[a].astype(np.float32))) if with_on else out
+        if with_on:
+            out = (*out, t(self.on[a].astype(np.float32)))
+        if with_pose:
+            assert self.pose is not None, "sampler built without pose=True"
+            out = (*out, t(self.pose[o]), t(self.pose[o + 1]))
+        if with_map:
+            assert self.patch is not None, "sampler built without road_map=True"
+            out = (*out, t(self.patch[o].astype(np.float32)), t(self.motion[o]))
+        return out
 
 
 def probe_prob(probe, logit, mu, logsig):
@@ -132,21 +161,35 @@ def free_task_loss(model, batch, probe, warm, probe_weight=1.0, on_weight=1.0, r
 
 
 def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight: float = 0.0,
-            stats: dict | None = None, free_warm: int = 0, probe=None, probe_weight: float = 0.0):
+            stats: dict | None = None, free_warm: int = 0, probe=None, probe_weight: float = 0.0,
+            pose_weight: float = 0.0, pose_ss_prob: float | None = None, map_weight: float = 0.0):
     """ss_prob > 0 is scheduled sampling: at each step, with that probability, the input
     latent is the model's own sample from the previous step instead of the recorded one.
     Teacher forcing alone never scores the model on its own outputs, which is exactly the
     regime the dream runs in. free_warm: the first free_warm inputs are always the recorded ones
-    (the dream is started from a real warm-up); own samples are used only after that."""
+    (the dream is started from a real warm-up); own samples are used only after that.
+    Models with a pose head (model.pose_dim) need a batch sampled with_pose; pose_weight scales
+    the head's squared error. With pose input, the pose fed in is the true one, or with
+    probability pose_ss_prob (default: ss_prob; its own coin, independent of the latent's) the
+    model's own prediction from the step before, detached, as in the dream.
+    Road-map models (model.map_dim) need a batch sampled with_map: the true patch is fed at every
+    step, and map_weight scales the motion head's squared error."""
     z, a, z_next, r, d, *rest = batch
     ron = on_weight > 0
-    if ss_prob <= 0:
-        logit, mu, logsig, r_hat, d_hat, _, *on_hat = model(z, a, return_on=ron)
+    rp, pin, rmap = bool(model.pose_dim), model.pose_input, bool(model.map_dim)
+    patch, m_next = rest[-2:] if rmap else (None, None)
+    rest = rest[:-2] if rmap else rest
+    q_in, q_next = rest[-2:] if rp else (None, None)
+    pss = ss_prob if pose_ss_prob is None else pose_ss_prob
+    if ss_prob <= 0 and (not pin or pss <= 0):
+        logit, mu, logsig, r_hat, d_hat, _, *extra = model(z, a, return_on=ron, q=q_in if pin else None,
+                                                           return_pose=rp, patch=patch, return_motion=rmap)
     else:
         B, L, _ = z.shape
-        state, zin, outs = None, z[:, 0], []
+        state, zin, qin, outs = None, z[:, 0], q_in[:, 0] if pin else None, []
         for t in range(L):
-            step = model.step(zin, a[:, t], state, return_on=ron)
+            step = model.step(zin, a[:, t], state, return_on=ron, q=qin, return_pose=rp,
+                              patch=patch[:, t] if rmap else None, return_motion=rmap)
             outs.append(step[:5] + step[6:])
             state = step[5]
             if t + 1 < L:
@@ -154,12 +197,29 @@ def loss_fn(model, batch, done_pos_weight=50.0, ss_prob: float = 0.0, on_weight:
                 use = (torch.rand(B, 1, device=z.device) < ss_prob).float()
                 use = use * float(t + 1 >= free_warm)
                 zin = use * own + (1 - use) * z[:, t + 1]
-        logit, mu, logsig, r_hat, d_hat, *on_hat = [torch.stack(o, 1) for o in zip(*outs)]
+                if pin:
+                    useq = (torch.rand(B, 1, device=z.device) < pss).float() * float(t + 1 >= free_warm)
+                    qin = useq * step[6 + ron].detach() + (1 - useq) * q_in[:, t + 1]
+        logit, mu, logsig, r_hat, d_hat, *extra = [torch.stack(o, 1) for o in zip(*outs)]
+    on_hat = extra[:1] if ron else []
+    pose_hat = extra[int(ron)] if rp else None
+    motion_hat = extra[-1] if rmap else None
     nll = mdn_nll(logit, mu, logsig, z_next)
     r_loss = F.mse_loss(r_hat, r)
     d_loss = F.binary_cross_entropy_with_logits(
         d_hat, d, pos_weight=torch.tensor(done_pos_weight, device=d.device))
     total = nll + r_loss + d_loss
+    if rp:
+        pose_loss = F.mse_loss(pose_hat, q_next)
+        total = total + pose_weight * pose_loss
+        if stats is not None:
+            stats.update(pose_mse=pose_loss.item(),
+                         pose_lat_mae=(pose_hat[..., 0] - q_next[..., 0]).abs().mean().item() * 2)
+    if rmap:
+        motion_loss = F.mse_loss(motion_hat, m_next)
+        total = total + map_weight * motion_loss
+        if stats is not None:
+            stats.update(motion_mse=motion_loss.item())
     if probe is not None and rest:
         pl = probe_bce(probe_prob(probe, logit, mu, logsig), rest[0], stats)
         total = total + probe_weight * pl
@@ -208,6 +268,19 @@ def main():
                    help="weight of the on-road head loss (0: head not trained)")
     p.add_argument("--extra-onset-frac", type=float, default=0.0,
                    help="share of the --extra part of every batch centred on an off-road onset")
+    p.add_argument("--pose-weight", type=float, default=0.0,
+                   help="weight of a pose head (ldr.label_pose: lateral offset, heading, speed after "
+                        "the action); 0: no pose head")
+    p.add_argument("--pose-input", action="store_true",
+                   help="also feed the pose to the LSTM: the true one in training, the model's own "
+                        "prediction in the dream (needs --pose-weight)")
+    p.add_argument("--pose-ss-prob", type=float, default=None,
+                   help="final probability of feeding the model's own predicted pose instead of the "
+                        "true one, ramped like --ss-prob (default: --ss-prob)")
+    p.add_argument("--map-weight", type=float, default=0.0,
+                   help="road map (ldr.road_map): weight of the motion head; 0: no road map")
+    p.add_argument("--map-input", action="store_true",
+                   help="feed the road patch read off the map to the LSTM (needs --map-weight)")
     p.add_argument("--eval-every", type=int, default=500)
     p.add_argument("--out", type=Path, default=RUNS / "mdnrnn")
     p.add_argument("--device", default=None)
@@ -215,10 +288,20 @@ def main():
     args = p.parse_args()
     seed_everything(args.seed)
     dev = get_device(args.device)
-    data = SequenceSampler(L=args.seq_len)
-    extra = SequenceSampler(args.extra, L=args.seq_len) if args.extra else None
+    assert args.pose_weight > 0 or not args.pose_input, "--pose-input needs --pose-weight"
+    wp = args.pose_weight > 0
+    assert (args.map_weight > 0) == args.map_input, "--map-weight and --map-input go together"
+    wm = args.map_input
+    data = SequenceSampler(L=args.seq_len, pose=wp, road_map=wm)
+    extra = SequenceSampler(args.extra, L=args.seq_len, pose=wp, road_map=wm) if args.extra else None
+    if wm:
+        from .road_map import MAP_DIM
     model = (load_mdnrnn(args.init_from, dev) if args.init_from
-             else MDNRNN(shared=args.shared_mixture).to(dev)).train()
+             else MDNRNN(shared=args.shared_mixture, pose_dim=POSE_DIM if wp else 0,
+                         pose_input=args.pose_input, map_dim=MAP_DIM if wm else 0).to(dev)).train()
+    assert bool(model.pose_dim) == wp and model.pose_input == args.pose_input, \
+        "pose flags do not match the --init-from checkpoint"
+    assert bool(model.map_dim) == wm, "road-map flags do not match the --init-from checkpoint"
 
     probe = None
     if args.probe:
@@ -226,6 +309,7 @@ def main():
         probe = load_probe(args.probe, dev)
     won = args.on_weight > 0 or probe is not None   # the probe loss needs the on-road labels
     if args.free_task_weight > 0:
+        assert not wp and not wm, "the free-running pass does not carry the pose or the road map"
         assert probe is not None and args.on_weight > 0, "free-running pass needs --probe and --on-weight"
         data_f = SequenceSampler(L=args.free_len)
         extra_f = SequenceSampler(args.extra, L=args.free_len) if args.extra else None
@@ -235,11 +319,11 @@ def main():
     def draw(split, n, d=None, x=None):
         d, x = (data, extra) if d is None else (d, x)
         if x is None or not len(x.starts[split]):
-            return d.sample(n, split, rng, dev, with_on=won)
+            return d.sample(n, split, rng, dev, with_on=won, with_pose=wp, with_map=wm)
         k = round(n * args.extra_frac)
         on = args.extra_onset_frac if split == "train" else 0.0
-        a = d.sample(n - k, split, rng, dev, with_on=won)
-        b = x.sample(k, split, rng, dev, on, with_on=won)
+        a = d.sample(n - k, split, rng, dev, with_on=won, with_pose=wp, with_map=wm)
+        b = x.sample(k, split, rng, dev, on, with_on=won, with_pose=wp, with_map=wm)
         return tuple(torch.cat([u, v]) for u, v in zip(a, b))
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, args.steps)
@@ -251,13 +335,20 @@ def main():
     log, rng, best = CSVLogger(args.out / "log.csv"), np.random.default_rng(args.seed + start), 1e9
 
     t_start = time.time()
+    ptask = os.environ.get("LDR_PROGRESS_TASK")   # progress lines for scripts/progress_watch.py
+    if ptask:
+        progress(ptask, start, args.steps)
     for step in range(start, args.steps):
-        ss = args.ss_prob * min(1.0, 2 * step / args.steps)   # ramp in over the first half
+        ramp = min(1.0, 2 * step / args.steps)   # ramp in over the first half
+        ss = args.ss_prob * ramp
+        pss = None if args.pose_ss_prob is None else args.pose_ss_prob * ramp
         tstats = {}
         loss, nll, rl, dl = loss_fn(model, draw("train", args.batch), ss_prob=ss,
                                     on_weight=args.on_weight, stats=tstats,
                                     free_warm=args.free_warm, probe=probe,
-                                    probe_weight=args.probe_weight)
+                                    probe_weight=args.probe_weight,
+                                    pose_weight=args.pose_weight, pose_ss_prob=pss,
+                                    map_weight=args.map_weight)
         if args.free_task_weight > 0:
             loss = loss + args.free_task_weight * free_task_loss(
                 model, draw("train", args.free_batch, data_f, extra_f), probe, args.free_warm,
@@ -270,17 +361,25 @@ def main():
             model.eval()
             with torch.no_grad():
                 vstats = {}
-                vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev, with_on=won),
+                vl, vn, vr, vd = loss_fn(model, data.sample(256, "val", rng, dev, with_on=won,
+                                                         with_pose=wp, with_map=wm),
                                          on_weight=args.on_weight, stats=vstats, probe=probe,
-                                         probe_weight=args.probe_weight)
+                                         probe_weight=args.probe_weight, pose_weight=args.pose_weight,
+                                         map_weight=args.map_weight)
                 xstats = {}
                 if won and extra is not None and len(extra.starts["val"]):
-                    loss_fn(model, extra.sample(256, "val", rng, dev, with_on=True),
+                    loss_fn(model, extra.sample(256, "val", rng, dev, with_on=True, with_pose=wp, with_map=wm),
                             on_weight=args.on_weight, stats=xstats)
                 # validation always teacher-forced, so the number stays comparable across runs
-                ve = (loss_fn(model, extra.sample(256, "val", rng, dev))[1].item()
+                ve = (loss_fn(model, extra.sample(256, "val", rng, dev, with_pose=wp, with_map=wm))[1].item()
                       if extra is not None and len(extra.starts["val"]) else float("nan"))
             model.train()
+            pose_cols = (dict(pose_mse=tstats.get("pose_mse", float("nan")),
+                              val_pose_mse=vstats.get("pose_mse", float("nan")),
+                              val_pose_lat_mae=vstats.get("pose_lat_mae", float("nan"))) if wp else {})
+            if wm:
+                pose_cols.update(motion_mse=tstats.get("motion_mse", float("nan")),
+                                 val_motion_mse=vstats.get("motion_mse", float("nan")))
             log.log(step=step + 1, nll=nll.item(), r_mse=rl.item(), d_bce=dl.item(),
                     val_nll=vn.item(), val_r_mse=vr.item(), val_d_bce=vd.item(), val_nll_extra=ve,
                     on_bce=tstats.get("on_bce", float("nan")),
@@ -293,7 +392,8 @@ def main():
                     val_probe_off_recall=vstats.get("probe_off_recall", float("nan")),
                     free_on_acc=tstats.get("free_on_acc", float("nan")),
                     free_probe_acc=tstats.get("free_probe_acc", float("nan")),
-                    free_probe_off_recall=tstats.get("free_probe_off_recall", float("nan")))
+                    free_probe_off_recall=tstats.get("free_probe_off_recall", float("nan")),
+                    **pose_cols)
             eta = (time.time() - t_start) / (step + 1 - start) * (args.steps - step - 1)
             print(f"step {step + 1}/{args.steps}  nll {nll.item():.3f}  "
                   f"val nll {vn.item():.3f}  val r_mse {vr.item():.3f}  "
@@ -304,11 +404,20 @@ def main():
                   + (f"on-road acc {vstats.get('on_acc', float('nan')):.3f} (branches "
                      f"{xstats.get('on_acc', float('nan')):.3f}, off-road recall "
                      f"{xstats.get('off_recall', float('nan')):.2f})  " if won else "")
+                  + (f"pose mse {vstats.get('pose_mse', float('nan')):.4f} (lateral error "
+                     f"{vstats.get('pose_lat_mae', float('nan')):.3f} half-widths)  " if wp else "")
+                  + (f"motion mse {vstats.get('motion_mse', float('nan')):.4f} (scaled)  " if wm else "")
                   + f"about {eta / 60:.1f} min left", flush=True)
             payload = dict(model=model.state_dict(), opt=opt.state_dict(),
                            sched=sched.state_dict(), step=step + 1, on_trained=trained_on)
+            if wp:
+                payload["pose_trained"] = True
+            if wm:
+                payload.update(map_trained=True, map_dim=model.map_dim)
             save_ckpt(ck, **payload)
             sel = vl.item() if np.isnan(ve) else 0.5 * (vn.item() + ve)   # with extra, judge both
+            if ptask:
+                progress(ptask, step + 1, args.steps)
             if sel < best:
                 best = sel
                 save_ckpt(args.out / "best.pt", **payload)

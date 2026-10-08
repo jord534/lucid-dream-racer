@@ -1,0 +1,51 @@
+../runs/pose_state/ctrl_s0/best.pt: pose head 0, pose input False, trained pose False
+  tau 1.15 | original data, held-out validation episodes | random start: 210 windows
+  tau 1.15 | original data, held-out validation episodes | 30 steps before leaving the road: 52 windows
+  tau 1.15 | test-track rollouts of dream-trained drivers | random start: 1800 windows
+  tau 1.15 | test-track rollouts of dream-trained drivers | 30 steps before leaving the road: 275 windows
+
+original data, held-out validation episodes | random start (210 windows), tau 1.15
+  real: probe on real frame          0-5: 0.96/0.97  5-10: 0.98/0.98  10-20: 0.98/0.97  20-40: 0.96/0.96  40-70: 0.96/0.94  70-100: 0.95/0.93
+  real: probe on 1-step prediction   0-5: 0.96/0.96  5-10: 0.97/0.97  10-20: 0.97/0.96  20-40: 0.96/0.95  40-70: 0.95/0.93  70-100: 0.95/0.92
+  own                                0-5: 0.96/0.96  5-10: 0.96/0.95  10-20: 0.96/0.95  20-40: 0.94/0.94  40-70: 0.90/0.91  70-100: 0.84/0.88
+
+original data, held-out validation episodes | 30 steps before leaving the road (52 windows), tau 1.15
+  real: probe on real frame          0-5: 0.94/-  5-10: 0.96/0.99  10-20: 0.93/0.64  20-40: 0.75/0.87  40-70: 0.90/0.90  70-100: 0.97/0.98
+  real: probe on 1-step prediction   0-5: 0.94/-  5-10: 0.95/0.85  10-20: 0.91/0.66  20-40: 0.74/0.86  40-70: 0.89/0.89  70-100: 0.96/0.97
+  own                                0-5: 0.94/-  5-10: 0.95/0.69  10-20: 0.89/0.57  20-40: 0.69/0.75  40-70: 0.79/0.81  70-100: 0.78/0.84
+
+test-track rollouts of dream-trained drivers | random start (1800 windows), tau 1.15
+  real: probe on real frame          0-5: 0.97/0.90  5-10: 0.97/0.90  10-20: 0.97/0.90  20-40: 0.96/0.89  40-70: 0.96/0.90  70-100: 0.96/0.89
+  real: probe on 1-step prediction   0-5: 0.97/0.88  5-10: 0.97/0.87  10-20: 0.97/0.88  20-40: 0.96/0.86  40-70: 0.96/0.87  70-100: 0.96/0.86
+  own                                0-5: 0.97/0.86  5-10: 0.97/0.84  10-20: 0.96/0.80  20-40: 0.81/0.74  40-70: 0.59/0.73  70-100: 0.46/0.70
+
+test-track rollouts of dream-trained drivers | 30 steps before leaving the road (275 windows), tau 1.15
+  real: probe on real frame          0-5: 0.90/0.45  5-10: 0.88/0.39  10-20: 0.93/0.23  20-40: 0.79/0.91  40-70: 0.88/0.87  70-100: 0.85/0.84
+  real: probe on 1-step prediction   0-5: 0.88/0.27  5-10: 0.86/0.26  10-20: 0.92/0.30  20-40: 0.80/0.86  40-70: 0.86/0.86  70-100: 0.84/0.82
+  own                                0-5: 0.88/0.13  5-10: 0.88/0.13  10-20: 0.84/0.28  20-40: 0.52/0.34  40-70: 0.48/0.49  70-100: 0.46/0.54
+written /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/pose_state/horizon/ctrl_s0_tau1.15.json (1.8 min)
+  tau 0.05 | original data, held-out validation episodes | random start: 210 windows
+  tau 0.05 | original data, held-out validation episodes | 30 steps before leaving the road: 52 windows
+  tau 0.05 | test-track rollouts of dream-trained drivers | random start: 1800 windows
+  tau 0.05 | test-track rollouts of dream-trained drivers | 30 steps before leaving the road: 275 windows
+
+original data, held-out validation episodes | random start (210 windows), tau 0.05
+  real: probe on real frame          0-5: 0.96/0.97  5-10: 0.98/0.98  10-20: 0.98/0.97  20-40: 0.96/0.96  40-70: 0.96/0.94  70-100: 0.95/0.93
+  real: probe on 1-step prediction   0-5: 0.97/0.99  5-10: 0.99/0.99  10-20: 0.99/0.99  20-40: 0.97/0.98  40-70: 0.97/0.96  70-100: 0.97/0.95
+  own                                0-5: 0.97/0.98  5-10: 0.98/0.98  10-20: 0.99/0.99  20-40: 0.97/0.97  40-70: 0.93/0.93  70-100: 0.87/0.91
+
+original data, held-out validation episodes | 30 steps before leaving the road (52 windows), tau 0.05
+  real: probe on real frame          0-5: 0.94/-  5-10: 0.96/0.99  10-20: 0.93/0.64  20-40: 0.75/0.87  40-70: 0.90/0.90  70-100: 0.97/0.98
+  real: probe on 1-step prediction   0-5: 0.96/-  5-10: 0.98/0.90  10-20: 0.98/0.80  20-40: 0.76/0.88  40-70: 0.92/0.91  70-100: 0.98/0.99
+  own                                0-5: 0.96/-  5-10: 0.98/0.95  10-20: 0.96/0.69  20-40: 0.74/0.82  40-70: 0.81/0.83  70-100: 0.80/0.85
+
+test-track rollouts of dream-trained drivers | random start (1800 windows), tau 0.05
+  real: probe on real frame          0-5: 0.97/0.90  5-10: 0.97/0.90  10-20: 0.97/0.90  20-40: 0.96/0.89  40-70: 0.96/0.90  70-100: 0.96/0.89
+  real: probe on 1-step prediction   0-5: 0.98/0.91  5-10: 0.98/0.91  10-20: 0.98/0.91  20-40: 0.98/0.90  40-70: 0.97/0.90  70-100: 0.97/0.90
+  own                                0-5: 0.98/0.90  5-10: 0.98/0.88  10-20: 0.97/0.84  20-40: 0.82/0.78  40-70: 0.61/0.79  70-100: 0.52/0.78
+
+test-track rollouts of dream-trained drivers | 30 steps before leaving the road (275 windows), tau 0.05
+  real: probe on real frame          0-5: 0.90/0.45  5-10: 0.88/0.39  10-20: 0.93/0.23  20-40: 0.79/0.91  40-70: 0.88/0.87  70-100: 0.85/0.84
+  real: probe on 1-step prediction   0-5: 0.91/0.23  5-10: 0.90/0.25  10-20: 0.94/0.24  20-40: 0.83/0.90  40-70: 0.90/0.89  70-100: 0.87/0.86
+  own                                0-5: 0.91/0.08  5-10: 0.92/0.10  10-20: 0.86/0.20  20-40: 0.53/0.33  40-70: 0.51/0.53  70-100: 0.47/0.60
+written /Users/jordanbonil/Documents/source/lucid-dream-racer/reports/pose_state/horizon/ctrl_s0_tau0.05.json (1.4 min)

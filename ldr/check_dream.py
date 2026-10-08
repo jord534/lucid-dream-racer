@@ -28,11 +28,20 @@ def load_mdnrnn(path=RUNS / "mdnrnn" / "best.pt", device="cpu") -> MDNRNN:
     ck = load_ckpt(path, device)
     sd = ck["model"]
     out = sd["head.weight"].shape[0]
-    m = MDNRNN(shared=out == C.n_gauss + C.z_dim * C.n_gauss * 2 + 2)
+    # pose head and pose input (ldr.label_pose) are read from the weights; older checkpoints have neither
+    pose_dim = sd["pose_head.weight"].shape[0] if "pose_head.weight" in sd else 0
+    # road-map input (ldr.road_map) is whatever the LSTM reads beyond [z, a] and the pose
+    extra = sd["lstm.weight_ih_l0"].shape[1] - C.z_dim - C.a_dim
+    map_dim = ck.get("map_dim", extra - pose_dim) if "motion_head.weight" in sd else 0
+    pose_input = pose_dim > 0 and extra - map_dim == pose_dim
+    m = MDNRNN(shared=out == C.n_gauss + C.z_dim * C.n_gauss * 2 + 2, pose_dim=pose_dim, pose_input=pose_input,
+               map_dim=map_dim)
     missing, unexpected = m.load_state_dict(sd, strict=False)
     # checkpoints from before the on-road head existed lack exactly its weights
     assert not unexpected and all(k.startswith("on_head") for k in missing), (missing, unexpected)
     m.has_on = not missing and bool(ck.get("on_trained", False))
+    m.has_pose = bool(pose_dim) and bool(ck.get("pose_trained", False))
+    m.has_map = bool(map_dim) and bool(ck.get("map_trained", False))
     return m.to(device).eval()
 
 

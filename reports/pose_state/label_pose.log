@@ -1,0 +1,11 @@
+labelled 1100/1400  (0.4 min)
+labelled 1200/1400  (0.4 min)
+labelled 1300/1400  (0.5 min)
+labelled 1400/1400  (0.5 min)
+wrote /Users/jordanbonil/Documents/source/lucid-dream-racer/data/latents_pose.npy: 1,359,000 steps; replays not matching the recorded rewards: 0; on-road flags differing from latents_onroad.npy: 0
+data/dream_failure/rollouts_loop_head_r02_p0.npz: 100 tracks, 99,834 steps; replays not matching: 0 []
+data/dream_failure/rollouts_loop_head_r02_p1.npz: 100 tracks, 90,305 steps; replays not matching: 0 []
+data/dream_failure/rollouts_loop_head_r02_p2.npz: 100 tracks, 95,295 steps; replays not matching: 0 []
+data/dream_failure/rollouts_loop_road_r02_p0.npz: 100 tracks, 88,398 steps; replays not matching: 0 []
+data/dream_failure/rollouts_loop_road_r02_p1.npz: 100 tracks, 96,762 steps; replays not matching: 0 []
+data/dream_failure/rollouts_loop_road_r02_p2.npz: 100 tracks, 95,901 steps; replays not matching: 0 []

@@ -64,17 +64,25 @@ def rollout_log(job):
     _AG.reset()
     rng = np.random.default_rng(seed)
     mu, lv, act, rew, on = [], [], [], [], []
+    road_map = _AG.rnn.map_input   # road-map models: also the car's pose at each step and the track
+    if road_map:
+        from .road_geometry import env_pose, env_tiles
+        pose, tiles = [], env_tiles(env)
     for _ in range(rest[0] if rest else 1000):
         m, l = _encode(obs)
         mu.append(m), lv.append(l)
-        a = _AG.act(theta, obs, rng)
+        if road_map:
+            pose.append(env_pose(env))
+        a = _AG.act(theta, obs, rng, env=env)
         obs, r, term, trunc, _ = env.step(a)
         act.append(a), rew.append(r), on.append(_wheels_on(env))
         if term or trunc:
             break
+    if road_map:
+        pose.append(env_pose(env))
     env.close()
     f32 = lambda x: np.asarray(x, np.float32)
-    return {
+    out = {
         "seed": seed,
         "mu": f32(mu),
         "logvar": f32(lv),
@@ -82,6 +90,9 @@ def rollout_log(job):
         "rew": f32(rew),
         "on": np.array(on, bool),
     }
+    if road_map:
+        out.update(pose=np.array(pose), tiles=tiles)
+    return out
 
 
 def real_branch(job):
@@ -128,16 +139,30 @@ def start_state(log, rng):
 
 @torch.no_grad()
 def dream_branch(rnn, theta, log, t0, W, B, tau):
-    """The controller steers inside the dream, started in the exact real state at step t0."""
+    """The controller steers inside the dream, started in the exact real state at step t0.
+    Road-map models: the real road patch through the history, then the car moves across the track
+    by the model's own predicted motion (as in ldr.dream.DreamSim)."""
     mu, act = torch.from_numpy(log["mu"]), torch.from_numpy(log["act"])
-    *_, state = rnn(mu[None, :t0], act[None, :t0])
+    rmap = None
+    if rnn.map_input:
+        from .road_map import MOTION_SCALE, RoadMap, read_patch
+        hist = torch.from_numpy(read_patch(log["pose"][:t0], np.broadcast_to(log["tiles"], (t0, *log["tiles"].shape))))
+        *_, state = rnn(mu[None, :t0], act[None, :t0], patch=hist[None])
+        rmap = RoadMap(np.broadcast_to(log["tiles"], (B, *log["tiles"].shape)), np.ones((B, len(log["tiles"])), bool),
+                       np.repeat(log["pose"][t0][None], B, 0))
+    else:
+        *_, state = rnn(mu[None, :t0], act[None, :t0])
     st = tuple(s.expand(1, B, -1).contiguous() for s in state)
     th = torch.as_tensor(np.asarray(theta), dtype=torch.float32)[None].expand(B, -1)
     z, acts, rs, zs, ons = mu[t0][None].expand(B, -1).clone(), [], [], [], []
     head = getattr(rnn, "has_on", False)
     for _ in range(W):
         a = act_batched(th, z, st[0][0])
-        logit, m, ls, r, _, st, *on = rnn.step(z, a, st, return_on=head)
+        patch = torch.from_numpy(rmap.read()) if rmap is not None else None
+        logit, m, ls, r, _, st, *extra = rnn.step(z, a, st, return_on=head, patch=patch, return_motion=rmap is not None)
+        on = extra[:1] if head else []
+        if rmap is not None:
+            rmap.move(extra[-1].cpu().numpy().astype(np.float64) * MOTION_SCALE)
         z = mdn_sample(logit, m, ls, tau)
         acts.append(a), rs.append(r), zs.append(z)
         if on:

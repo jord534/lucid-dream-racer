@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -15,6 +16,7 @@ import torch
 
 from .agent import Perturb, WorldModelAgent
 from .config import REPORTS, RUNS, SEED_TEST
+from .progress import progress
 
 _AGENT = None
 
@@ -46,8 +48,13 @@ def main():
     theta = torch.load(a.ckpt, weights_only=False)["theta"]
     pert = dict(obs_noise=a.obs_noise, road_friction=a.road_friction, gas_cap=a.gas_cap)
     jobs = [(theta, SEED_TEST + i, pert) for i in range(a.tracks)]
+    ptask = os.environ.get("LDR_PROGRESS_TASK")   # progress lines for scripts/progress_watch.py
     with Pool(a.workers, initializer=_init, initargs=(a.vae, a.rnn)) as pool:
-        res = pool.map(_run, jobs)
+        res = []
+        for r in pool.imap(_run, jobs):          # same order as map
+            res.append(r)
+            if ptask:
+                progress(ptask, len(res), len(jobs))
     returns = np.array([r for _, r, _ in res])
     out = dict(name=a.name, ckpt=str(a.ckpt), vae=str(a.vae), rnn=str(a.rnn), perturb=pert, seeds=[s for s, _, _ in res],
                returns=returns.tolist(), mean=float(returns.mean()), std=float(returns.std()))

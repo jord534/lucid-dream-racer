@@ -6,6 +6,7 @@ measure how the policy transfers back to the real track.
 from __future__ import annotations
 
 import argparse
+import os
 import pickle
 from pathlib import Path
 
@@ -18,6 +19,7 @@ from .check_dream import load_mdnrnn
 from .config import RUNS, SEED_VAL, C
 from .controller import N_PARAMS, act_batched
 from .dream import DreamSim
+from .progress import progress
 from .train_controller import evaluate_population, make_pool
 from .utils import CSVLogger, get_device, save_ckpt, save_pickle
 
@@ -79,6 +81,10 @@ def main():
     real_seeds = [SEED_VAL + i for i in range(a.real_tracks)]
     bar = tqdm(total=a.generations, initial=start, desc="dream CMA-ES", unit="gen",
                dynamic_ncols=True)
+    # progress lines for scripts/progress_watch.py, when a launcher asks for them
+    ptask = f"{os.environ['LDR_PROGRESS_PREFIX']}_{a.out.name}" if "LDR_PROGRESS_PREFIX" in os.environ else None
+    if ptask:
+        progress(ptask, start, a.generations)
     with make_pool(a.workers) as pool:
         for gen in range(start + 1, a.generations + 1):
             X = es.ask()
@@ -100,6 +106,8 @@ def main():
             save_pickle(es_path, (es, gen, best))             # state first, then the log line
             log.log(**row)
             bar.update(1)
+            if ptask:
+                progress(ptask, gen, a.generations)
             bar.set_postfix(dream_avg=f"{fit.mean():.0f}",
                             best_real=f"{best:.0f}" if best > -1e8 else "none")
             if row["real_return"] != "":

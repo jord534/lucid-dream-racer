@@ -86,7 +86,7 @@ def _collect_one(job):
             m, l = ag.vae.encode(to_tensor(preprocess(obs, C.img)[None], ag.dev))
         mu.append(m[0].cpu().numpy())
         lv.append(l[0].cpu().numpy())
-        a = ag.act(theta, obs, rng)
+        a = ag.act(theta, obs, rng, env=env)
         obs, r, term, trunc, _ = env.step(a)
         car = env.unwrapped.car
         pos = np.asarray(car.hull.position)
